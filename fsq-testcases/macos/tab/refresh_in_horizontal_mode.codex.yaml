@@ -1,0 +1,31 @@
+schemaVersion: fsq.ai-test/v1
+name: Refresh in horizontal mode
+description: Converted from Edge Mac Behave BDD scenario.
+platform: macos
+appId: com.microsoft.edgemac
+tags:
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+    timeout: 10000
+- inputText:
+    text: https://www.youtube.com
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+- pressKey: Enter
+- tapOn:
+    target: I right click on the tab header of "Youtube" tab
+- tapOn:
+    target: I click "Refresh" from the context menu
+- assertVisible:
+    target: the page should be refreshed
+    optional: false
+- assertVisible:
+    target: the address bar still displays the complete URL "https://www.youtube.com"
+    optional: false

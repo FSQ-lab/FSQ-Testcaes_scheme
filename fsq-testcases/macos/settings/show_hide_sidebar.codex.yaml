@@ -1,0 +1,32 @@
+schemaVersion: fsq.ai-test/v1
+name: Show/hide sidebar
+description: Converted from Edge Mac Behave BDD scenario.
+platform: macos
+appId: com.microsoft.edgemac
+tags:
+- regression
+- p0
+- settings
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+    timeout: 10000
+- inputText:
+    text: edge://settings/appearance/copilotAndSidebar
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+- tapOn:
+    target: I select "Always on" option in Settings page
+- assertVisible:
+    target: Sidebar
+    optional: false
+- tapOn:
+    target: I select "Off" option in Settings page
+- assertNotVisible:
+    target: Sidebar
+    optional: false

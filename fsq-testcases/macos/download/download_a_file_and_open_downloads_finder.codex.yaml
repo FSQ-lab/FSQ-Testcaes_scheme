@@ -1,0 +1,39 @@
+schemaVersion: fsq.ai-test/v1
+name: Download a file and open downloads finder
+description: Converted from Edge Mac Behave BDD scenario.
+platform: macos
+appId: com.microsoft.edgemac
+tags:
+- p0
+- regression
+- download
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: I clean Edge downloads file "sample-1.pdf"
+- tapOn:
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+    timeout: 10000
+- inputText:
+    text: https://getsamplefiles.com/download/pdf/sample-1.pdf
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+- pressKey: Enter
+- assertVisible:
+    target: the Downloads panel should appear
+    optional: false
+- tapOn:
+    target: I click "Search downloads" in Downloads panel
+- tapOn:
+    target: I hover over the file name containing "sample-1" in the Downloads panel
+- tapOn:
+    target: I click the "Show in Finder" button
+- tapOn:
+    target: Analyze the screenshot to verify the Finder window should appear
+- tapOn:
+    target: Analyze the screenshot to verify that the file "sample-1.pdf" is present
+      in the Finder window

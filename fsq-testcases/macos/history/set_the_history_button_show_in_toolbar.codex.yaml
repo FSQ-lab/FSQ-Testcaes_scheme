@@ -1,0 +1,20 @@
+schemaVersion: fsq.ai-test/v1
+name: Set the History button show in toolbar
+description: Converted from Edge Mac Behave BDD scenario.
+platform: macos
+appId: com.microsoft.edgemac
+tags:
+- p0
+- regression
+- history
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Settings and more button
+- tapOn:
+    target: History button
+- tapOn:
+    target: I click "Show in toolbar" in menu
+- tapOn:
+    target: '"History" should be displayed in toolbar'

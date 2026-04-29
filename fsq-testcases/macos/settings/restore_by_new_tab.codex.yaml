@@ -1,0 +1,44 @@
+schemaVersion: fsq.ai-test/v1
+name: Restore by new tab
+description: Converted from Edge Mac Behave BDD scenario.
+platform: macos
+appId: com.microsoft.edgemac
+tags:
+- regression
+- p0
+- settings
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+    timeout: 10000
+- inputText:
+    text: edge://settings/startHomeNTP
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+- tapOn:
+    target: Open the new tab page option
+- tapOn:
+    target: New Tab button
+    locator:
+      accessibilityId: New Tab
+- tapOn:
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+    timeout: 10000
+- inputText:
+    text: https://www.bing.com
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+- pressKey: Enter
+- killApp: {}
+- launchApp
+- assertVisible:
+    target: edge should open with a page titled "New Tab"
+    optional: false

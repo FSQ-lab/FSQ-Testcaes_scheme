@@ -1,0 +1,45 @@
+schemaVersion: fsq.ai-test/v1
+name: Cancel add custom site
+description: Converted from Edge Mac Behave BDD scenario.
+platform: macos
+appId: com.microsoft.edgemac
+tags:
+- regression
+- p0
+- settings
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+    timeout: 10000
+- inputText:
+    text: edge://settings/startHomeNTP
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+- tapOn:
+    target: Open custom sites option
+- tapOn:
+    target: I click the "Add site" button
+- assertVisible:
+    target: Add site dialog
+    optional: false
+- inputText:
+    text: https://www.bing.com
+    target: URL field
+    locator:
+      text: URL
+      childOf:
+        text: Add site
+- tapOn:
+    target: Cancel button on Add site dialog
+    locator:
+      text: Cancel
+      childOf:
+        text: Add site
+- assertNotVisible:
+    target: Add site dialog
+    optional: false

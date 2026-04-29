@@ -1,0 +1,31 @@
+schemaVersion: fsq.ai-test/v1
+name: Type a website URL and enter to navigate directly to site
+description: Converted from Edge Mac Behave BDD scenario.
+platform: macos
+appId: com.microsoft.edgemac
+tags:
+- p0
+- ominibox
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+    timeout: 10000
+- inputText:
+    text: www.163.com
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+- pressKey: Enter
+- assertVisible:
+    target: 163 website content
+    locator:
+      name: 网易
+    optional: false
+- assert:
+    url:
+      equals: https://www.163.com
+    optional: false

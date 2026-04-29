@@ -1,0 +1,31 @@
+schemaVersion: fsq.ai-test/v1
+name: Set NTP as home page
+description: Converted from Edge Mac Behave BDD scenario.
+platform: macos
+appId: com.microsoft.edgemac
+tags:
+- settings
+- smoke
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+    timeout: 10000
+- inputText:
+    text: edge://settings/startHomeNTP
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+- tapOn:
+    target: show home button on the toolbar option
+- tapOn:
+    target: New tab page option
+- tapOn:
+    target: Home button
+- assertVisible:
+    target: should open a page titled "New Tab"
+    optional: false

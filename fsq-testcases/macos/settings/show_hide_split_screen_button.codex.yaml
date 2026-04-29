@@ -1,0 +1,32 @@
+schemaVersion: fsq.ai-test/v1
+name: Show/hide Split screen button
+description: Converted from Edge Mac Behave BDD scenario.
+platform: macos
+appId: com.microsoft.edgemac
+tags:
+- regression
+- p0
+- settings
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+    timeout: 10000
+- inputText:
+    text: edge://settings/appearance/toolbar
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+- tapOn:
+    target: Split screen button
+- assertVisible:
+    target: Split screen button on toolbar
+    optional: false
+- tapOn:
+    target: Split screen button
+- assertNotVisible:
+    target: Split screen button on toolbar
+    optional: false

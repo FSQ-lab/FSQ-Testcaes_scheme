@@ -1,0 +1,26 @@
+schemaVersion: fsq.ai-test/v1
+name: Close a tab in horizontal mode
+description: Converted from Edge Mac Behave BDD scenario.
+platform: macos
+appId: com.microsoft.edgemac
+tags:
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+    timeout: 10000
+- inputText:
+    text: https://www.apple.com
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+- pressKey: Enter
+- tapOn:
+    target: I click the "Close Tab" button on tab header
+- assertVisible:
+    target: the "Apple" tab should be closed
+    optional: false

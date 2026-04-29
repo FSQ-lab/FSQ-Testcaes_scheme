@@ -1,0 +1,32 @@
+schemaVersion: fsq.ai-test/v1
+name: Show/hide home button
+description: Converted from Edge Mac Behave BDD scenario.
+platform: macos
+appId: com.microsoft.edgemac
+tags:
+- regression
+- p0
+- settings
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+    timeout: 10000
+- inputText:
+    text: edge://settings/appearance/toolbar
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+- tapOn:
+    target: Home button
+- assertVisible:
+    target: Home button on toolbar
+    optional: false
+- tapOn:
+    target: Home button
+- assertNotVisible:
+    target: Home button on toolbar
+    optional: false

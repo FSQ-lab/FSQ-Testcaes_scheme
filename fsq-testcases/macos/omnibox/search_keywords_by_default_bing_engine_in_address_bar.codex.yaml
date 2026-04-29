@@ -1,0 +1,29 @@
+schemaVersion: fsq.ai-test/v1
+name: Search keywords by default Bing engine in address bar
+description: Converted from Edge Mac Behave BDD scenario.
+platform: macos
+appId: com.microsoft.edgemac
+tags:
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: New Tab button
+    locator:
+      accessibilityId: New Tab
+- tapOn:
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+    timeout: 10000
+- inputText:
+    text: cat
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+- pressKey: Enter
+- assert:
+    title:
+      equals: cat - Search
+    optional: false

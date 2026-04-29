@@ -1,0 +1,44 @@
+schemaVersion: fsq.ai-test/v1
+name: Navigate to website by selecting from dropdown suggestions
+description: Converted from Edge Mac Behave BDD scenario.
+platform: macos
+appId: com.microsoft.edgemac
+tags:
+- p0
+- ominibox
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: New Tab button
+    locator:
+      accessibilityId: New Tab
+- tapOn:
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+    timeout: 10000
+- inputText:
+    text: www.apple.com
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+- tapOn:
+    target: a dropdown list should appear with URL suggestions
+- tapOn:
+    target: I click the top item "www.apple.com" in the dropdown list
+- tapOn:
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+    timeout: 10000
+- inputText:
+    text: https://www.apple.com
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+- pressKey: Enter
+- assert:
+    url:
+      equals: https://www.apple.com
+    optional: false
