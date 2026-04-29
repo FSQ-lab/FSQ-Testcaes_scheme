@@ -1,0 +1,651 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://fsq.example.com/schemas/codex-fsq-ai-test-dsl-v1.schema.json",
+  "title": "FSQ AI Test DSL v1 Codex Schema",
+  "description": "Codex-produced JSON Schema for the parser-normalized FSQ AI Test DSL v1 model.",
+  "type": "object",
+  "required": ["config", "commands"],
+  "additionalProperties": false,
+  "properties": {
+    "config": { "$ref": "#/$defs/config" },
+    "commands": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/command" }
+    }
+  },
+  "$defs": {
+    "config": {
+      "type": "object",
+      "required": ["schemaVersion", "name"],
+      "additionalProperties": false,
+      "anyOf": [
+        { "required": ["appId"] },
+        { "required": ["url"] },
+        { "required": ["app"] }
+      ],
+      "properties": {
+        "schemaVersion": { "const": "fsq.ai-test/v1" },
+        "name": { "type": "string", "minLength": 1 },
+        "description": { "type": "string" },
+        "appId": { "type": "string", "minLength": 1 },
+        "url": { "type": "string", "minLength": 1 },
+        "platform": { "$ref": "#/$defs/platform" },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "env": {
+          "type": "object",
+          "additionalProperties": {
+            "anyOf": [
+              { "type": "string" },
+              { "type": "number" },
+              { "type": "boolean" }
+            ]
+          }
+        },
+        "properties": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "app": { "$ref": "#/$defs/appConfig" },
+        "runner": { "$ref": "#/$defs/runnerConfig" }
+      }
+    },
+    "platform": {
+      "type": "string",
+      "enum": ["android", "ios", "macos", "windows", "web"]
+    },
+    "appConfig": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "anyOf": [
+        { "required": ["name"] },
+        { "required": ["exe"] },
+        { "required": ["path"] },
+        { "required": ["bundleId"] },
+        { "required": ["appId"] }
+      ],
+      "properties": {
+        "name": { "type": "string" },
+        "exe": { "type": "string" },
+        "path": { "type": "string" },
+        "bundleId": { "type": "string" },
+        "appId": { "type": "string" },
+        "windowTitleRegex": { "type": "string" },
+        "launchArgs": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "runnerConfig": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "backend": {
+          "type": "string",
+          "enum": ["appium", "appium-mcp", "pywinauto-mcp", "webdriver", "cli"]
+        },
+        "mcpServer": { "type": "string" }
+      }
+    },
+    "command": {
+      "oneOf": [
+        { "$ref": "#/$defs/bareCommand" },
+        { "$ref": "#/$defs/launchAppCommand" },
+        { "$ref": "#/$defs/stopAppCommand" },
+        { "$ref": "#/$defs/killAppCommand" },
+        { "$ref": "#/$defs/clearStateCommand" },
+        { "$ref": "#/$defs/setPermissionsCommand" },
+        { "$ref": "#/$defs/tapOnCommand" },
+        { "$ref": "#/$defs/doubleTapOnCommand" },
+        { "$ref": "#/$defs/longPressOnCommand" },
+        { "$ref": "#/$defs/rightClickOnCommand" },
+        { "$ref": "#/$defs/hoverOnCommand" },
+        { "$ref": "#/$defs/inputTextCommand" },
+        { "$ref": "#/$defs/clearTextCommand" },
+        { "$ref": "#/$defs/pressKeyCommand" },
+        { "$ref": "#/$defs/swipeCommand" },
+        { "$ref": "#/$defs/scrollCommand" },
+        { "$ref": "#/$defs/scrollUntilVisibleCommand" },
+        { "$ref": "#/$defs/assertVisibleCommand" },
+        { "$ref": "#/$defs/assertNotVisibleCommand" },
+        { "$ref": "#/$defs/assertCommand" },
+        { "$ref": "#/$defs/assertWithAICommand" },
+        { "$ref": "#/$defs/waitUntilCommand" },
+        { "$ref": "#/$defs/waitForAnimationToEndCommand" },
+        { "$ref": "#/$defs/performActionsCommand" },
+        { "$ref": "#/$defs/releaseActionsCommand" },
+        { "$ref": "#/$defs/executeMethodCommand" },
+        { "$ref": "#/$defs/runFlowCommand" },
+        { "$ref": "#/$defs/repeatCommand" },
+        { "$ref": "#/$defs/retryCommand" },
+        { "$ref": "#/$defs/takeScreenshotCommand" },
+        { "$ref": "#/$defs/startRecordingCommand" },
+        { "$ref": "#/$defs/stopRecordingCommand" }
+      ]
+    },
+    "bareCommand": {
+      "type": "string",
+      "enum": ["launchApp", "stopApp", "killApp", "clearState", "releaseActions", "takeScreenshot", "startRecording", "stopRecording", "waitForAnimationToEnd"]
+    },
+    "emptyCommandValue": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "maxProperties": 0,
+          "additionalProperties": false
+        }
+      ]
+    },
+    "selectorCommandValue": {
+      "oneOf": [
+        { "type": "string", "minLength": 1 },
+        { "$ref": "#/$defs/targeting" }
+      ]
+    },
+    "targeting": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "target": { "type": "string", "minLength": 1 },
+        "locator": { "$ref": "#/$defs/selector" },
+        "timeout": { "$ref": "#/$defs/timeout" },
+        "optional": { "type": "boolean", "default": false },
+        "retry": { "$ref": "#/$defs/retryCount" },
+        "label": { "type": "string" },
+        "text": { "type": "string" },
+        "id": { "type": "string" },
+        "accessibilityId": { "type": "string" },
+        "name": { "type": "string" },
+        "className": { "type": "string" },
+        "xpath": { "type": "string" },
+        "automationId": { "type": "string" },
+        "controlType": { "type": "string" }
+      },
+      "anyOf": [
+        { "required": ["target"] },
+        { "required": ["locator"] },
+        { "required": ["text"] },
+        { "required": ["id"] },
+        { "required": ["accessibilityId"] },
+        { "required": ["name"] },
+        { "required": ["automationId"] }
+      ]
+    },
+    "selector": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "text": { "type": "string" },
+        "id": { "type": "string" },
+        "accessibilityId": { "type": "string" },
+        "name": { "type": "string" },
+        "label": { "type": "string" },
+        "value": { "type": "string" },
+        "resourceId": { "type": "string" },
+        "className": { "type": "string" },
+        "xpath": { "type": "string" },
+        "css": { "type": "string" },
+        "predicate": { "type": "string" },
+        "classChain": { "type": "string" },
+        "uiautomator": { "type": "string" },
+        "automationId": { "type": "string" },
+        "controlType": { "type": "string" },
+        "localizedControlType": { "type": "string" },
+        "frameworkId": { "type": "string" },
+        "processId": { "type": "integer" },
+        "handle": { "type": "string" },
+        "image": { "type": "string" },
+        "point": { "$ref": "#/$defs/point" },
+        "index": { "type": "integer", "minimum": 0 },
+        "enabled": { "type": "boolean" },
+        "visible": { "type": "boolean" },
+        "selected": { "type": "boolean" },
+        "checked": { "type": "boolean" },
+        "focused": { "type": "boolean" },
+        "below": { "$ref": "#/$defs/selector" },
+        "above": { "$ref": "#/$defs/selector" },
+        "leftOf": { "$ref": "#/$defs/selector" },
+        "rightOf": { "$ref": "#/$defs/selector" },
+        "childOf": { "$ref": "#/$defs/selector" },
+        "contains": { "$ref": "#/$defs/selector" },
+        "containsDescendants": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/selector" }
+        }
+      },
+      "minProperties": 1
+    },
+    "point": {
+      "type": "object",
+      "required": ["x", "y"],
+      "additionalProperties": false,
+      "properties": {
+        "x": { "type": "number" },
+        "y": { "type": "number" }
+      }
+    },
+    "timeout": { "type": "integer", "minimum": 0, "maximum": 3600000 },
+    "retryCount": { "type": "integer", "minimum": 0, "maximum": 10 },
+    "launchAppCommand": { "$ref": "#/$defs/oneKeyEmpty/launchApp" },
+    "stopAppCommand": { "$ref": "#/$defs/oneKeyEmpty/stopApp" },
+    "killAppCommand": { "$ref": "#/$defs/oneKeyEmpty/killApp" },
+    "clearStateCommand": { "$ref": "#/$defs/oneKeyEmpty/clearState" },
+    "releaseActionsCommand": { "$ref": "#/$defs/oneKeyEmpty/releaseActions" },
+    "takeScreenshotCommand": { "$ref": "#/$defs/oneKeyEmpty/takeScreenshot" },
+    "startRecordingCommand": { "$ref": "#/$defs/oneKeyEmpty/startRecording" },
+    "stopRecordingCommand": { "$ref": "#/$defs/oneKeyEmpty/stopRecording" },
+    "waitForAnimationToEndCommand": { "$ref": "#/$defs/oneKeyEmpty/waitForAnimationToEnd" },
+    "oneKeyEmpty": {
+      "launchApp": { "type": "object", "required": ["launchApp"], "additionalProperties": false, "properties": { "launchApp": { "$ref": "#/$defs/emptyCommandValue" } } },
+      "stopApp": { "type": "object", "required": ["stopApp"], "additionalProperties": false, "properties": { "stopApp": { "$ref": "#/$defs/emptyCommandValue" } } },
+      "killApp": { "type": "object", "required": ["killApp"], "additionalProperties": false, "properties": { "killApp": { "$ref": "#/$defs/emptyCommandValue" } } },
+      "clearState": { "type": "object", "required": ["clearState"], "additionalProperties": false, "properties": { "clearState": { "$ref": "#/$defs/emptyCommandValue" } } },
+      "releaseActions": { "type": "object", "required": ["releaseActions"], "additionalProperties": false, "properties": { "releaseActions": { "$ref": "#/$defs/emptyCommandValue" } } },
+      "takeScreenshot": { "type": "object", "required": ["takeScreenshot"], "additionalProperties": false, "properties": { "takeScreenshot": { "$ref": "#/$defs/emptyCommandValue" } } },
+      "startRecording": { "type": "object", "required": ["startRecording"], "additionalProperties": false, "properties": { "startRecording": { "$ref": "#/$defs/emptyCommandValue" } } },
+      "stopRecording": { "type": "object", "required": ["stopRecording"], "additionalProperties": false, "properties": { "stopRecording": { "$ref": "#/$defs/emptyCommandValue" } } },
+      "waitForAnimationToEnd": { "type": "object", "required": ["waitForAnimationToEnd"], "additionalProperties": false, "properties": { "waitForAnimationToEnd": { "$ref": "#/$defs/emptyCommandValue" } } }
+    },
+    "tapOnCommand": { "$ref": "#/$defs/oneKeySelector/tapOn" },
+    "doubleTapOnCommand": { "$ref": "#/$defs/oneKeySelector/doubleTapOn" },
+    "longPressOnCommand": { "$ref": "#/$defs/oneKeySelector/longPressOn" },
+    "rightClickOnCommand": { "$ref": "#/$defs/oneKeySelector/rightClickOn" },
+    "hoverOnCommand": { "$ref": "#/$defs/oneKeySelector/hoverOn" },
+    "clearTextCommand": { "$ref": "#/$defs/oneKeySelector/clearText" },
+    "assertVisibleCommand": { "$ref": "#/$defs/oneKeySelector/assertVisible" },
+    "assertNotVisibleCommand": { "$ref": "#/$defs/oneKeySelector/assertNotVisible" },
+    "oneKeySelector": {
+      "tapOn": { "type": "object", "required": ["tapOn"], "additionalProperties": false, "properties": { "tapOn": { "$ref": "#/$defs/selectorCommandValue" } } },
+      "doubleTapOn": { "type": "object", "required": ["doubleTapOn"], "additionalProperties": false, "properties": { "doubleTapOn": { "$ref": "#/$defs/selectorCommandValue" } } },
+      "longPressOn": { "type": "object", "required": ["longPressOn"], "additionalProperties": false, "properties": { "longPressOn": { "$ref": "#/$defs/selectorCommandValue" } } },
+      "rightClickOn": { "type": "object", "required": ["rightClickOn"], "additionalProperties": false, "properties": { "rightClickOn": { "$ref": "#/$defs/selectorCommandValue" } } },
+      "hoverOn": { "type": "object", "required": ["hoverOn"], "additionalProperties": false, "properties": { "hoverOn": { "$ref": "#/$defs/selectorCommandValue" } } },
+      "clearText": { "type": "object", "required": ["clearText"], "additionalProperties": false, "properties": { "clearText": { "$ref": "#/$defs/selectorCommandValue" } } },
+      "scroll": { "type": "object", "required": ["scroll"], "additionalProperties": false, "properties": { "scroll": { "$ref": "#/$defs/selectorCommandValue" } } },
+      "scrollUntilVisible": { "type": "object", "required": ["scrollUntilVisible"], "additionalProperties": false, "properties": { "scrollUntilVisible": { "$ref": "#/$defs/selectorCommandValue" } } },
+      "assertVisible": { "type": "object", "required": ["assertVisible"], "additionalProperties": false, "properties": { "assertVisible": { "$ref": "#/$defs/selectorCommandValue" } } },
+      "assertNotVisible": { "type": "object", "required": ["assertNotVisible"], "additionalProperties": false, "properties": { "assertNotVisible": { "$ref": "#/$defs/selectorCommandValue" } } }
+    },
+    "inputTextCommand": {
+      "type": "object",
+      "required": ["inputText"],
+      "additionalProperties": false,
+      "properties": {
+        "inputText": {
+          "oneOf": [
+            { "type": "string" },
+            {
+              "type": "object",
+              "required": ["text"],
+              "additionalProperties": false,
+              "properties": {
+                "text": { "type": "string" },
+                "target": { "type": "string" },
+                "locator": { "$ref": "#/$defs/selector" },
+                "timeout": { "$ref": "#/$defs/timeout" },
+                "optional": { "type": "boolean", "default": false },
+                "retry": { "$ref": "#/$defs/retryCount" }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "pressKeyCommand": {
+      "type": "object",
+      "required": ["pressKey"],
+      "additionalProperties": false,
+      "properties": {
+        "pressKey": {
+          "oneOf": [
+            { "type": "string", "minLength": 1 },
+            {
+              "type": "object",
+              "required": ["key"],
+              "additionalProperties": false,
+              "properties": {
+                "key": { "type": "string", "minLength": 1 },
+                "modifiers": {
+                  "type": "array",
+                  "items": { "type": "string", "enum": ["Alt", "Control", "Command", "Meta", "Shift"] },
+                  "uniqueItems": true
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "setPermissionsCommand": {
+      "type": "object",
+      "required": ["setPermissions"],
+      "additionalProperties": false,
+      "properties": {
+        "setPermissions": {
+          "type": "object",
+          "additionalProperties": { "type": "string", "enum": ["allow", "deny", "unset"] }
+        }
+      }
+    },
+    "swipeCommand": {
+      "type": "object",
+      "required": ["swipe"],
+      "additionalProperties": false,
+      "properties": {
+        "swipe": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "start": { "$ref": "#/$defs/point" },
+            "end": { "$ref": "#/$defs/point" },
+            "direction": { "type": "string", "enum": ["up", "down", "left", "right"] },
+            "duration": { "type": "integer", "minimum": 0 }
+          },
+          "anyOf": [
+            { "required": ["start", "end"] },
+            { "required": ["direction"] }
+          ]
+        }
+      }
+    },
+    "scrollCommand": { "$ref": "#/$defs/oneKeySelector/scroll" },
+    "scrollUntilVisibleCommand": { "$ref": "#/$defs/oneKeySelector/scrollUntilVisible" },
+    "assertCommand": {
+      "type": "object",
+      "required": ["assert"],
+      "additionalProperties": false,
+      "properties": { "assert": { "$ref": "#/$defs/assertion" } }
+    },
+    "assertWithAICommand": {
+      "type": "object",
+      "required": ["assertWithAI"],
+      "additionalProperties": false,
+      "properties": {
+        "assertWithAI": {
+          "type": "object",
+          "required": ["prompt"],
+          "additionalProperties": false,
+          "properties": {
+            "prompt": { "type": "string", "minLength": 1 },
+            "optional": { "type": "boolean", "default": false },
+            "timeout": { "$ref": "#/$defs/timeout" }
+          }
+        }
+      }
+    },
+    "waitUntilCommand": {
+      "type": "object",
+      "required": ["waitUntil"],
+      "additionalProperties": false,
+      "properties": {
+        "waitUntil": {
+          "allOf": [
+            { "$ref": "#/$defs/assertion" },
+            {
+              "type": "object",
+              "properties": { "timeout": { "$ref": "#/$defs/timeout" } }
+            }
+          ]
+        }
+      }
+    },
+    "assertion": {
+      "type": "object",
+      "additionalProperties": false,
+      "anyOf": [
+        { "required": ["url"] },
+        { "required": ["title"] },
+        { "required": ["text"] },
+        { "required": ["element"] },
+        { "required": ["clipboard"] },
+        { "required": ["appState"] },
+        { "required": ["orientation"] },
+        { "required": ["network"] },
+        { "required": ["visual"] }
+      ],
+      "properties": {
+        "url": { "$ref": "#/$defs/matcher" },
+        "title": { "$ref": "#/$defs/matcher" },
+        "text": { "$ref": "#/$defs/matcher" },
+        "element": { "$ref": "#/$defs/selector" },
+        "clipboard": { "$ref": "#/$defs/matcher" },
+        "appState": { "$ref": "#/$defs/matcher" },
+        "orientation": { "$ref": "#/$defs/matcher" },
+        "network": { "$ref": "#/$defs/matcher" },
+        "visual": { "$ref": "#/$defs/matcher" },
+        "timeout": { "$ref": "#/$defs/timeout" },
+        "optional": { "type": "boolean", "default": false }
+      }
+    },
+    "matcher": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "equals": {},
+        "contains": { "type": "string" },
+        "matches": { "type": "string" },
+        "exists": { "type": "boolean" },
+        "notExists": { "type": "boolean" },
+        "isTrue": { "type": "boolean" },
+        "isFalse": { "type": "boolean" }
+      },
+      "minProperties": 1,
+      "maxProperties": 1
+    },
+    "performActionsCommand": {
+      "type": "object",
+      "required": ["performActions"],
+      "additionalProperties": false,
+      "properties": {
+        "performActions": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/actionSource" }
+        }
+      }
+    },
+    "actionSource": {
+      "type": "object",
+      "required": ["type", "id", "actions"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "type": "string", "enum": ["none", "key", "pointer", "wheel"] },
+        "id": { "type": "string", "minLength": 1 },
+        "parameters": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "pointerType": { "type": "string", "enum": ["mouse", "pen", "touch"] }
+          }
+        },
+        "actions": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/actionItem" }
+        }
+      }
+    },
+    "actionItem": {
+      "oneOf": [
+        { "$ref": "#/$defs/pauseAction" },
+        { "$ref": "#/$defs/keyDownAction" },
+        { "$ref": "#/$defs/keyUpAction" },
+        { "$ref": "#/$defs/pointerMoveAction" },
+        { "$ref": "#/$defs/pointerDownAction" },
+        { "$ref": "#/$defs/pointerUpAction" },
+        { "$ref": "#/$defs/scrollAction" }
+      ]
+    },
+    "pauseAction": {
+      "type": "object",
+      "required": ["type"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "pause" },
+        "duration": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "keyDownAction": {
+      "type": "object",
+      "required": ["type", "value"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "keyDown" },
+        "value": { "type": "string", "minLength": 1 }
+      }
+    },
+    "keyUpAction": {
+      "type": "object",
+      "required": ["type", "value"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "keyUp" },
+        "value": { "type": "string", "minLength": 1 }
+      }
+    },
+    "pointerOrigin": {
+      "oneOf": [
+        { "type": "string", "enum": ["viewport", "pointer"] },
+        { "$ref": "#/$defs/selector" }
+      ]
+    },
+    "pointerMoveAction": {
+      "type": "object",
+      "required": ["type", "origin", "x", "y"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "pointerMove" },
+        "duration": { "type": "integer", "minimum": 0 },
+        "origin": { "$ref": "#/$defs/pointerOrigin" },
+        "x": { "type": "number" },
+        "y": { "type": "number" }
+      }
+    },
+    "pointerDownAction": {
+      "type": "object",
+      "required": ["type", "button"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "pointerDown" },
+        "button": { "type": "integer" }
+      }
+    },
+    "pointerUpAction": {
+      "type": "object",
+      "required": ["type", "button"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "pointerUp" },
+        "button": { "type": "integer" }
+      }
+    },
+    "scrollAction": {
+      "type": "object",
+      "required": ["type", "origin", "x", "y", "deltaX", "deltaY"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "const": "scroll" },
+        "duration": { "type": "integer", "minimum": 0 },
+        "origin": { "$ref": "#/$defs/pointerOrigin" },
+        "x": { "type": "number" },
+        "y": { "type": "number" },
+        "deltaX": { "type": "number" },
+        "deltaY": { "type": "number" }
+      }
+    },
+    "executeMethodCommand": {
+      "type": "object",
+      "required": ["executeMethod"],
+      "additionalProperties": false,
+      "properties": {
+        "executeMethod": {
+          "type": "object",
+          "required": ["script"],
+          "additionalProperties": false,
+          "properties": {
+            "script": { "type": "string", "minLength": 1 },
+            "args": {
+              "type": "object",
+              "additionalProperties": true,
+              "default": {}
+            }
+          }
+        }
+      }
+    },
+    "runFlowCommand": {
+      "type": "object",
+      "required": ["runFlow"],
+      "additionalProperties": false,
+      "properties": {
+        "runFlow": {
+          "oneOf": [
+            { "type": "string", "minLength": 1 },
+            {
+              "type": "object",
+              "required": ["file"],
+              "additionalProperties": false,
+              "properties": {
+                "file": { "type": "string", "minLength": 1 },
+                "env": { "type": "object", "additionalProperties": true },
+                "when": { "$ref": "#/$defs/condition" }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "repeatCommand": {
+      "type": "object",
+      "required": ["repeat"],
+      "additionalProperties": false,
+      "properties": {
+        "repeat": {
+          "type": "object",
+          "required": ["times", "commands"],
+          "additionalProperties": false,
+          "properties": {
+            "times": { "type": "integer", "minimum": 1, "maximum": 1000 },
+            "commands": { "type": "array", "items": { "$ref": "#/$defs/command" }, "minItems": 1 }
+          }
+        }
+      }
+    },
+    "retryCommand": {
+      "type": "object",
+      "required": ["retry"],
+      "additionalProperties": false,
+      "properties": {
+        "retry": {
+          "type": "object",
+          "required": ["commands"],
+          "additionalProperties": false,
+          "properties": {
+            "maxRetries": { "$ref": "#/$defs/retryCount" },
+            "commands": { "type": "array", "items": { "$ref": "#/$defs/command" }, "minItems": 1 }
+          }
+        }
+      }
+    },
+    "condition": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "platform": { "$ref": "#/$defs/platform" },
+        "visible": { "$ref": "#/$defs/selectorCommandValue" },
+        "notVisible": { "$ref": "#/$defs/selectorCommandValue" },
+        "url": { "$ref": "#/$defs/matcher" },
+        "title": { "$ref": "#/$defs/matcher" },
+        "expression": { "type": "string" }
+      },
+      "minProperties": 1
+    }
+  }
+}

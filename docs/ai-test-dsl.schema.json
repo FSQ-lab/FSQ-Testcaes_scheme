@@ -1,0 +1,1143 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.com/ai-test-dsl.schema.json",
+  "title": "AI Test Agent DSL",
+  "description": "AI 驱动的移动端自动化测试 DSL Schema - 用于约束 AI 生成的测试脚本格式",
+  "type": "object",
+  "required": ["steps"],
+  "properties": {
+    "config": {
+      "$ref": "#/definitions/Config"
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Step"
+      },
+      "minItems": 1,
+      "description": "测试步骤列表"
+    }
+  },
+  "definitions": {
+    "Config": {
+      "type": "object",
+      "description": "测试流程配置",
+      "properties": {
+        "app_id": {
+          "type": "string",
+          "description": "应用包名 (Android) 或 Bundle ID (iOS)"
+        },
+        "name": {
+          "type": "string",
+          "description": "测试流程名称"
+        },
+        "description": {
+          "type": "string",
+          "description": "测试流程描述"
+        },
+        "timeout": {
+          "type": "integer",
+          "minimum": 1000,
+          "maximum": 300000,
+          "default": 30000,
+          "description": "全局超时时间 (ms)"
+        },
+        "retry_on_fail": {
+          "type": "boolean",
+          "default": true,
+          "description": "失败时是否允许 AI 重试"
+        },
+        "env": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "环境变量，可在步骤中通过 ${VAR_NAME} 引用"
+        }
+      },
+      "additionalProperties": false
+    },
+    "Selector": {
+      "description": "元素选择器 - 支持简单字符串或复杂对象形式",
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "简单文本匹配，等价于 { text: '...' }"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "description": "文本匹配 (支持正则表达式)"
+            },
+            "id": {
+              "type": "string",
+              "description": "元素 ID (resource-id / accessibility-id)"
+            },
+            "class": {
+              "type": "string",
+              "description": "元素类名"
+            },
+            "xpath": {
+              "type": "string",
+              "description": "XPath 表达式 (不推荐使用，脆弱)"
+            },
+            "index": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "多个匹配时选择第几个 (从 0 开始)"
+            },
+            "enabled": {
+              "type": "boolean",
+              "description": "筛选可用/禁用状态的元素"
+            },
+            "visible": {
+              "type": "boolean",
+              "default": true,
+              "description": "是否只匹配可见元素"
+            },
+            "selected": {
+              "type": "boolean",
+              "description": "筛选选中状态"
+            },
+            "checked": {
+              "type": "boolean",
+              "description": "筛选勾选状态"
+            },
+            "focused": {
+              "type": "boolean",
+              "description": "筛选焦点状态"
+            },
+            "below": {
+              "$ref": "#/definitions/Selector",
+              "description": "位于指定元素下方"
+            },
+            "above": {
+              "$ref": "#/definitions/Selector",
+              "description": "位于指定元素上方"
+            },
+            "left_of": {
+              "$ref": "#/definitions/Selector",
+              "description": "位于指定元素左侧"
+            },
+            "right_of": {
+              "$ref": "#/definitions/Selector",
+              "description": "位于指定元素右侧"
+            },
+            "near": {
+              "$ref": "#/definitions/Selector",
+              "description": "靠近指定元素"
+            },
+            "child_of": {
+              "$ref": "#/definitions/Selector",
+              "description": "是指定元素的子元素"
+            },
+            "contains": {
+              "$ref": "#/definitions/Selector",
+              "description": "包含指定的子元素"
+            },
+            "timeout": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 60000,
+              "description": "等待元素出现的超时时间 (ms)"
+            },
+            "retry": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10,
+              "description": "操作失败时的重试次数"
+            },
+            "optional": {
+              "type": "boolean",
+              "default": false,
+              "description": "为 true 时，该步骤失败不会中断整个流程"
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "Condition": {
+      "type": "object",
+      "description": "条件表达式，用于 if 和 repeat 命令",
+      "properties": {
+        "visible": {
+          "$ref": "#/definitions/Selector",
+          "description": "当元素可见时条件为真"
+        },
+        "not_visible": {
+          "$ref": "#/definitions/Selector",
+          "description": "当元素不可见时条件为真"
+        },
+        "platform": {
+          "type": "string",
+          "enum": ["android", "ios"],
+          "description": "平台条件"
+        },
+        "expression": {
+          "type": "string",
+          "description": "JavaScript 表达式，如 ${count > 0}"
+        }
+      },
+      "additionalProperties": false
+    },
+    "Step": {
+      "description": "测试步骤 - 支持所有命令类型",
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": ["launch_app", "kill_app", "clear_data", "clear_text", "back", "home"],
+          "description": "无参数的简单命令"
+        },
+        { "$ref": "#/definitions/LaunchAppStep" },
+        { "$ref": "#/definitions/KillAppStep" },
+        { "$ref": "#/definitions/ClearDataStep" },
+        { "$ref": "#/definitions/TapStep" },
+        { "$ref": "#/definitions/LongPressStep" },
+        { "$ref": "#/definitions/DoubleTapStep" },
+        { "$ref": "#/definitions/InputTextStep" },
+        { "$ref": "#/definitions/ClearTextStep" },
+        { "$ref": "#/definitions/SwipeStep" },
+        { "$ref": "#/definitions/ScrollStep" },
+        { "$ref": "#/definitions/DragStep" },
+        { "$ref": "#/definitions/AssertVisibleStep" },
+        { "$ref": "#/definitions/AssertNotVisibleStep" },
+        { "$ref": "#/definitions/AssertTextStep" },
+        { "$ref": "#/definitions/AssertEnabledStep" },
+        { "$ref": "#/definitions/AssertCheckedStep" },
+        { "$ref": "#/definitions/AssertAiStep" },
+        { "$ref": "#/definitions/WaitVisibleStep" },
+        { "$ref": "#/definitions/WaitGoneStep" },
+        { "$ref": "#/definitions/WaitTextStep" },
+        { "$ref": "#/definitions/WaitSecondsStep" },
+        { "$ref": "#/definitions/BackStep" },
+        { "$ref": "#/definitions/HomeStep" },
+        { "$ref": "#/definitions/OpenUrlStep" },
+        { "$ref": "#/definitions/PressKeyStep" },
+        { "$ref": "#/definitions/SetOrientationStep" },
+        { "$ref": "#/definitions/SetLocationStep" },
+        { "$ref": "#/definitions/SetNetworkStep" },
+        { "$ref": "#/definitions/ScreenshotStep" },
+        { "$ref": "#/definitions/StartRecordingStep" },
+        { "$ref": "#/definitions/StopRecordingStep" },
+        { "$ref": "#/definitions/IfStep" },
+        { "$ref": "#/definitions/RepeatStep" },
+        { "$ref": "#/definitions/RunFlowStep" },
+        { "$ref": "#/definitions/SetVariableStep" },
+        { "$ref": "#/definitions/ExtractTextStep" }
+      ]
+    },
+    "LaunchAppStep": {
+      "type": "object",
+      "properties": {
+        "launch_app": {
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "properties": {
+                "app_id": {
+                  "type": "string",
+                  "description": "应用包名，默认使用 config.app_id"
+                },
+                "clear_data": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "启动前是否清除应用数据"
+                },
+                "wait_for_ready": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "是否等待应用就绪"
+                },
+                "timeout": {
+                  "type": "integer",
+                  "description": "启动超时时间 (ms)"
+                },
+                "arguments": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "description": "传递给应用的启动参数"
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": ["launch_app"],
+      "additionalProperties": false
+    },
+    "KillAppStep": {
+      "type": "object",
+      "properties": {
+        "kill_app": {
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "properties": {
+                "app_id": { "type": "string" }
+              },
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": ["kill_app"],
+      "additionalProperties": false
+    },
+    "ClearDataStep": {
+      "type": "object",
+      "properties": {
+        "clear_data": {
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "properties": {
+                "app_id": { "type": "string" }
+              },
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": ["clear_data"],
+      "additionalProperties": false
+    },
+    "TapStep": {
+      "type": "object",
+      "properties": {
+        "tap": {
+          "$ref": "#/definitions/Selector"
+        }
+      },
+      "required": ["tap"],
+      "additionalProperties": false
+    },
+    "LongPressStep": {
+      "type": "object",
+      "properties": {
+        "long_press": {
+          "oneOf": [
+            { "$ref": "#/definitions/Selector" },
+            {
+              "type": "object",
+              "properties": {
+                "text": { "type": "string" },
+                "id": { "type": "string" },
+                "duration": {
+                  "type": "integer",
+                  "minimum": 500,
+                  "maximum": 5000,
+                  "default": 1000,
+                  "description": "长按持续时间 (ms)"
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": ["long_press"],
+      "additionalProperties": false
+    },
+    "DoubleTapStep": {
+      "type": "object",
+      "properties": {
+        "double_tap": {
+          "oneOf": [
+            { "$ref": "#/definitions/Selector" },
+            {
+              "type": "object",
+              "properties": {
+                "text": { "type": "string" },
+                "id": { "type": "string" },
+                "interval": {
+                  "type": "integer",
+                  "minimum": 50,
+                  "maximum": 500,
+                  "default": 100,
+                  "description": "两次点击间隔 (ms)"
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": ["double_tap"],
+      "additionalProperties": false
+    },
+    "InputTextStep": {
+      "type": "object",
+      "properties": {
+        "input_text": {
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "直接输入到当前焦点元素"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "description": "要输入的文本，支持 ${var} 变量"
+                },
+                "element": {
+                  "$ref": "#/definitions/Selector",
+                  "description": "目标输入框"
+                },
+                "clear_first": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "输入前是否先清空"
+                },
+                "hide_keyboard": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "输入后是否隐藏键盘"
+                }
+              },
+              "required": ["text"],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": ["input_text"],
+      "additionalProperties": false
+    },
+    "ClearTextStep": {
+      "type": "object",
+      "properties": {
+        "clear_text": {
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "properties": {
+                "element": { "$ref": "#/definitions/Selector" },
+                "characters": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "description": "删除指定数量的字符"
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": ["clear_text"],
+      "additionalProperties": false
+    },
+    "SwipeStep": {
+      "type": "object",
+      "properties": {
+        "swipe": {
+          "oneOf": [
+            {
+              "type": "string",
+              "enum": ["up", "down", "left", "right"],
+              "description": "简单方向滑动"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "direction": {
+                  "type": "string",
+                  "enum": ["up", "down", "left", "right"]
+                },
+                "distance": {
+                  "type": "string",
+                  "enum": ["short", "medium", "long"],
+                  "default": "medium"
+                },
+                "duration": {
+                  "type": "integer",
+                  "minimum": 100,
+                  "maximum": 3000,
+                  "default": 500,
+                  "description": "滑动持续时间 (ms)"
+                },
+                "element": {
+                  "$ref": "#/definitions/Selector",
+                  "description": "在指定元素上滑动"
+                },
+                "from": {
+                  "type": "array",
+                  "items": { "type": "integer" },
+                  "minItems": 2,
+                  "maxItems": 2,
+                  "description": "起始坐标 [x, y]"
+                },
+                "to": {
+                  "type": "array",
+                  "items": { "type": "integer" },
+                  "minItems": 2,
+                  "maxItems": 2,
+                  "description": "结束坐标 [x, y]"
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": ["swipe"],
+      "additionalProperties": false
+    },
+    "ScrollStep": {
+      "type": "object",
+      "properties": {
+        "scroll": {
+          "type": "object",
+          "properties": {
+            "to": {
+              "$ref": "#/definitions/Selector",
+              "description": "滚动直到该元素可见"
+            },
+            "direction": {
+              "type": "string",
+              "enum": ["up", "down"],
+              "default": "down"
+            },
+            "max_scrolls": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "default": 10,
+              "description": "最大滚动次数"
+            },
+            "timeout": {
+              "type": "integer",
+              "default": 30000
+            }
+          },
+          "required": ["to"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["scroll"],
+      "additionalProperties": false
+    },
+    "DragStep": {
+      "type": "object",
+      "properties": {
+        "drag": {
+          "type": "object",
+          "properties": {
+            "from": {
+              "$ref": "#/definitions/Selector",
+              "description": "拖拽起始元素"
+            },
+            "to": {
+              "$ref": "#/definitions/Selector",
+              "description": "拖拽目标元素"
+            },
+            "duration": {
+              "type": "integer",
+              "default": 1000,
+              "description": "拖拽持续时间 (ms)"
+            }
+          },
+          "required": ["from", "to"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["drag"],
+      "additionalProperties": false
+    },
+    "AssertVisibleStep": {
+      "type": "object",
+      "properties": {
+        "assert_visible": {
+          "oneOf": [
+            { "$ref": "#/definitions/Selector" },
+            {
+              "type": "object",
+              "properties": {
+                "text": { "type": "string" },
+                "id": { "type": "string" },
+                "timeout": { "type": "integer" },
+                "optional": { "type": "boolean", "default": false }
+              },
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": ["assert_visible"],
+      "additionalProperties": false
+    },
+    "AssertNotVisibleStep": {
+      "type": "object",
+      "properties": {
+        "assert_not_visible": {
+          "oneOf": [
+            { "$ref": "#/definitions/Selector" },
+            {
+              "type": "object",
+              "properties": {
+                "text": { "type": "string" },
+                "id": { "type": "string" },
+                "timeout": { "type": "integer" },
+                "optional": { "type": "boolean", "default": false }
+              },
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": ["assert_not_visible"],
+      "additionalProperties": false
+    },
+    "AssertTextStep": {
+      "type": "object",
+      "properties": {
+        "assert_text": {
+          "type": "object",
+          "properties": {
+            "element": {
+              "$ref": "#/definitions/Selector"
+            },
+            "equals": {
+              "type": "string",
+              "description": "精确匹配"
+            },
+            "contains": {
+              "type": "string",
+              "description": "包含匹配"
+            },
+            "matches": {
+              "type": "string",
+              "description": "正则匹配"
+            },
+            "timeout": { "type": "integer" },
+            "optional": { "type": "boolean", "default": false }
+          },
+          "required": ["element"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["assert_text"],
+      "additionalProperties": false
+    },
+    "AssertEnabledStep": {
+      "type": "object",
+      "properties": {
+        "assert_enabled": {
+          "type": "object",
+          "properties": {
+            "element": { "$ref": "#/definitions/Selector" },
+            "enabled": {
+              "type": "boolean",
+              "description": "true = 可用, false = 禁用"
+            },
+            "timeout": { "type": "integer" },
+            "optional": { "type": "boolean", "default": false }
+          },
+          "required": ["element", "enabled"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["assert_enabled"],
+      "additionalProperties": false
+    },
+    "AssertCheckedStep": {
+      "type": "object",
+      "properties": {
+        "assert_checked": {
+          "type": "object",
+          "properties": {
+            "element": { "$ref": "#/definitions/Selector" },
+            "checked": {
+              "type": "boolean",
+              "description": "true = 已勾选, false = 未勾选"
+            },
+            "timeout": { "type": "integer" },
+            "optional": { "type": "boolean", "default": false }
+          },
+          "required": ["element", "checked"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["assert_checked"],
+      "additionalProperties": false
+    },
+    "AssertAiStep": {
+      "type": "object",
+      "properties": {
+        "assert_ai": {
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "AI 断言的自然语言描述"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "assertion": {
+                  "type": "string",
+                  "description": "AI 断言的自然语言描述"
+                },
+                "confidence": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1,
+                  "default": 0.8,
+                  "description": "AI 置信度阈值"
+                },
+                "optional": {
+                  "type": "boolean",
+                  "default": true,
+                  "description": "AI 断言建议设为 optional"
+                }
+              },
+              "required": ["assertion"],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": ["assert_ai"],
+      "additionalProperties": false
+    },
+    "WaitVisibleStep": {
+      "type": "object",
+      "properties": {
+        "wait_visible": {
+          "oneOf": [
+            { "$ref": "#/definitions/Selector" },
+            {
+              "type": "object",
+              "properties": {
+                "text": { "type": "string" },
+                "id": { "type": "string" },
+                "timeout": {
+                  "type": "integer",
+                  "default": 30000
+                },
+                "poll_interval": {
+                  "type": "integer",
+                  "default": 500,
+                  "description": "轮询间隔 (ms)"
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": ["wait_visible"],
+      "additionalProperties": false
+    },
+    "WaitGoneStep": {
+      "type": "object",
+      "properties": {
+        "wait_gone": {
+          "oneOf": [
+            { "$ref": "#/definitions/Selector" },
+            {
+              "type": "object",
+              "properties": {
+                "text": { "type": "string" },
+                "id": { "type": "string" },
+                "timeout": {
+                  "type": "integer",
+                  "default": 30000
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": ["wait_gone"],
+      "additionalProperties": false
+    },
+    "WaitTextStep": {
+      "type": "object",
+      "properties": {
+        "wait_text": {
+          "type": "object",
+          "properties": {
+            "element": { "$ref": "#/definitions/Selector" },
+            "equals": { "type": "string" },
+            "contains": { "type": "string" },
+            "matches": { "type": "string" },
+            "timeout": {
+              "type": "integer",
+              "default": 30000
+            }
+          },
+          "required": ["element"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["wait_text"],
+      "additionalProperties": false
+    },
+    "WaitSecondsStep": {
+      "type": "object",
+      "properties": {
+        "wait_seconds": {
+          "type": "number",
+          "minimum": 0.1,
+          "maximum": 60,
+          "description": "固定等待秒数 (尽量少用，优先使用 wait_visible)"
+        }
+      },
+      "required": ["wait_seconds"],
+      "additionalProperties": false
+    },
+    "BackStep": {
+      "type": "object",
+      "properties": {
+        "back": { "type": "null" }
+      },
+      "required": ["back"],
+      "additionalProperties": false
+    },
+    "HomeStep": {
+      "type": "object",
+      "properties": {
+        "home": { "type": "null" }
+      },
+      "required": ["home"],
+      "additionalProperties": false
+    },
+    "OpenUrlStep": {
+      "type": "object",
+      "properties": {
+        "open_url": {
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "URL 或 Deep Link"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "url": {
+                  "type": "string",
+                  "description": "URL 或 Deep Link"
+                },
+                "in_app": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "是否在应用内打开"
+                }
+              },
+              "required": ["url"],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": ["open_url"],
+      "additionalProperties": false
+    },
+    "PressKeyStep": {
+      "type": "object",
+      "properties": {
+        "press_key": {
+          "oneOf": [
+            {
+              "type": "string",
+              "enum": [
+                "enter", "tab", "escape", "delete", "backspace", "space",
+                "volume_up", "volume_down", "home", "back", "menu",
+                "power", "camera", "search"
+              ]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "key": { "type": "string" },
+                "times": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 10,
+                  "default": 1
+                }
+              },
+              "required": ["key"],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": ["press_key"],
+      "additionalProperties": false
+    },
+    "SetOrientationStep": {
+      "type": "object",
+      "properties": {
+        "set_orientation": {
+          "type": "string",
+          "enum": ["portrait", "landscape"]
+        }
+      },
+      "required": ["set_orientation"],
+      "additionalProperties": false
+    },
+    "SetLocationStep": {
+      "type": "object",
+      "properties": {
+        "set_location": {
+          "type": "object",
+          "properties": {
+            "latitude": {
+              "type": "number",
+              "minimum": -90,
+              "maximum": 90
+            },
+            "longitude": {
+              "type": "number",
+              "minimum": -180,
+              "maximum": 180
+            },
+            "altitude": {
+              "type": "number",
+              "description": "海拔高度 (米)"
+            }
+          },
+          "required": ["latitude", "longitude"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["set_location"],
+      "additionalProperties": false
+    },
+    "SetNetworkStep": {
+      "type": "object",
+      "properties": {
+        "set_network": {
+          "type": "object",
+          "properties": {
+            "wifi": { "type": "boolean" },
+            "mobile_data": { "type": "boolean" },
+            "airplane_mode": { "type": "boolean" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "required": ["set_network"],
+      "additionalProperties": false
+    },
+    "ScreenshotStep": {
+      "type": "object",
+      "properties": {
+        "screenshot": {
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "截图文件名"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "crop": {
+                  "$ref": "#/definitions/Selector",
+                  "description": "裁剪到指定元素区域"
+                }
+              },
+              "required": ["name"],
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": ["screenshot"],
+      "additionalProperties": false
+    },
+    "StartRecordingStep": {
+      "type": "object",
+      "properties": {
+        "start_recording": {
+          "type": "string",
+          "description": "录屏文件名"
+        }
+      },
+      "required": ["start_recording"],
+      "additionalProperties": false
+    },
+    "StopRecordingStep": {
+      "type": "object",
+      "properties": {
+        "stop_recording": { "type": "null" }
+      },
+      "required": ["stop_recording"],
+      "additionalProperties": false
+    },
+    "IfStep": {
+      "type": "object",
+      "properties": {
+        "if": {
+          "type": "object",
+          "properties": {
+            "condition": {
+              "$ref": "#/definitions/Condition"
+            },
+            "then": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/Step" },
+              "minItems": 1,
+              "description": "条件为真时执行的步骤"
+            },
+            "else": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/Step" },
+              "description": "条件为假时执行的步骤 (可选)"
+            }
+          },
+          "required": ["condition", "then"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["if"],
+      "additionalProperties": false
+    },
+    "RepeatStep": {
+      "type": "object",
+      "properties": {
+        "repeat": {
+          "type": "object",
+          "properties": {
+            "times": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "description": "固定重复次数"
+            },
+            "while": {
+              "$ref": "#/definitions/Condition",
+              "description": "条件循环"
+            },
+            "max_times": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 10,
+              "description": "条件循环的最大次数 (防止无限循环)"
+            },
+            "steps": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/Step" },
+              "minItems": 1,
+              "description": "循环体步骤"
+            }
+          },
+          "required": ["steps"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["repeat"],
+      "additionalProperties": false
+    },
+    "RunFlowStep": {
+      "type": "object",
+      "properties": {
+        "run_flow": {
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "子流程文件路径"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "file": {
+                  "type": "string",
+                  "description": "子流程文件路径"
+                },
+                "steps": {
+                  "type": "array",
+                  "items": { "$ref": "#/definitions/Step" },
+                  "description": "内联步骤 (与 file 互斥)"
+                },
+                "condition": {
+                  "$ref": "#/definitions/Condition",
+                  "description": "执行条件"
+                },
+                "env": {
+                  "type": "object",
+                  "additionalProperties": { "type": "string" },
+                  "description": "传递给子流程的环境变量"
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": ["run_flow"],
+      "additionalProperties": false
+    },
+    "SetVariableStep": {
+      "type": "object",
+      "properties": {
+        "set_variable": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "description": "变量名 (字母开头，只包含字母数字下划线)"
+            },
+            "value": {
+              "oneOf": [
+                { "type": "string" },
+                { "type": "number" },
+                { "type": "boolean" }
+              ],
+              "description": "变量值"
+            },
+            "expression": {
+              "type": "string",
+              "description": "JavaScript 表达式，如 ${counter + 1}"
+            }
+          },
+          "required": ["name"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["set_variable"],
+      "additionalProperties": false
+    },
+    "ExtractTextStep": {
+      "type": "object",
+      "properties": {
+        "extract_text": {
+          "type": "object",
+          "properties": {
+            "element": {
+              "$ref": "#/definitions/Selector",
+              "description": "要提取文本的元素"
+            },
+            "variable": {
+              "type": "string",
+              "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+              "description": "存储提取文本的变量名"
+            },
+            "regex": {
+              "type": "string",
+              "description": "使用正则提取部分文本"
+            }
+          },
+          "required": ["element", "variable"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["extract_text"],
+      "additionalProperties": false
+    }
+  }
+}
