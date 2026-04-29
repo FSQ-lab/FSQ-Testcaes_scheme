@@ -1,0 +1,52 @@
+schemaVersion: fsq.ai-test/v1
+name: Search with the third party search engine in top mode
+description: Converted from Edge Android Behave BDD scenario.
+platform: android
+appId: com.microsoft.emmx
+tags:
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Browser menu
+- tapOn:
+    target: Settings
+- tapOn:
+    target: Search
+- tapOn:
+    target: Search engine
+- tapOn:
+    target: I select "Google" radio button
+- pressKey: Back
+- tapOn:
+    target: I see "Google" shown on "Search engine" section
+- pressKey: Back
+- pressKey: Back
+- tapOn:
+    target: Address bar
+- tapOn:
+    target: Go
+- assertVisible:
+    target: the omnibox with "google.com" in the search box
+    optional: false
+- tapOn:
+    target: I perform a long press gesture on address bar
+- tapOn:
+    target: Move address bar to bottom
+- assertVisible:
+    target: address bar on the bottom of screen
+    optional: false
+- tapOn:
+    target: Browser menu
+- tapOn:
+    target: Settings
+- tapOn:
+    target: Search
+- tapOn:
+    target: Search engine
+- tapOn:
+    target: I select "Bing" radio button
+- pressKey: Back
+- tapOn:
+    target: I see "Bing" shown on "Search engine" section

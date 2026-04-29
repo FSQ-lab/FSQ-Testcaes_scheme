@@ -1,0 +1,30 @@
+schemaVersion: fsq.ai-test/v1
+name: Access history through overflow menu
+description: Converted from Edge Android Behave BDD scenario.
+platform: android
+appId: com.microsoft.emmx
+tags:
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Browser menu
+- tapOn:
+    target: History
+- tapOn:
+    target: the History panel should open
+- tapOn:
+    target: the panel title should display "History"
+- pressKey: Back
+- tapOn:
+    target: Add new tab
+- tapOn:
+    target: Browser menu
+- tapOn:
+    target: History
+- tapOn:
+    target: the panel title should display "History"
+- pressKey: Back
+- tapOn:
+    target: Add new tab

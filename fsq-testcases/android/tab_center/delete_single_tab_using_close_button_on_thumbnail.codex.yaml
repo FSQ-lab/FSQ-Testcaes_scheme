@@ -1,0 +1,36 @@
+schemaVersion: fsq.ai-test/v1
+name: Delete single tab using close button on thumbnail
+description: Converted from Edge Android Behave BDD scenario.
+platform: android
+appId: com.microsoft.emmx
+tags:
+- p0
+- codex-converted
+---
+- launchApp
+- inputText:
+    text: https://www.microsoft.com/en-us
+    target: Search box
+- pressKey: Enter
+- tapOn:
+    target: Add new tab
+- inputText:
+    text: https://www.google.com
+    target: Search box
+- pressKey: Enter
+- tapOn:
+    target: Add new tab
+- inputText:
+    text: https://bing.com
+    target: Search box
+- pressKey: Enter
+- tapOn:
+    target: I enter tab center by clicking on the tab center icon
+- assertVisible:
+    target: 4 tab thumbnails
+    optional: false
+- tapOn:
+    target: I Click on close button of Google thumbnails
+- assertVisible:
+    target: 3 tab thumbnails
+    optional: false

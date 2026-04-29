@@ -1,0 +1,62 @@
+schemaVersion: fsq.ai-test/v1
+name: Verify that each item in the second part of L1 page is accessible
+description: Converted from Edge Android Behave BDD scenario.
+platform: android
+appId: com.microsoft.emmx
+tags:
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Browser menu
+- tapOn:
+    target: Settings
+- tapOn:
+    target: Set as Default Browser section
+- assertVisible:
+    target: Set edge as your default browser app? dialog
+    optional: false
+- tapOn:
+    target: Cancel
+- assertNotVisible:
+    target: Dialog
+    optional: false
+- tapOn:
+    target: Search section
+- assertVisible:
+    target: Search page title
+    optional: false
+- pressKey: Back
+- tapOn:
+    target: Appearance and layout
+- assertVisible:
+    target: Appearance and Layout page title
+    optional: false
+- pressKey: Back
+- swipe:
+    direction: up
+    duration: 500
+- tapOn:
+    target: New Tab Page section
+- tapOn:
+    target: Add new tab
+- pressKey: Back
+- swipe:
+    direction: up
+    duration: 500
+- tapOn:
+    target: Tabs section
+- assertVisible:
+    target: Tabs page title
+    optional: false
+- pressKey: Back
+- tapOn:
+    target: Accessibility section
+- assertVisible:
+    target: Accessibility page title
+    optional: false
+- pressKey: Back
+- pressKey: Back
+- tapOn:
+    target: Add new tab

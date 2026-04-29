@@ -1,0 +1,24 @@
+schemaVersion: fsq.ai-test/v1
+name: Enter search process and verify address bar
+description: Converted from Edge Android Behave BDD scenario.
+platform: android
+appId: com.microsoft.emmx
+tags:
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Search box
+- assertVisible:
+    target: Omnibox with Camera icon and Copilot voice icon
+    optional: false
+- tapOn:
+    target: Go
+- tapOn:
+    target: Refresh
+- tapOn:
+    target: Search box
+- assertVisible:
+    target: the omnibox with "microsoft" in the search box
+    optional: false

@@ -1,0 +1,47 @@
+schemaVersion: fsq.ai-test/v1
+name: Verify that each item in the first part of L1 page is accessible
+description: Converted from Edge Android Behave BDD scenario.
+platform: android
+appId: com.microsoft.emmx
+tags:
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Browser menu
+- tapOn:
+    target: Settings
+- tapOn:
+    target: Password Manager section
+- assertVisible:
+    target: Microsoft Password Manager page title
+    optional: false
+- pressKey: Back
+- tapOn:
+    target: Payment Methods section
+- assertVisible:
+    target: Payment Methods page title
+    optional: false
+- pressKey: Back
+- tapOn:
+    target: Personal Info section
+- assertVisible:
+    target: Personal Info page title
+    optional: false
+- pressKey: Back
+- tapOn:
+    target: Privacy and Security section
+- assertVisible:
+    target: Privacy and Security page title
+    optional: false
+- pressKey: Back
+- tapOn:
+    target: Microsoft Services section
+- assertVisible:
+    target: Microsoft Services page title
+    optional: false
+- pressKey: Back
+- pressKey: Back
+- tapOn:
+    target: Add new tab

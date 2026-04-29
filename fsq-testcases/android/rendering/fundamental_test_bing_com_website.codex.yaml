@@ -1,0 +1,24 @@
+schemaVersion: fsq.ai-test/v1
+name: Fundamental Test bing.com website
+description: Converted from Edge Android Behave BDD scenario.
+platform: android
+appId: com.microsoft.emmx
+tags:
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Search box
+- inputText:
+    text: bing.com
+    target: Search box
+- tapOn:
+    target: I press enter to navigate to the page
+- tapOn:
+    target: I wait for the page to load completely
+- assertVisible:
+    target: the tab with the title "bing.com"
+    optional: false
+- tapOn:
+    target: Analyze the screenshot to verify bing webpage displayed normally

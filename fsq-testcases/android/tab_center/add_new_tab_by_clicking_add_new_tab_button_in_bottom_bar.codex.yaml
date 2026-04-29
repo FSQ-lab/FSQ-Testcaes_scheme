@@ -1,0 +1,34 @@
+schemaVersion: fsq.ai-test/v1
+name: Add new tab by clicking 'add new tab' button in bottom bar
+description: Converted from Edge Android Behave BDD scenario.
+platform: android
+appId: com.microsoft.emmx
+tags:
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: I enter tab center by clicking on the tab center icon
+- tapOn:
+    target: I open tab center settings menu
+- tapOn:
+    target: Clear all tabs
+- tapOn:
+    target: Close all tabs and groups
+- tapOn:
+    target: Open a new tab
+- inputText:
+    text: https://www.google.com
+    target: Search box
+- pressKey: Enter
+- assertVisible:
+    target: tab center icon count 1
+    optional: false
+- tapOn:
+    target: Add new tab
+- tapOn:
+    target: Add new tab
+- assertVisible:
+    target: tab center icon count 2
+    optional: false

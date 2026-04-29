@@ -1,0 +1,30 @@
+schemaVersion: fsq.ai-test/v1
+name: Refresh webpage can work well in top mode
+description: Converted from Edge Android Behave BDD scenario.
+platform: android
+appId: com.microsoft.emmx
+tags:
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Search box
+- inputText:
+    text: https://www.chinatravel.com
+    target: Search box
+- pressKey: Enter
+- tapOn:
+    target: I perform a long press gesture on address bar
+- tapOn:
+    target: Move address bar to top
+- tapOn:
+    target: Refresh
+- tapOn:
+    target: Refresh
+- tapOn:
+    target: the web page is reloaded completedly
+- tapOn:
+    target: I scroll the page down for 2 seconds
+- tapOn:
+    target: the web page is reloaded completedly

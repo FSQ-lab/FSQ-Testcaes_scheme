@@ -1,0 +1,58 @@
+schemaVersion: fsq.ai-test/v1
+name: Complete all menu workflow through overflow menu on NTP
+description: Converted from Edge Android Behave BDD scenario.
+platform: android
+appId: com.microsoft.emmx
+tags:
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Browser menu
+- tapOn:
+    target: I swipe within the scrollable area on menu from right to left to go to
+      the second page
+- tapOn:
+    target: All Menu
+- tapOn:
+    target: the All Menu panel should open
+- tapOn:
+    target: Edit
+- tapOn:
+    target: The All menu edit mode should be opened
+- tapOn:
+    target: The "Favorites" is disabled
+- tapOn:
+    target: Drop
+- tapOn:
+    target: Done
+- pressKey: Back
+- tapOn:
+    target: Browser menu
+- tapOn:
+    target: I swipe within the scrollable area on menu from right to left to go to
+      the second page
+- assertNotVisible:
+    target: Drop menu item
+    optional: false
+- tapOn:
+    target: All Menu
+- tapOn:
+    target: Edit
+- swipe:
+    direction: up
+    duration: 500
+- tapOn:
+    target: Drop
+- tapOn:
+    target: Done
+- pressKey: Back
+- tapOn:
+    target: Browser menu
+- tapOn:
+    target: I swipe within the scrollable area on menu from right to left to go to
+      the second page
+- assertVisible:
+    target: Drop menu item
+    optional: false

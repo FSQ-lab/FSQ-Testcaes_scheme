@@ -1,0 +1,19 @@
+schemaVersion: fsq.ai-test/v1
+name: Growth Could entry rewards page in New Tab page
+description: Converted from Edge Android Behave BDD scenario.
+platform: android
+appId: com.microsoft.emmx
+tags:
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: I login to edge with MSA
+- tapOn:
+    target: I click the account in NTP page
+- tapOn:
+    target: I click the "Microsoft Rewards" option
+- assertVisible:
+    target: the Microsoft Rewards page open normally
+    optional: false

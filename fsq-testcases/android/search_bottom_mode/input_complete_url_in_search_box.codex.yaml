@@ -1,0 +1,32 @@
+schemaVersion: fsq.ai-test/v1
+name: Input complete URL in search box
+description: Converted from Edge Android Behave BDD scenario.
+platform: android
+appId: com.microsoft.emmx
+tags:
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Search box
+- inputText:
+    text: https://www.chinatravel.com
+    target: Search box
+- pressKey: Enter
+- assert:
+    url:
+      contains: https://www.chinatravel.com
+    optional: false
+- tapOn:
+    target: Create My Trip
+- swipe:
+    direction: up
+    duration: 500
+- tapOn:
+    target: I scroll the page down for 2 seconds
+- pressKey: Back
+- assert:
+    url:
+      contains: https://www.chinatravel.com
+    optional: false
