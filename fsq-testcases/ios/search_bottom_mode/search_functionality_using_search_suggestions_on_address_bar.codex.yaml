@@ -1,0 +1,22 @@
+schemaVersion: fsq.ai-test/v1
+name: Search functionality using search suggestions on address bar
+description: Converted from Edge iOS Behave BDD scenario.
+platform: ios
+appId: com.microsoft.msedge
+tags:
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Search box
+- inputText:
+    text: apple
+    target: Search box
+- tapOn:
+    target: First search suggestion
+- tapOn:
+    target: Dismiss permission dialog
+- assertVisible:
+    target: Search results for apple
+    optional: false

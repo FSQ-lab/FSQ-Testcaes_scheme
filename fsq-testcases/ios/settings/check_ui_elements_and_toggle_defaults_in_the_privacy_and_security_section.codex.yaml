@@ -1,0 +1,37 @@
+schemaVersion: fsq.ai-test/v1
+name: Check UI elements and toggle defaults in the "Privacy and Security" section
+description: Converted from Edge iOS Behave BDD scenario.
+platform: ios
+appId: com.microsoft.msedge
+tags:
+- settings
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Browser menu
+- tapOn:
+    target: Settings
+- tapOn:
+    target: Privacy and Security section
+- assertVisible:
+    target: Diagnostic Data
+    optional: false
+- assertVisible:
+    target: Tracking Prevention toggle on by default
+    optional: false
+- assertVisible:
+    target: Protect InPrivate Tabs by Passcode toggle off by default
+    optional: false
+- assertVisible:
+    target: Microsoft Defender SmartScreen toggle on by default
+    optional: false
+- assertVisible:
+    target: Website Typo Protection toggle on by default
+    optional: false
+- tapOn:
+    target: Done
+- assertVisible:
+    target: New tab page
+    optional: false

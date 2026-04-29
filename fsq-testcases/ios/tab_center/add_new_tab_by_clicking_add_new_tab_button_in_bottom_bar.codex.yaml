@@ -1,0 +1,37 @@
+schemaVersion: fsq.ai-test/v1
+name: Add new tab by clicking 'add new tab' button in bottom bar
+description: Converted from Edge iOS Behave BDD scenario.
+platform: ios
+appId: com.microsoft.msedge
+tags:
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: I enter tab center by clicking on the tab center icon
+- tapOn:
+    target: Edit
+- tapOn:
+    target: Close all tabs and groups
+- tapOn:
+    target: I click tab grid add button in tab center
+- assertVisible:
+    target: New tab page
+    optional: false
+- tapOn:
+    target: Search box
+- inputText:
+    text: https://www.microsoft.com
+    target: Search box
+- assertVisible:
+    target: '"1" on the tab center icon'
+    optional: false
+- tapOn:
+    target: I click on new tab button to open a new tab
+- assertVisible:
+    target: New tab page
+    optional: false
+- assertVisible:
+    target: '"2" on the tab center icon'
+    optional: false

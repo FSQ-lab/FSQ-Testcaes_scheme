@@ -1,0 +1,34 @@
+schemaVersion: fsq.ai-test/v1
+name: Use auto complete to input search content
+description: Converted from Edge iOS Behave BDD scenario.
+platform: ios
+appId: com.microsoft.msedge
+tags:
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Search box
+- inputText:
+    text: apple
+    target: Search box
+- tapOn:
+    target: Go
+- tapOn:
+    target: Dismiss permission dialog
+- tapOn:
+    target: New tab button
+- tapOn:
+    target: Search box
+- inputText:
+    text: a
+    target: Search box
+- assertVisible:
+    target: apple shown in search box
+    optional: false
+- tapOn:
+    target: Go
+- assertVisible:
+    target: Search results for apple
+    optional: false

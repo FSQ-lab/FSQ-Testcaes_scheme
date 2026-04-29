@@ -1,0 +1,26 @@
+schemaVersion: fsq.ai-test/v1
+name: search history keyword can be accessiable on zip page
+description: Converted from Edge iOS Behave BDD scenario.
+platform: ios
+appId: com.microsoft.msedge
+tags:
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Dismiss permission dialog
+- tapOn:
+    target: Search box
+- inputText:
+    text: microsoft
+    target: Search box
+- tapOn:
+    target: Go
+- tapOn:
+    target: New tab button
+- tapOn:
+    target: Search box
+- assertVisible:
+    target: microsoft search history keyword
+    optional: false

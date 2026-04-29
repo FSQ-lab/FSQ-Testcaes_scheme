@@ -1,0 +1,44 @@
+schemaVersion: fsq.ai-test/v1
+name: Verify Bottom address bar on NTP
+description: Converted from Edge iOS Behave BDD scenario.
+platform: ios
+appId: com.microsoft.msedge
+tags:
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: New tab button
+- tapOn:
+    target: I change the NTP page layout to Partial view
+- tapOn:
+    target: Close page settings dialog
+- swipe:
+    direction: up
+    duration: 3000
+- assertVisible:
+    target: the omnibox with Copilot icon and Copilot voice icon
+    optional: false
+- swipe:
+    direction: down
+    duration: 3000
+- assertVisible:
+    target: the omnibox with Copilot icon and Copilot voice icon
+    optional: false
+- tapOn:
+    target: I change the NTP page layout to Headings view
+- tapOn:
+    target: Close page settings dialog
+- swipe:
+    direction: up
+    duration: 3000
+- assertVisible:
+    target: the omnibox with Copilot icon and Copilot voice icon
+    optional: false
+- swipe:
+    direction: down
+    duration: 3000
+- assertVisible:
+    target: the omnibox with Copilot icon and Copilot voice icon
+    optional: false

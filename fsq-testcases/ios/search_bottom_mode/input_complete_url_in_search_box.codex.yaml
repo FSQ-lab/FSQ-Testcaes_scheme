@@ -1,0 +1,43 @@
+schemaVersion: fsq.ai-test/v1
+name: Input complete URL in search box
+description: Converted from Edge iOS Behave BDD scenario.
+platform: ios
+appId: com.microsoft.msedge
+tags:
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Search box
+- inputText:
+    text: https://apple.com
+    target: Search box
+- tapOn:
+    target: Go
+- performActions:
+  - type: none
+    id: wait
+    actions:
+    - type: pause
+      duration: 3000
+- assert:
+    url:
+      contains: https://www.apple.com
+    optional: false
+- tapOn:
+    target: I click the link on page to navigate to other pages
+- tapOn:
+    target: Dismiss permission dialog
+- swipe:
+    direction: down
+    duration: 2000
+- swipe:
+    direction: up
+    duration: 2000
+- tapOn:
+    target: I click the back button on bottom toolbar
+- assert:
+    url:
+      contains: https://www.apple.com
+    optional: false

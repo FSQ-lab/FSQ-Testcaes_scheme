@@ -1,0 +1,38 @@
+schemaVersion: fsq.ai-test/v1
+name: Refresh webpage can work well in top mode
+description: Converted from Edge iOS Behave BDD scenario.
+platform: ios
+appId: com.microsoft.msedge
+tags:
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Search box
+- inputText:
+    text: microsoft
+    target: Search box
+- tapOn:
+    target: Dismiss permission dialog
+- tapOn:
+    target: Go
+- tapOn:
+    target: I perform a long press gesture on address bar
+- tapOn:
+    target: Move address bar to top
+- tapOn:
+    target: Refresh
+- tapOn:
+    target: Refresh
+- assertWithAI:
+    prompt: analyze the screenshot to verify the web page does not have large blank
+      spaces, and the content loads well
+    optional: false
+- swipe:
+    direction: down
+    duration: 2000
+- assertWithAI:
+    prompt: analyze the screenshot to verify the web page does not have large blank
+      spaces, and the content loads well
+    optional: false

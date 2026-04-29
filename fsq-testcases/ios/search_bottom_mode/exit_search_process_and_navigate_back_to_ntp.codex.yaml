@@ -1,0 +1,30 @@
+schemaVersion: fsq.ai-test/v1
+name: Exit search process and Navigate back to NTP
+description: Converted from Edge iOS Behave BDD scenario.
+platform: ios
+appId: com.microsoft.msedge
+tags:
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Search box
+- pressKey: Back
+- assertVisible:
+    target: New tab page
+    optional: false
+- tapOn:
+    target: Search box
+- inputText:
+    text: https://www.chinatravel.com
+    target: Search box
+- tapOn:
+    target: Go
+- tapOn:
+    target: Browser menu
+- tapOn:
+    target: Home
+- assertVisible:
+    target: New tab page
+    optional: false

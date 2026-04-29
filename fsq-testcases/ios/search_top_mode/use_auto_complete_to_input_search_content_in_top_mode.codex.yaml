@@ -1,0 +1,34 @@
+schemaVersion: fsq.ai-test/v1
+name: Use auto complete to input search content in top mode
+description: Converted from Edge iOS Behave BDD scenario.
+platform: ios
+appId: com.microsoft.msedge
+tags:
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: I click on the top address bar on NTP page
+- inputText:
+    text: apple
+    target: Search box
+- tapOn:
+    target: Go
+- tapOn:
+    target: Dismiss permission dialog
+- tapOn:
+    target: New tab button
+- tapOn:
+    target: I click on the top address bar on NTP page
+- inputText:
+    text: appl
+    target: Search box
+- assertVisible:
+    target: apple shown in search box
+    optional: false
+- tapOn:
+    target: Go
+- assertWithAI:
+    prompt: analyze the screenshot to verify the search result is apple related
+    optional: false

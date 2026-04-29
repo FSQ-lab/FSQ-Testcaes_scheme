@@ -1,0 +1,32 @@
+schemaVersion: fsq.ai-test/v1
+name: Top and bottom bars appear and disappear when scrolling
+description: Converted from Edge iOS Behave BDD scenario.
+platform: ios
+appId: com.microsoft.msedge
+tags:
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Search box
+- inputText:
+    text: https://www.chinatravel.com
+    target: Search box
+- tapOn:
+    target: Go
+- tapOn:
+    target: I scroll up the web page for 2 second
+- assertVisible:
+    target: the address bar is minimized and show "chinatravel.com"
+    optional: false
+- tapOn:
+    target: I scroll down the web page for 2 second
+- assertVisible:
+    target: the address bar is fully expanded and show "chinatravel.com"
+    optional: false
+- tapOn:
+    target: New tab button
+- assertVisible:
+    target: New tab page
+    optional: false

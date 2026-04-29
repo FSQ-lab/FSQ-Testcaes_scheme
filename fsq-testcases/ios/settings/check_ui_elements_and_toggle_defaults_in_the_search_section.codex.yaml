@@ -1,0 +1,32 @@
+schemaVersion: fsq.ai-test/v1
+name: Check UI elements and toggle defaults in the "Search" section
+description: Converted from Edge iOS Behave BDD scenario.
+platform: ios
+appId: com.microsoft.msedge
+tags:
+- settings
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Browser menu
+- tapOn:
+    target: Settings
+- tapOn:
+    target: Search section
+- assertVisible:
+    target: Select Search Engine default Bing
+    optional: false
+- assertVisible:
+    target: Search History toggle on by default
+    optional: false
+- assertVisible:
+    target: Show Me Search and Site Suggestions Using My Typed Characters toggle on
+      by default
+    optional: false
+- tapOn:
+    target: Done
+- assertVisible:
+    target: New tab page
+    optional: false

@@ -1,0 +1,34 @@
+schemaVersion: fsq.ai-test/v1
+name: Input complete keyword in search box
+description: Converted from Edge iOS Behave BDD scenario.
+platform: ios
+appId: com.microsoft.msedge
+tags:
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: New tab button
+- tapOn:
+    target: Search box
+- inputText:
+    text: machine learning tutorials
+    target: Search box
+- tapOn:
+    target: Go
+- tapOn:
+    target: Dismiss permission dialog
+- assertWithAI:
+    prompt: Analyze the screenshot to verify search result is machine learning related
+    optional: false
+- swipe:
+    direction: up
+    duration: 2000
+- swipe:
+    direction: down
+    duration: 2000
+- assert:
+    url:
+      contains: machine learning tutorials
+    optional: false

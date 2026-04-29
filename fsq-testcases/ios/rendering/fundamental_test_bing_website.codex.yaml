@@ -1,0 +1,20 @@
+schemaVersion: fsq.ai-test/v1
+name: Fundamental Test bing website
+description: Converted from Edge iOS Behave BDD scenario.
+platform: ios
+appId: com.microsoft.msedge
+tags:
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: I click the search box in NTP page
+- inputText:
+    text: www.bing.com
+    target: Search box
+- tapOn:
+    target: I press go button to search
+- assertVisible:
+    target: the Microsoft bing logo
+    optional: false

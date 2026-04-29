@@ -1,0 +1,50 @@
+schemaVersion: fsq.ai-test/v1
+name: Verify that each item in the second part is accessible and exitable
+description: Converted from Edge iOS Behave BDD scenario.
+platform: ios
+appId: com.microsoft.msedge
+tags:
+- settings
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Browser menu
+- tapOn:
+    target: Settings
+- tapOn:
+    target: Search section
+- assertVisible:
+    target: Search page title
+    optional: false
+- pressKey: Back
+- tapOn:
+    target: Appearance and layout
+- assertVisible:
+    target: Appearance and Layout page title
+    optional: false
+- pressKey: Back
+- tapOn:
+    target: New Tab Page section
+- assertVisible:
+    target: New Tab Page page title
+    optional: false
+- pressKey: Back
+- swipe:
+    direction: up
+    duration: 1000
+- assertWithAI:
+    prompt: analyze the screenshot to verify that settings page contains the following
+      items2
+    optional: false
+- tapOn:
+    target: Tabs and Tab Groups section
+- assertVisible:
+    target: Tabs and Tab Groups page title
+    optional: false
+- tapOn:
+    target: Done
+- assertVisible:
+    target: New tab page
+    optional: false
