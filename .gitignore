@@ -1,0 +1,62 @@
+# Codex FSQ runner outputs and evidence
+runs/
+evidence/
+reports/
+artifacts/
+*.log
+*.jsonl
+*.trace
+*.har
+*.mp4
+*.webm
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.tiff
+*.bmp
+
+# Python caches and local tooling
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+.venv/
+venv/
+env/
+
+# Node/Appium local dependencies and reports
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+playwright-report/
+test-results/
+.appium/
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+*.local
+*.secret
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Packaged skills and temporary archives
+*.skill
+*.zip
+*.tar
+*.tar.gz
