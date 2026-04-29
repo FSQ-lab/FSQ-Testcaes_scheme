@@ -1,0 +1,42 @@
+schemaVersion: fsq.ai-test/v1
+name: Download a file and open file by clicking Open file button
+description: Converted from Edge Windows Behave BDD scenario.
+platform: windows
+app:
+  name: edge
+  exe: C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe
+  windowTitleRegex: .*Microsoft Edge.*
+runner:
+  backend: pywinauto-mcp
+tags:
+- downloads
+- regression
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Address bar
+    locator:
+      name: Address and search bar
+      controlType: Edit
+    timeout: 10000
+- pressKey:
+    key: A
+    modifiers:
+    - Control
+- inputText:
+    text: https://getsamplefiles.com/download/pdf/sample-1.pdf
+    target: Address bar
+    locator:
+      name: Address and search bar
+      controlType: Edit
+- pressKey: Enter
+- assertVisible:
+    target: Downloads page or panel
+- tapOn:
+    target: Open file for sample-1.pdf
+- assertWithAI:
+    prompt: Verify the downloaded file sample-1.pdf is opened in a new Edge tab.
+    optional: false
+    timeout: 30000

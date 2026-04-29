@@ -1,0 +1,36 @@
+schemaVersion: fsq.ai-test/v1
+name: Click the History button on toolbar to open History pane
+description: Converted from Edge Windows Behave BDD scenario.
+platform: windows
+app:
+  name: edge
+  exe: C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe
+  windowTitleRegex: .*Microsoft Edge.*
+runner:
+  backend: pywinauto-mcp
+tags:
+- p0
+- history
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: New Tab button
+    locator:
+      name: New Tab
+      controlType: Button
+- tapOn:
+    target: Settings and more button in toolbar
+    locator:
+      name: Settings and more
+      controlType: Button
+- rightClickOn:
+    target: History button in the menu
+- tapOn:
+    target: Show in toolbar in menu
+- assertVisible:
+    target: History button in the toolbar
+- tapOn:
+    target: History button in the toolbar
+- assertVisible:
+    target: history hub

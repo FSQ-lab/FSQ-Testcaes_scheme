@@ -1,0 +1,50 @@
+schemaVersion: fsq.ai-test/v1
+name: Navigate to HTTP website and verify not secure connection
+description: Converted from Edge Windows Behave BDD scenario.
+platform: windows
+app:
+  name: edge
+  exe: C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe
+  windowTitleRegex: .*Microsoft Edge.*
+runner:
+  backend: pywinauto-mcp
+tags:
+- navigation
+- regression
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: New Tab button
+    locator:
+      name: New Tab
+      controlType: Button
+- tapOn:
+    target: Address bar
+    locator:
+      name: Address and search bar
+      controlType: Edit
+    timeout: 10000
+- pressKey:
+    key: A
+    modifiers:
+    - Control
+- inputText:
+    text: http://www.faqs.org/faqs/
+    target: Address bar
+    locator:
+      name: Address and search bar
+      controlType: Edit
+- pressKey: Enter
+- waitUntil:
+    url:
+      contains: faqs.org
+    timeout: 30000
+    optional: false
+- assertVisible:
+    target: not secure connection indicator in the address bar
+- assertWithAI:
+    prompt: Verify the FAQs page is loaded and the address bar security indicator shows a not secure connection.
+    optional: false
+    timeout: 30000

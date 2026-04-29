@@ -1,0 +1,66 @@
+schemaVersion: fsq.ai-test/v1
+name: Type URL by autocompleting to navigate directly to site
+description: Converted from Edge Windows Behave BDD scenario.
+platform: windows
+app:
+  name: edge
+  exe: C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe
+  windowTitleRegex: .*Microsoft Edge.*
+runner:
+  backend: pywinauto-mcp
+tags:
+- navigation
+- regression
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Address bar
+    locator:
+      name: Address and search bar
+      controlType: Edit
+    timeout: 10000
+- pressKey:
+    key: A
+    modifiers:
+    - Control
+- inputText:
+    text: https://www.apple.com
+    target: Address bar
+    locator:
+      name: Address and search bar
+      controlType: Edit
+- pressKey: Enter
+- waitUntil:
+    url:
+      contains: apple.com
+    timeout: 30000
+    optional: false
+- tapOn:
+    target: New Tab button
+    locator:
+      name: New Tab
+      controlType: Button
+- tapOn:
+    target: Address bar
+    locator:
+      name: Address and search bar
+      controlType: Edit
+    timeout: 10000
+- inputText:
+    text: www.app
+    target: Address bar
+    locator:
+      name: Address and search bar
+      controlType: Edit
+- pressKey: Enter
+- waitUntil:
+    url:
+      contains: apple.com
+    timeout: 30000
+    optional: false
+- assertWithAI:
+    prompt: Verify autocomplete navigated to the Apple website from partial input "www.app".
+    optional: false
+    timeout: 30000

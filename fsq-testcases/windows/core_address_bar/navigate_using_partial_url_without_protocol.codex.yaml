@@ -1,0 +1,48 @@
+schemaVersion: fsq.ai-test/v1
+name: Navigate using partial URL without protocol
+description: Converted from Edge Windows Behave BDD scenario.
+platform: windows
+app:
+  name: edge
+  exe: C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe
+  windowTitleRegex: .*Microsoft Edge.*
+runner:
+  backend: pywinauto-mcp
+tags:
+- navigation
+- regression
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: New Tab button
+    locator:
+      name: New Tab
+      controlType: Button
+- tapOn:
+    target: Address bar
+    locator:
+      name: Address and search bar
+      controlType: Edit
+    timeout: 10000
+- pressKey:
+    key: A
+    modifiers:
+    - Control
+- inputText:
+    text: apple.com
+    target: Address bar
+    locator:
+      name: Address and search bar
+      controlType: Edit
+- pressKey: Enter
+- waitUntil:
+    url:
+      contains: apple.com
+    timeout: 30000
+    optional: false
+- assertWithAI:
+    prompt: Verify the active tab navigated to the Apple website and the address bar shows the normalized Apple URL.
+    optional: false
+    timeout: 30000

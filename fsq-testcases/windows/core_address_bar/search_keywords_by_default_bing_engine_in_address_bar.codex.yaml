@@ -1,0 +1,44 @@
+schemaVersion: fsq.ai-test/v1
+name: Search keywords by default Bing engine in address bar
+description: Converted from Edge Windows Behave BDD scenario.
+platform: windows
+app:
+  name: edge
+  exe: C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe
+  windowTitleRegex: .*Microsoft Edge.*
+runner:
+  backend: pywinauto-mcp
+tags:
+- search
+- smoke
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: New Tab button
+    locator:
+      name: New Tab
+      controlType: Button
+- tapOn:
+    target: Address bar
+    locator:
+      name: Address and search bar
+      controlType: Edit
+    timeout: 10000
+- inputText:
+    text: cat
+    target: Address bar
+    locator:
+      name: Address and search bar
+      controlType: Edit
+- pressKey: Enter
+- waitUntil:
+    url:
+      contains: search
+    timeout: 30000
+    optional: false
+- assertWithAI:
+    prompt: Verify the active tab shows Bing search results related to "cat".
+    optional: false
+    timeout: 30000

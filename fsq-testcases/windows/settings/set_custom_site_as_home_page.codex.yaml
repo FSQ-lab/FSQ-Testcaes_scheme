@@ -1,0 +1,51 @@
+schemaVersion: fsq.ai-test/v1
+name: Set custom site as home page
+description: Converted from Edge Windows Behave BDD scenario.
+platform: windows
+app:
+  name: edge
+  exe: C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe
+  windowTitleRegex: .*Microsoft Edge.*
+runner:
+  backend: pywinauto-mcp
+tags:
+- settings
+- smoke
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Settings and more button on toolbar
+    locator:
+      name: Settings and more
+      controlType: Button
+- tapOn:
+    target: Settings button from dropdown menu
+    locator:
+      name: Settings
+      controlType: MenuItem
+- assert:
+    url:
+      contains: edge://settings
+    optional: false
+- tapOn:
+    target: Start, home, and new tab page
+- tapOn:
+    target: show home button on the toolbar option
+- tapOn:
+    target: Set custom site option
+- tapOn:
+    target: input box under Set custom site
+- inputText:
+    text: https://www.apple.com
+    target: Set custom site input box
+- tapOn:
+    target: Set custom site option
+- tapOn:
+    target: Home button to the left of the address bar
+- waitUntil:
+    url:
+      contains: apple.com
+    timeout: 30000
+    optional: false

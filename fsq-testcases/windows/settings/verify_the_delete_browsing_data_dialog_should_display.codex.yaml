@@ -1,0 +1,39 @@
+schemaVersion: fsq.ai-test/v1
+name: Verify the Delete browsing data dialog should display
+description: Converted from Edge Windows Behave BDD scenario.
+platform: windows
+app:
+  name: edge
+  exe: C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe
+  windowTitleRegex: .*Microsoft Edge.*
+runner:
+  backend: pywinauto-mcp
+tags:
+- settings
+- smoke
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Settings and more button on toolbar
+    locator:
+      name: Settings and more
+      controlType: Button
+- tapOn:
+    target: Settings button from dropdown menu
+    locator:
+      name: Settings
+      controlType: MenuItem
+- assert:
+    url:
+      contains: edge://settings
+    optional: false
+- tapOn:
+    target: Privacy, search, and services
+- tapOn:
+    target: Clear browsing data button under Privacy, search, and services
+- tapOn:
+    target: Choose what to clear button
+- assertVisible:
+    target: Delete browsing data dialog

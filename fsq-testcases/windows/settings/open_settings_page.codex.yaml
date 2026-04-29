@@ -1,0 +1,62 @@
+schemaVersion: fsq.ai-test/v1
+name: Open settings page
+description: Converted from Edge Windows Behave BDD scenario.
+platform: windows
+app:
+  name: edge
+  exe: C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe
+  windowTitleRegex: .*Microsoft Edge.*
+runner:
+  backend: pywinauto-mcp
+tags:
+- settings
+- smoke
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Settings and more button on toolbar
+    locator:
+      name: Settings and more
+      controlType: Button
+- tapOn:
+    target: Settings button from dropdown menu
+    locator:
+      name: Settings
+      controlType: MenuItem
+- assert:
+    url:
+      contains: edge://settings
+    optional: false
+- tapOn:
+    target: New Tab button
+    locator:
+      name: New Tab
+      controlType: Button
+- tapOn:
+    target: Address bar
+    locator:
+      name: Address and search bar
+      controlType: Edit
+    timeout: 10000
+- pressKey:
+    key: A
+    modifiers:
+    - Control
+- inputText:
+    text: edge://settings
+    target: Address bar
+    locator:
+      name: Address and search bar
+      controlType: Edit
+- pressKey: Enter
+- waitUntil:
+    url:
+      contains: edge://settings
+    timeout: 30000
+    optional: false
+- assert:
+    url:
+      contains: edge://settings
+    optional: false

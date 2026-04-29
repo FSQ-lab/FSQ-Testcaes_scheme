@@ -1,0 +1,66 @@
+schemaVersion: fsq.ai-test/v1
+name: Search in settings search box
+description: Converted from Edge Windows Behave BDD scenario.
+platform: windows
+app:
+  name: edge
+  exe: C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe
+  windowTitleRegex: .*Microsoft Edge.*
+runner:
+  backend: pywinauto-mcp
+tags:
+- settings
+- smoke
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Settings and more button on toolbar
+    locator:
+      name: Settings and more
+      controlType: Button
+- tapOn:
+    target: Settings button from dropdown menu
+    locator:
+      name: Settings
+      controlType: MenuItem
+- assert:
+    url:
+      contains: edge://settings
+    optional: false
+- tapOn:
+    target: Search settings box
+    locator:
+      name: Search settings
+      controlType: Edit
+- inputText:
+    text: Privacy
+    target: Search settings box
+    locator:
+      name: Search settings
+      controlType: Edit
+- assertVisible:
+    target: settings search results related to Privacy
+- tapOn:
+    target: Search settings box
+    locator:
+      name: Search settings
+      controlType: Edit
+- pressKey:
+    key: A
+    modifiers:
+    - Control
+- pressKey: Backspace
+- assert:
+    url:
+      contains: edge://settings/profiles
+    optional: false
+- inputText:
+    text: '123'
+    target: Search settings box
+    locator:
+      name: Search settings
+      controlType: Edit
+- assertVisible:
+    target: No search results found

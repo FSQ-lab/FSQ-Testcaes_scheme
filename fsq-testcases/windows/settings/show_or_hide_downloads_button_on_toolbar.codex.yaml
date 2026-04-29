@@ -1,0 +1,45 @@
+schemaVersion: fsq.ai-test/v1
+name: Show or hide Downloads button on toolbar
+description: Converted from Edge Windows Behave BDD scenario.
+platform: windows
+app:
+  name: edge
+  exe: C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe
+  windowTitleRegex: .*Microsoft Edge.*
+runner:
+  backend: pywinauto-mcp
+tags:
+- regression
+- p0
+- settings
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Settings and more button on toolbar
+    locator:
+      name: Settings and more
+      controlType: Button
+- tapOn:
+    target: Settings button from dropdown menu
+    locator:
+      name: Settings
+      controlType: MenuItem
+- assert:
+    url:
+      contains: edge://settings
+    optional: false
+- tapOn:
+    target: Appearance
+- tapOn:
+    target: Page zoom button under Appearance
+- tapOn:
+    target: Toolbar in the webpage
+- tapOn:
+    target: Downloads button toggle on the settings page
+- assertVisible:
+    target: Downloads button on the toolbar
+- tapOn:
+    target: Downloads button toggle on the settings page
+- assertNotVisible:
+    target: Downloads button on the toolbar
