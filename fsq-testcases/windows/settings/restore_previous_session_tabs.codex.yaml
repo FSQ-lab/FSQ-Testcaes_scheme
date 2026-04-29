@@ -95,3 +95,4 @@ tags:
     prompt: Verify previously opened BBC and Apple tabs are restored after Edge restarts.
     optional: false
     timeout: 30000
+- killApp

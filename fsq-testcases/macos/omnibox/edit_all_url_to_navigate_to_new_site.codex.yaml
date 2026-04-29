@@ -51,3 +51,4 @@ tags:
     url:
       equals: https://www.apple.com
     optional: false
+- killApp

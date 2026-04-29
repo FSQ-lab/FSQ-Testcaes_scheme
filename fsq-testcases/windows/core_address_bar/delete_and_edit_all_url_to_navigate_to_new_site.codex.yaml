@@ -64,3 +64,4 @@ tags:
     prompt: Verify the active tab navigated to the BBC website after replacing the Apple URL.
     optional: false
     timeout: 30000
+- killApp

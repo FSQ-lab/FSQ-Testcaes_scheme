@@ -18,3 +18,4 @@ tags:
     target: I click "Show in toolbar" in menu
 - tapOn:
     target: '"History" should be displayed in toolbar'
+- killApp

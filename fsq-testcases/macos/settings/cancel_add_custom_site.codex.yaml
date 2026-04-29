@@ -43,3 +43,4 @@ tags:
 - assertNotVisible:
     target: Add site dialog
     optional: false
+- killApp

@@ -15,6 +15,25 @@ Avoid first-pass conversion for:
 - Cases whose only executable behavior is coordinate-heavy gesture logic.
 - Cases requiring special accounts, lab data, external services, or very large downloads unless the environment is already known.
 
+
+## Lifecycle Policy
+
+Every converted case must be self-contained:
+
+```yaml
+---
+- launchApp
+# scenario commands
+- killApp
+```
+
+Rules:
+
+- Preserve `launchApp` as the first command even when the source relies on a fixture/background.
+- Append `killApp` as the final command so the next case starts from a clean app process.
+- If the source scenario restarts the app mid-flow, keep that explicit `stopApp`/`killApp` plus `launchApp`, and still end with final `killApp`.
+- Do not replace final `killApp` with `stopApp` unless the user explicitly asks for graceful close semantics.
+
 ## Step Mapping Patterns
 
 | Source intent | FSQ pattern |

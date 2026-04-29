@@ -35,8 +35,7 @@ tags:
     direction: up
     duration: 1000
 - assertWithAI:
-    prompt: analyze the screenshot to verify that settings page contains the following
-      items2
+    prompt: analyze the screenshot to verify that settings page contains the following items2
     optional: false
 - tapOn:
     target: Tabs and Tab Groups section
@@ -48,3 +47,4 @@ tags:
 - assertVisible:
     target: New tab page
     optional: false
+- killApp

@@ -34,3 +34,4 @@ tags:
 - assertVisible:
     target: 3 tab thumbnails
     optional: false
+- killApp

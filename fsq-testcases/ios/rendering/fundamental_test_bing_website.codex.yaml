@@ -18,3 +18,4 @@ tags:
 - assertVisible:
     target: the Microsoft bing logo
     optional: false
+- killApp

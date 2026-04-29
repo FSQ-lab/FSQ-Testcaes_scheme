@@ -35,5 +35,5 @@ tags:
 - tapOn:
     target: Analyze the screenshot to verify the Finder window should appear
 - tapOn:
-    target: Analyze the screenshot to verify that the file "sample-1.pdf" is present
-      in the Finder window
+    target: Analyze the screenshot to verify that the file "sample-1.pdf" is present in the Finder window
+- killApp

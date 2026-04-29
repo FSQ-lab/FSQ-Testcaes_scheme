@@ -69,7 +69,7 @@ Core rules:
 - Do not invent stable locators. Use semantic `target` when locator is unknown.
 - Use a dual-layer locator only when the source, knowledge base, or platform convention supports it.
 - Keep assertions blocking by default; use `optional: true` only when the source explicitly treats the check as optional.
-- Add `launchApp` when source background/fixture clearly launches the app or the scenario cannot run without it.
+- Every case must start with `launchApp` and end with `killApp` so runs are isolated.
 - Keep repair/evidence policy out of each case unless the schema or repo convention explicitly requires it.
 
 ## Platform Defaults

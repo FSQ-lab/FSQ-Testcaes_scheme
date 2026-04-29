@@ -39,3 +39,4 @@ tags:
     target: Home button toggle on the settings page
 - assertNotVisible:
     target: Home button on the toolbar
+- killApp

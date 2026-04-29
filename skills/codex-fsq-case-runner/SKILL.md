@@ -84,4 +84,5 @@ Read these only when needed:
 - Do not hardcode secrets, device IDs, or private runner endpoints.
 - Do not screenshot-guess coordinates under a non-vision model.
 - Do not convert runner failures into case edits automatically.
+- Treat cases as isolated: each case should start with `launchApp` and end with `killApp`.
 - Keep run outputs under `runs/`, which should be treated as generated evidence.

@@ -22,3 +22,4 @@ tags:
     optional: false
 - tapOn:
     target: Analyze the screenshot to verify bing webpage displayed normally
+- killApp

@@ -42,3 +42,4 @@ tags:
 - assertVisible:
     target: edge should open with a page titled "New Tab"
     optional: false
+- killApp

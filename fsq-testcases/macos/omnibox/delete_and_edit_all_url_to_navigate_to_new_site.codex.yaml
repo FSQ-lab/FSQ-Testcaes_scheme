@@ -53,3 +53,4 @@ tags:
     url:
       equals: https://www.expedia.com
     optional: false
+- killApp

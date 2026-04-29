@@ -158,6 +158,25 @@ startRecording
 stopRecording
 ```
 
+
+## 4.1 Case Lifecycle Convention
+
+Every executable case should be isolated at the app-process level:
+
+```yaml
+---
+- launchApp
+# scenario commands
+- killApp
+```
+
+Rules:
+
+- `launchApp` should be the first command so the executor starts from a known app entry point.
+- `killApp` should be the final command so the next case does not inherit app process state.
+- Mid-case restarts may use `stopApp` or `killApp` followed by `launchApp`, but the case should still end with a final `killApp`.
+- Use `stopApp` as final cleanup only when a runner explicitly requires graceful close semantics.
+
 ## 5. Command Shape
 
 Bare command:

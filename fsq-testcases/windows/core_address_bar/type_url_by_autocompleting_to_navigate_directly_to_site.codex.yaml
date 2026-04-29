@@ -64,3 +64,4 @@ tags:
     prompt: Verify autocomplete navigated to the Apple website from partial input "www.app".
     optional: false
     timeout: 30000
+- killApp

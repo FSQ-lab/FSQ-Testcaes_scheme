@@ -37,3 +37,4 @@ tags:
     target: Choose what to clear button
 - assertVisible:
     target: Delete browsing data dialog
+- killApp

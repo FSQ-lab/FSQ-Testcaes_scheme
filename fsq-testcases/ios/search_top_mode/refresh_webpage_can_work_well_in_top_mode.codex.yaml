@@ -26,13 +26,12 @@ tags:
 - tapOn:
     target: Refresh
 - assertWithAI:
-    prompt: analyze the screenshot to verify the web page does not have large blank
-      spaces, and the content loads well
+    prompt: analyze the screenshot to verify the web page does not have large blank spaces, and the content loads well
     optional: false
 - swipe:
     direction: down
     duration: 2000
 - assertWithAI:
-    prompt: analyze the screenshot to verify the web page does not have large blank
-      spaces, and the content loads well
+    prompt: analyze the screenshot to verify the web page does not have large blank spaces, and the content loads well
     optional: false
+- killApp

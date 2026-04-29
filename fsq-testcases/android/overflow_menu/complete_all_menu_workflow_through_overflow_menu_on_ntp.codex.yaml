@@ -11,8 +11,7 @@ tags:
 - tapOn:
     target: Browser menu
 - tapOn:
-    target: I swipe within the scrollable area on menu from right to left to go to
-      the second page
+    target: I swipe within the scrollable area on menu from right to left to go to the second page
 - tapOn:
     target: All Menu
 - tapOn:
@@ -31,8 +30,7 @@ tags:
 - tapOn:
     target: Browser menu
 - tapOn:
-    target: I swipe within the scrollable area on menu from right to left to go to
-      the second page
+    target: I swipe within the scrollable area on menu from right to left to go to the second page
 - assertNotVisible:
     target: Drop menu item
     optional: false
@@ -51,8 +49,8 @@ tags:
 - tapOn:
     target: Browser menu
 - tapOn:
-    target: I swipe within the scrollable area on menu from right to left to go to
-      the second page
+    target: I swipe within the scrollable area on menu from right to left to go to the second page
 - assertVisible:
     target: Drop menu item
     optional: false
+- killApp

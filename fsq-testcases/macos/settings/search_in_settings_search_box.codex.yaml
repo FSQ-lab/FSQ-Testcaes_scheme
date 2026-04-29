@@ -39,3 +39,4 @@ tags:
     locator:
       text: No search results found
     optional: false
+- killApp

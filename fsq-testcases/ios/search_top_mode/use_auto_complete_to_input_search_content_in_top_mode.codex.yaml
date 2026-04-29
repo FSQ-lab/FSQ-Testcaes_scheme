@@ -32,3 +32,4 @@ tags:
 - assertWithAI:
     prompt: analyze the screenshot to verify the search result is apple related
     optional: false
+- killApp

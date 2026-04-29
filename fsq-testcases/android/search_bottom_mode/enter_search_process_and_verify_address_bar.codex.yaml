@@ -22,3 +22,4 @@ tags:
 - assertVisible:
     target: the omnibox with "microsoft" in the search box
     optional: false
+- killApp

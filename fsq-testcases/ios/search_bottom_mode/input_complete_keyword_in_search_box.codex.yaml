@@ -32,3 +32,4 @@ tags:
     url:
       contains: machine learning tutorials
     optional: false
+- killApp

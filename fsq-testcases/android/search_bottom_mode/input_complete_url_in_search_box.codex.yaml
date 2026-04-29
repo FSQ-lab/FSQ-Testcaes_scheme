@@ -30,3 +30,4 @@ tags:
     url:
       contains: https://www.chinatravel.com
     optional: false
+- killApp

@@ -16,8 +16,7 @@ tags:
     text: developer.wikimedia.org
     target: Search box
 - tapOn:
-    target: I select "Discover and build Wikimedia technology" from the auto suggestion
-      list
+    target: I select "Discover and build Wikimedia technology" from the auto suggestion list
 - assert:
     url:
       contains: developer.wikimedia.org
@@ -34,3 +33,4 @@ tags:
     url:
       contains: developer.wikimedia.org
     optional: false
+- killApp

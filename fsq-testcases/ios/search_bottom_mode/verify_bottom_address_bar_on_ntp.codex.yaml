@@ -42,3 +42,4 @@ tags:
 - assertVisible:
     target: the omnibox with Copilot icon and Copilot voice icon
     optional: false
+- killApp

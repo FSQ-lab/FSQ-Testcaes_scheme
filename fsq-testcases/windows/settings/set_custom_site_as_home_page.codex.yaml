@@ -49,3 +49,4 @@ tags:
       contains: apple.com
     timeout: 30000
     optional: false
+- killApp

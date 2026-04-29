@@ -68,3 +68,4 @@ tags:
     prompt: Verify the active tab changed from BBC to the Apple website and finished loading.
     optional: false
     timeout: 30000
+- killApp

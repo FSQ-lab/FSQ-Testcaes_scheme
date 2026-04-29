@@ -43,3 +43,4 @@ tags:
     target: Downloads button toggle on the settings page
 - assertNotVisible:
     target: Downloads button on the toolbar
+- killApp

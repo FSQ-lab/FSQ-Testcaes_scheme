@@ -46,3 +46,4 @@ tags:
     prompt: Verify the BBC page is loaded completely in the active tab.
     optional: false
     timeout: 30000
+- killApp

@@ -32,3 +32,4 @@ tags:
 - assertVisible:
     target: tab center icon count 2
     optional: false
+- killApp

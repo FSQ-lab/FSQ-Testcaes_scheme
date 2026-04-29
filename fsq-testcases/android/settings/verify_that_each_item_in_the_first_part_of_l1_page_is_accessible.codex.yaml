@@ -45,3 +45,4 @@ tags:
 - pressKey: Back
 - tapOn:
     target: Add new tab
+- killApp

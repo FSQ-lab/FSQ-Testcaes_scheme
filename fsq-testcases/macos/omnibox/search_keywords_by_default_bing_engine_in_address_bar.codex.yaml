@@ -27,3 +27,4 @@ tags:
     title:
       equals: cat - Search
     optional: false
+- killApp

@@ -22,11 +22,11 @@ tags:
     target: Search History toggle on by default
     optional: false
 - assertVisible:
-    target: Show Me Search and Site Suggestions Using My Typed Characters toggle on
-      by default
+    target: Show Me Search and Site Suggestions Using My Typed Characters toggle on by default
     optional: false
 - tapOn:
     target: Done
 - assertVisible:
     target: New tab page
     optional: false
+- killApp

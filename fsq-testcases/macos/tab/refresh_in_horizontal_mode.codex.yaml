@@ -29,3 +29,4 @@ tags:
 - assertVisible:
     target: the address bar still displays the complete URL "https://www.youtube.com"
     optional: false
+- killApp

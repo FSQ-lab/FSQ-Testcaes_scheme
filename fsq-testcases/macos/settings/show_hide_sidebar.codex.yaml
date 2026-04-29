@@ -30,3 +30,4 @@ tags:
 - assertNotVisible:
     target: Sidebar
     optional: false
+- killApp

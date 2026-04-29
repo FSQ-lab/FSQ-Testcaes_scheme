@@ -30,3 +30,4 @@ tags:
 - assertVisible:
     target: the address bar is fully expanded and show "chinatravel.com"
     optional: false
+- killApp

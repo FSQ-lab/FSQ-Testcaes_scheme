@@ -30,3 +30,4 @@ tags:
 - assertVisible:
     target: New tab page
     optional: false
+- killApp

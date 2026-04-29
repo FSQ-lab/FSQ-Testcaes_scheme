@@ -29,3 +29,4 @@ tags:
 - assertVisible:
     target: should open a page titled "New Tab"
     optional: false
+- killApp

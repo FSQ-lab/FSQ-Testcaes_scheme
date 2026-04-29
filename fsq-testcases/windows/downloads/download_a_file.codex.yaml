@@ -58,3 +58,4 @@ tags:
     optional: false
 - assertVisible:
     target: sample-1.pdf in download list
+- killApp

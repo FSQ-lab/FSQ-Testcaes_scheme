@@ -41,3 +41,4 @@ tags:
     url:
       contains: https://www.apple.com
     optional: false
+- killApp

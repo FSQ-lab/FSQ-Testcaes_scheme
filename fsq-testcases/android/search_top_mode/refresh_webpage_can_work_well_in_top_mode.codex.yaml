@@ -28,3 +28,4 @@ tags:
     target: I scroll the page down for 2 seconds
 - tapOn:
     target: the web page is reloaded completedly
+- killApp

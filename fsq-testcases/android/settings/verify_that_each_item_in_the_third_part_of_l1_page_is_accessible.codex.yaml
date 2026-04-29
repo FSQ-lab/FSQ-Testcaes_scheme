@@ -41,3 +41,4 @@ tags:
 - assertVisible:
     target: About Microsoft Edge page title
     optional: false
+- killApp

@@ -64,3 +64,4 @@ tags:
       controlType: Edit
 - assertVisible:
     target: No search results found
+- killApp

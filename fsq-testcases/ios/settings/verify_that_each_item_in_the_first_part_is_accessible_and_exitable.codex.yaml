@@ -14,8 +14,7 @@ tags:
 - tapOn:
     target: Settings
 - assertWithAI:
-    prompt: analyze the screenshot to verify that settings page contains the following
-      items1
+    prompt: analyze the screenshot to verify that settings page contains the following items1
     optional: false
 - tapOn:
     target: Payment Methods section
@@ -45,3 +44,4 @@ tags:
 - assertVisible:
     target: New tab page
     optional: false
+- killApp

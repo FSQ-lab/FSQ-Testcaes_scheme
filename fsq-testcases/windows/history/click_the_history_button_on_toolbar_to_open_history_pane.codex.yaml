@@ -34,3 +34,4 @@ tags:
     target: History button in the toolbar
 - assertVisible:
     target: history hub
+- killApp

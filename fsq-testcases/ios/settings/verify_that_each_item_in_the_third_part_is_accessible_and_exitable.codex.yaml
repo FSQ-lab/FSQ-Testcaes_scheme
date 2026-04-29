@@ -17,8 +17,7 @@ tags:
     direction: up
     duration: 1000
 - assertWithAI:
-    prompt: analyze the screenshot to verify that settings page contains the following
-      items3
+    prompt: analyze the screenshot to verify that settings page contains the following items3
     optional: false
 - tapOn:
     target: Languages section
@@ -48,3 +47,4 @@ tags:
 - assertVisible:
     target: New tab page
     optional: false
+- killApp

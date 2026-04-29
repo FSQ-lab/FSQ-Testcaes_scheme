@@ -30,3 +30,4 @@ tags:
 - assertNotVisible:
     target: Split screen button on toolbar
     optional: false
+- killApp

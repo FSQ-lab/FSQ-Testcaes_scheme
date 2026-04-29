@@ -23,9 +23,10 @@ tags:
 - assertVisible:
     target: 163 website content
     locator:
-      name: 网易
+      name: "\u7F51\u6613"
     optional: false
 - assert:
     url:
       equals: https://www.163.com
     optional: false
+- killApp

@@ -48,3 +48,4 @@ tags:
     prompt: Verify the FAQs page is loaded and the address bar security indicator shows a not secure connection.
     optional: false
     timeout: 30000
+- killApp

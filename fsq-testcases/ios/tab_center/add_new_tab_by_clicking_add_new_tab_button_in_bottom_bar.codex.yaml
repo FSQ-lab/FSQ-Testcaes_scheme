@@ -35,3 +35,4 @@ tags:
 - assertVisible:
     target: '"2" on the tab center icon'
     optional: false
+- killApp

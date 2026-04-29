@@ -20,3 +20,4 @@ tags:
 - assertVisible:
     target: Search results for apple
     optional: false
+- killApp

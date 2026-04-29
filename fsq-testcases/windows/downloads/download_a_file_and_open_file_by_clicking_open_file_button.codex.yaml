@@ -40,3 +40,4 @@ tags:
     prompt: Verify the downloaded file sample-1.pdf is opened in a new Edge tab.
     optional: false
     timeout: 30000
+- killApp

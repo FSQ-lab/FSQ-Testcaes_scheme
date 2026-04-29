@@ -54,3 +54,4 @@ tags:
     target: Search history box in history hub
 - assertVisible:
     target: cgtn website in the history hub
+- killApp

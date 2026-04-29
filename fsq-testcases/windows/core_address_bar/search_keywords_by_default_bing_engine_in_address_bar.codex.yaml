@@ -42,3 +42,4 @@ tags:
     prompt: Verify the active tab shows Bing search results related to "cat".
     optional: false
     timeout: 30000
+- killApp

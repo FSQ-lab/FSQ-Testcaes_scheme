@@ -45,3 +45,4 @@ tags:
     prompt: Verify the Apple page is loaded completely in the active tab.
     optional: false
     timeout: 30000
+- killApp

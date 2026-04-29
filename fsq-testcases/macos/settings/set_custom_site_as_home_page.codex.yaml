@@ -36,3 +36,4 @@ tags:
 - assertVisible:
     target: should open "https://www.apple.com" site
     optional: false
+- killApp
