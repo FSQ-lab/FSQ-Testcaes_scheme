@@ -69,6 +69,18 @@ python3 skills/codex-fsq-case-runner/scripts/run_fsq_cases.py \
   --runner-command "<runner> --case {case} --backend {backend} --output {output} --manifest {manifest}"
 ```
 
+Run one Android case with the repository-owned simple Appium runner and per-step accessibility evidence:
+
+```bash
+ANDROID_UDID=<device-id> \
+python3 skills/codex-fsq-case-runner/scripts/run_fsq_cases.py \
+  --cases fsq-testcases/android/bottom_bar/access_settings_through_overflow_menu.codex.yaml \
+  --run-id codex-android-simple-smoke \
+  --runner-command 'ANDROID_UDID=<device-id> python3 skills/codex-fsq-case-runner/scripts/codex_android_simple_runner.py --case {case} --backend {backend} --output {output} --manifest {manifest}'
+```
+
+The simple Android runner is not an MCP adapter. It uses Appium Python client against an Appium server, captures `before` and `after` accessibility XML for every step, and captures `failed` XML plus a `failureClass` when a step fails. Screenshots are optional and disabled by default.
+
 If no `--runner-command` is provided, the script still validates cases and creates a run bundle, then records each selected case as `skipped` with a missing runner message.
 
 ## References
