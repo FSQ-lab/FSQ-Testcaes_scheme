@@ -137,3 +137,73 @@ def test_execute_long_press_on_uses_explicit_locator():
 
     assert result["ok"] is True
     assert session.long_pressed == (60, 40, 1.0)
+
+
+def test_execute_perform_actions_normalizes_pointer_move_duration():
+    runner = load_runner()
+
+    class Transport(FakeTransport):
+        def __init__(self):
+            self.performed_actions = None
+            self.released = False
+
+        def perform_actions(self, actions):
+            self.performed_actions = actions
+
+        def release_actions(self):
+            self.released = True
+
+    class Session(FakeSession):
+        def __init__(self):
+            self.transport = Transport()
+
+    session = Session()
+
+    result = runner.execute_command(
+        session,
+        lambda *args, **kwargs: {"ok": False},
+        "com.microsoft.emmx",
+        {"performActions": [{
+            "type": "pointer",
+            "id": "codex-scroll-page-up",
+            "parameters": {"pointerType": "touch"},
+            "actions": [
+                {"type": "pointerMove", "origin": "viewport", "x": 540, "y": 1500},
+                {"type": "pointerDown", "button": 0},
+                {"type": "pointerMove", "origin": "viewport", "x": 540, "y": 800, "duration": 2000},
+                {"type": "pointerUp", "button": 0},
+            ],
+        }]},
+    )
+
+    assert result["ok"] is True
+    assert session.transport.released is True
+    assert session.transport.performed_actions[0]["actions"][0]["duration"] == 0
+    assert session.transport.performed_actions[0]["actions"][2]["duration"] == 2000
+
+
+def test_execute_tap_on_waits_until_locator_before_click():
+    runner = load_runner()
+    calls = []
+
+    def fake_run_action(session, action, params):
+        calls.append((action, params))
+        if action == "ui.wait":
+            return {"ok": True, "found": True, "timed_out": False}
+        return {"ok": True, "clicked": True, "found": True, "timed_out": False}
+
+    result = runner.execute_command(
+        FakeSession(),
+        fake_run_action,
+        "com.microsoft.emmx",
+        {"tapOn": {"target": "Browser menu", "locator": {"resourceId": "com.microsoft.emmx:id/overflow_button_bottom"}}},
+    )
+
+    assert result["ok"] is True
+    assert calls[0][0] == "ui.wait"
+    assert calls[0][1]["selectors"][0] == {"resourceId": "com.microsoft.emmx:id/overflow_button_bottom"}
+    assert calls[0][1]["timeout"] == 8
+    assert calls[0][1]["interval"] == 0.25
+    assert calls[1][0] == "ui.click"
+    assert calls[1][1]["selectors"][0] == {"resourceId": "com.microsoft.emmx:id/overflow_button_bottom"}
+    assert calls[1][1]["timeout"] == 8

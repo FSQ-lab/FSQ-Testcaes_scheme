@@ -9,7 +9,9 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: Address bar
+    target: Address bar on NTP page
+    locator:
+      resourceId: com.microsoft.emmx:id/url_bar
 - assertVisible:
     target: the topsites shown on ZIP
     locator:
@@ -28,14 +30,16 @@ tags:
 - inputText:
     text: chinatravel.com
     target: Search box
+    locator:
+      resourceId: com.microsoft.emmx:id/url_bar
 - assertVisible:
     target: the suggestion list shown next to Omnibox
     locator:
       resourceId: com.microsoft.emmx:id/omnibox_suggestions_dropdown
     optional: false
-- tapOn:
-    target: Go
-- assertVisible:
-    target: the address bar is fully expanded and show "chinatravel.com"
+- pressKey: Enter
+- assert:
+    element:
+      xpath: "//android.widget.EditText[@text='chinatravel.com']"
     optional: false
 - killApp

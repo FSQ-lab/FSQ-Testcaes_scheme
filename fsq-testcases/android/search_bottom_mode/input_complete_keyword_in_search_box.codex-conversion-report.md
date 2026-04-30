@@ -52,3 +52,11 @@ Codex-produced conversion report.
 - Confirm target wording is specific enough for accessibility-tree locator resolution.
 - Add stable Android locators from knowledge base when available.
 - Confirm every assertion should remain blocking.
+
+## Codex Whole-pass Reconciliation
+
+- Preserved source operation order for keyword input and keyboard submit.
+- Removed optional/noop Bing permission dialog handling from the DSL per current pilot scope.
+- Converted scroll helper steps to exact W3C pointer actions using source coordinates.
+- Preserved `url_bar` assertion and search-result XPath assertion.
+

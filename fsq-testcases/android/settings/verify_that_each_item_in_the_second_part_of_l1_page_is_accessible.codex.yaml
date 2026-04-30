@@ -10,6 +10,8 @@ tags:
 - launchApp
 - tapOn:
     target: Browser menu
+    locator:
+      resourceId: com.microsoft.emmx:id/overflow_button_bottom
 - tapOn:
     target: Settings
     locator:
@@ -41,7 +43,10 @@ tags:
     locator:
       xpath: "//android.widget.TextView[@text='Search']"
     optional: false
-- pressKey: Back
+- tapOn:
+    target: Navigate up
+    locator:
+      accessibilityId: Navigate up
 - tapOn:
     target: Appearance and layout
     locator:
@@ -51,10 +56,29 @@ tags:
     locator:
       xpath: "//android.widget.TextView[@text='Appearance and layout']"
     optional: false
-- pressKey: Back
-- swipe:
-    direction: up
-    duration: 500
+- tapOn:
+    target: Navigate up
+    locator:
+      accessibilityId: Navigate up
+- performActions:
+  - type: pointer
+    id: codex-scroll-up
+    parameters:
+      pointerType: touch
+    actions:
+    - type: pointerMove
+      origin: viewport
+      x: 540
+      y: 1500
+    - type: pointerDown
+      button: 0
+    - type: pointerMove
+      origin: viewport
+      x: 540
+      y: 800
+      duration: 2000
+    - type: pointerUp
+      button: 0
 - tapOn:
     target: New Tab Page section
     locator:
@@ -64,10 +88,29 @@ tags:
     locator:
       xpath: "//android.widget.TextView[@text='New tab page']"
     optional: false
-- pressKey: Back
-- swipe:
-    direction: up
-    duration: 500
+- tapOn:
+    target: Navigate up
+    locator:
+      accessibilityId: Navigate up
+- performActions:
+  - type: pointer
+    id: codex-scroll-up
+    parameters:
+      pointerType: touch
+    actions:
+    - type: pointerMove
+      origin: viewport
+      x: 540
+      y: 1500
+    - type: pointerDown
+      button: 0
+    - type: pointerMove
+      origin: viewport
+      x: 540
+      y: 800
+      duration: 2000
+    - type: pointerUp
+      button: 0
 - tapOn:
     target: Tabs section
     locator:
@@ -77,7 +120,10 @@ tags:
     locator:
       xpath: "//android.widget.TextView[contains(@text,'Tabs')]"
     optional: false
-- pressKey: Back
+- tapOn:
+    target: Navigate up
+    locator:
+      accessibilityId: Navigate up
 - tapOn:
     target: Accessibility section
     locator:
@@ -87,8 +133,17 @@ tags:
     locator:
       xpath: "//android.widget.TextView[@text='Accessibility']"
     optional: false
-- pressKey: Back
-- pressKey: Back
 - tapOn:
-    target: Add new tab
+    target: Navigate up
+    locator:
+      accessibilityId: Navigate up
+- tapOn:
+    target: Navigate up
+    locator:
+      accessibilityId: Navigate up
+- assertVisible:
+    target: New Tab Page
+    locator:
+      accessibilityId: Account menu
+    optional: false
 - killApp

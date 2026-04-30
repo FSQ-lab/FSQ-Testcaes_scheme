@@ -56,3 +56,10 @@ Codex-produced conversion report.
 - Confirm target wording is specific enough for accessibility-tree locator resolution.
 - Add stable Android locators from knowledge base when available.
 - Confirm every assertion should remain blocking.
+
+## Codex Whole-pass Reconciliation
+
+- Preserved browser menu locator and source `Navigate up` accessibility id instead of generic Back.
+- Converted settings scroll helper steps to W3C pointer actions.
+- Kept all lower settings section/page title assertions locator-backed from source step definitions.
+

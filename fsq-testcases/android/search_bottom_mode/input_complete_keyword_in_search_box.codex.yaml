@@ -9,7 +9,9 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: Search box
+    target: Search box on NTP page
+    locator:
+      resourceId: com.microsoft.emmx:id/url_bar
 - inputText:
     text: machine learning tutorials
     target: Search box
@@ -18,15 +20,7 @@ tags:
 - pressKey: Enter
 - performActions:
   - type: none
-    id: wait
-    actions:
-    - type: pause
-      duration: 3000
-- tapOn:
-    target: I dismiss the permission dialog from bing
-- performActions:
-  - type: none
-    id: wait
+    id: codex-wait-search-results
     actions:
     - type: pause
       duration: 3000
@@ -41,11 +35,44 @@ tags:
     locator:
       xpath: "//android.widget.TextView[contains(@text, 'machine') or contains(@text, 'Machine')]"
     optional: false
-- swipe:
-    direction: up
-    duration: 500
-- tapOn:
-    target: I scroll the page down for 2 seconds
+- performActions:
+  - type: pointer
+    id: codex-scroll-page-up
+    parameters:
+      pointerType: touch
+    actions:
+    - type: pointerMove
+      origin: viewport
+      x: 540
+      y: 1500
+    - type: pointerDown
+      button: 0
+    - type: pointerMove
+      origin: viewport
+      x: 540
+      y: 800
+      duration: 2000
+    - type: pointerUp
+      button: 0
+- performActions:
+  - type: pointer
+    id: codex-scroll-page-down
+    parameters:
+      pointerType: touch
+    actions:
+    - type: pointerMove
+      origin: viewport
+      x: 540
+      y: 800
+    - type: pointerDown
+      button: 0
+    - type: pointerMove
+      origin: viewport
+      x: 540
+      y: 1500
+      duration: 2000
+    - type: pointerUp
+      button: 0
 - assert:
     element:
       resourceId: com.microsoft.emmx:id/url_bar

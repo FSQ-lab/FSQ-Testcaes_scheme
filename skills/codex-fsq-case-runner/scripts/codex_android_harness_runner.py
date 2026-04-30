@@ -353,6 +353,31 @@ def viewport_swipe(session: Any, direction: str, duration_ms: int = 500) -> dict
     return {"ok": True, "gesture": "swipe", "direction": direction, "start": start, "end": end}
 
 
+def normalize_actions(actions: Any) -> Any:
+    if not isinstance(actions, list):
+        return actions
+    normalized: list[dict[str, Any]] = []
+    for source in actions:
+        if not isinstance(source, dict):
+            normalized.append(source)
+            continue
+        normalized_source = dict(source)
+        source_actions = source.get("actions")
+        if isinstance(source_actions, list):
+            normalized_source["actions"] = [normalize_action_item(item) for item in source_actions]
+        normalized.append(normalized_source)
+    return normalized
+
+
+def normalize_action_item(action: Any) -> Any:
+    if not isinstance(action, dict):
+        return action
+    normalized = dict(action)
+    if normalized.get("type") == "pointerMove" and "duration" not in normalized:
+        normalized["duration"] = 0
+    return normalized
+
+
 def assert_visible(session: Any, run_action: Any, target: str, selectors: list[dict[str, Any]] | None = None) -> dict[str, Any]:
     selectors = selectors or selectors_for(target)
     if selectors:
@@ -396,7 +421,7 @@ def execute_command(session: Any, run_action: Any, app_id: str, command: Any, ou
         if only_pause:
             time.sleep(min(total_pause / 1000.0, 10.0))
             return {"ok": True, "waitedMs": total_pause}
-        session.transport.perform_actions(value)
+        session.transport.perform_actions(normalize_actions(value))
         session.transport.release_actions()
         return {"ok": True, "performedActions": True}
 
@@ -444,7 +469,11 @@ def execute_command(session: Any, run_action: Any, app_id: str, command: Any, ou
             return viewport_swipe(session, "left", 500)
         if is_assert_like(target):
             return assert_visible(session, run_action, target)
-        result = run_action(session, "ui.click", {"selectors": selectors_from_targeting(value, target), "timeout": 8})
+        selectors = selectors_from_targeting(value, target)
+        wait_result = run_action(session, "ui.wait", {"selectors": selectors, "timeout": 8, "interval": 0.25})
+        if not wait_result.get("found"):
+            return {**wait_result, "ok": False, "failureClass": "element_not_found", "target": target}
+        result = run_action(session, "ui.click", {"selectors": selectors, "timeout": 8})
         if not result.get("clicked"):
             return {**result, "ok": False, "failureClass": "element_not_found", "target": target}
         return result

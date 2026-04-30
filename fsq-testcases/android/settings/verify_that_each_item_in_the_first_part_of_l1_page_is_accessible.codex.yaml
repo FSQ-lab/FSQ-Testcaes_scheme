@@ -10,6 +10,8 @@ tags:
 - launchApp
 - tapOn:
     target: Browser menu
+    locator:
+      resourceId: com.microsoft.emmx:id/overflow_button_bottom
 - tapOn:
     target: Settings
     locator:
@@ -23,7 +25,10 @@ tags:
     locator:
       xpath: "//android.widget.TextView[@text='Microsoft password manager']"
     optional: false
-- pressKey: Back
+- tapOn:
+    target: Navigate up
+    locator:
+      accessibilityId: Navigate up
 - tapOn:
     target: Payment Methods section
     locator:
@@ -33,7 +38,10 @@ tags:
     locator:
       xpath: "//android.widget.TextView[@text='Payment methods']"
     optional: false
-- pressKey: Back
+- tapOn:
+    target: Navigate up
+    locator:
+      accessibilityId: Navigate up
 - tapOn:
     target: Personal Info section
     locator:
@@ -43,7 +51,10 @@ tags:
     locator:
       xpath: "//android.widget.TextView[@text='Personal info']"
     optional: false
-- pressKey: Back
+- tapOn:
+    target: Navigate up
+    locator:
+      accessibilityId: Navigate up
 - tapOn:
     target: Privacy and Security section
     locator:
@@ -53,7 +64,10 @@ tags:
     locator:
       xpath: "//android.widget.TextView[@text='Privacy and security']"
     optional: false
-- pressKey: Back
+- tapOn:
+    target: Navigate up
+    locator:
+      accessibilityId: Navigate up
 - tapOn:
     target: Microsoft Services section
     locator:
@@ -63,8 +77,17 @@ tags:
     locator:
       xpath: "//android.widget.TextView[@text='Microsoft services']"
     optional: false
-- pressKey: Back
-- pressKey: Back
 - tapOn:
-    target: Add new tab
+    target: Navigate up
+    locator:
+      accessibilityId: Navigate up
+- tapOn:
+    target: Navigate up
+    locator:
+      accessibilityId: Navigate up
+- assertVisible:
+    target: New Tab Page
+    locator:
+      accessibilityId: Account menu
+    optional: false
 - killApp

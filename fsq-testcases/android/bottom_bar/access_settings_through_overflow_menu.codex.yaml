@@ -10,22 +10,50 @@ tags:
 - launchApp
 - tapOn:
     target: Browser menu
+    locator:
+      resourceId: com.microsoft.emmx:id/overflow_button_bottom
 - tapOn:
     target: Settings
+    locator:
+      xpath: "//android.widget.TextView[@text='Settings']"
+- assertVisible:
+    target: Settings panel should open
+    locator:
+      xpath: "//android.widget.TextView[@text='Settings']"
+    optional: false
+- assert:
+    element:
+      xpath: "//android.widget.TextView[@text='Settings']"
+    text:
+      contains: Settings
+    optional: false
 - tapOn:
-    target: the Settings panel should open
-- tapOn:
-    target: the panel title should display "Settings"
-- pressKey: Back
-- tapOn:
-    target: Add new tab
+    target: Close Settings panel
+    locator:
+      resourceId: com.microsoft.emmx:id/close_button
+- assertVisible:
+    target: New Tab Page
+    locator:
+      resourceId: com.microsoft.emmx:id/edge_ntp_scrollview
+    optional: false
 - tapOn:
     target: Browser menu
+    locator:
+      resourceId: com.microsoft.emmx:id/overflow_button_bottom
 - tapOn:
     target: Settings
-- tapOn:
-    target: the panel title should display "Settings"
+    locator:
+      xpath: "//android.widget.TextView[@text='Settings']"
+- assert:
+    element:
+      xpath: "//android.widget.TextView[@text='Settings']"
+    text:
+      contains: Settings
+    optional: false
 - pressKey: Back
-- tapOn:
-    target: Add new tab
+- assertVisible:
+    target: New Tab Page
+    locator:
+      resourceId: com.microsoft.emmx:id/edge_ntp_scrollview
+    optional: false
 - killApp

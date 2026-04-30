@@ -56,3 +56,9 @@ Codex-produced conversion report.
 - Preserved source locators for top sites, camera icon, Copilot voice icon, suggestion dropdown, and address bar text assertion.
 - Kept icon assertions accessibility-backed rather than screenshot-backed because the source step uses Appium ids.
 
+## Codex Whole-pass Reconciliation
+
+- Preserved `url_bar` locator for focusing/input and source locators for top sites, camera, mic, and suggestion dropdown.
+- Fixed submit action to `pressKey: Enter` instead of semantic `tapOn: Go`.
+- Converted final address-bar state to a locator-backed structured assertion.
+

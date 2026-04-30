@@ -54,3 +54,10 @@ Codex-produced conversion report.
 - Confirm target wording is specific enough for accessibility-tree locator resolution.
 - Add stable Android locators from knowledge base when available.
 - Confirm every assertion should remain blocking.
+
+## Codex Whole-pass Reconciliation
+
+- Replaced assertion-like `tapOn` placeholders with locator-backed assertions.
+- Preserved source locators for browser menu, Settings menu item, Settings title, and NTP return assertion.
+- Kept setting-page close as Android Back/return according to the source steps.
+

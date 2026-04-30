@@ -66,3 +66,11 @@ Codex-produced conversion report.
 - Confirm target wording is specific enough for accessibility-tree locator resolution.
 - Add stable Android locators from knowledge base when available.
 - Confirm every assertion should remain blocking.
+
+## Codex Whole-pass Reconciliation
+
+- Preserved browser menu locator and source `Navigate up` accessibility id instead of generic Back.
+- Converted settings scroll helper steps to W3C pointer actions.
+- Replaced final Add New Tab action with the source NTP assertion on `Account menu`.
+- Remaining execution risk: this scenario can vary by device because `Set as default browser` may open Android system Default apps instead of the Edge dialog.
+

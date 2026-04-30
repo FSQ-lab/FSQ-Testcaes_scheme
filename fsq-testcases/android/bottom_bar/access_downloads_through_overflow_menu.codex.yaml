@@ -10,22 +10,50 @@ tags:
 - launchApp
 - tapOn:
     target: Browser menu
+    locator:
+      resourceId: com.microsoft.emmx:id/overflow_button_bottom
 - tapOn:
     target: Downloads
+    locator:
+      xpath: "//android.widget.TextView[@text='Downloads']"
+- assertVisible:
+    target: Downloads panel should open
+    locator:
+      resourceId: com.microsoft.emmx:id/hub_view_pager
+    optional: false
+- assert:
+    element:
+      xpath: "//android.widget.TextView[@text='Downloads']"
+    text:
+      contains: Downloads
+    optional: false
 - tapOn:
-    target: the Downloads panel should open
-- tapOn:
-    target: the panel title should display "Downloads"
-- pressKey: Back
-- tapOn:
-    target: Add new tab
+    target: Close Downloads panel
+    locator:
+      resourceId: com.microsoft.emmx:id/close_button
+- assertVisible:
+    target: New Tab Page
+    locator:
+      resourceId: com.microsoft.emmx:id/edge_ntp_scrollview
+    optional: false
 - tapOn:
     target: Browser menu
+    locator:
+      resourceId: com.microsoft.emmx:id/overflow_button_bottom
 - tapOn:
     target: Downloads
-- tapOn:
-    target: the panel title should display "Downloads"
+    locator:
+      xpath: "//android.widget.TextView[@text='Downloads']"
+- assert:
+    element:
+      xpath: "//android.widget.TextView[@text='Downloads']"
+    text:
+      contains: Downloads
+    optional: false
 - pressKey: Back
-- tapOn:
-    target: Add new tab
+- assertVisible:
+    target: New Tab Page
+    locator:
+      resourceId: com.microsoft.emmx:id/edge_ntp_scrollview
+    optional: false
 - killApp

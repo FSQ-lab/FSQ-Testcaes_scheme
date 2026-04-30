@@ -54,3 +54,10 @@ Codex-produced conversion report.
 - Confirm target wording is specific enough for accessibility-tree locator resolution.
 - Add stable Android locators from knowledge base when available.
 - Confirm every assertion should remain blocking.
+
+## Codex Whole-pass Reconciliation
+
+- Replaced assertion-like `tapOn` placeholders with locator-backed assertions.
+- Preserved source locators for browser menu, History menu item, hub view pager, `hint_text` title, close button, and NTP return assertion.
+- Kept the second close path as Android Back because the source step uses key code 4.
+

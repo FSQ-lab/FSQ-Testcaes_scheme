@@ -54,3 +54,10 @@ Codex-produced conversion report.
 - Confirm target wording is specific enough for accessibility-tree locator resolution.
 - Add stable Android locators from knowledge base when available.
 - Confirm every assertion should remain blocking.
+
+## Codex Whole-pass Reconciliation
+
+- Replaced assertion-like `tapOn` placeholders with `assertVisible`/`assert` commands backed by source Appium locators.
+- Preserved source locators for browser menu, Favorites menu item, Favorites panel, close button, and NTP return assertion.
+- Converted phone navigation return to `pressKey: Back` only where the source uses Android key code 4.
+

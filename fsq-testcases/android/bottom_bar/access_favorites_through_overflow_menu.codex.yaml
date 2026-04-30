@@ -10,22 +10,48 @@ tags:
 - launchApp
 - tapOn:
     target: Browser menu
+    locator:
+      resourceId: com.microsoft.emmx:id/overflow_button_bottom
 - tapOn:
     target: Favorites
+    locator:
+      xpath: "//android.widget.TextView[@text='Favorites']"
+- assertVisible:
+    target: Favorites panel should open
+    locator:
+      resourceId: com.microsoft.emmx:id/bookmark_view_switcher
+    optional: false
+- assertVisible:
+    target: Favorites panel title
+    locator:
+      xpath: "//android.widget.TextView[@text='Favorites']"
+    optional: false
 - tapOn:
-    target: the Favorites panel should open
-- tapOn:
-    target: the panel title should display "Favorites"
-- pressKey: Back
-- tapOn:
-    target: Add new tab
+    target: Close Favorites panel
+    locator:
+      resourceId: com.microsoft.emmx:id/close_button
+- assertVisible:
+    target: New Tab Page
+    locator:
+      resourceId: com.microsoft.emmx:id/edge_ntp_scrollview
+    optional: false
 - tapOn:
     target: Browser menu
+    locator:
+      resourceId: com.microsoft.emmx:id/overflow_button_bottom
 - tapOn:
     target: Favorites
-- tapOn:
-    target: the panel title should display "Favorites"
+    locator:
+      xpath: "//android.widget.TextView[@text='Favorites']"
+- assertVisible:
+    target: Favorites panel title
+    locator:
+      xpath: "//android.widget.TextView[@text='Favorites']"
+    optional: false
 - pressKey: Back
-- tapOn:
-    target: Add new tab
+- assertVisible:
+    target: New Tab Page
+    locator:
+      resourceId: com.microsoft.emmx:id/edge_ntp_scrollview
+    optional: false
 - killApp

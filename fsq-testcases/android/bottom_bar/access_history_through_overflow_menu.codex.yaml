@@ -10,22 +10,50 @@ tags:
 - launchApp
 - tapOn:
     target: Browser menu
+    locator:
+      resourceId: com.microsoft.emmx:id/overflow_button_bottom
 - tapOn:
     target: History
+    locator:
+      xpath: "//android.widget.TextView[@text='History']"
+- assertVisible:
+    target: History panel should open
+    locator:
+      resourceId: com.microsoft.emmx:id/hub_view_pager
+    optional: false
+- assert:
+    element:
+      resourceId: com.microsoft.emmx:id/hint_text
+    text:
+      contains: History
+    optional: false
 - tapOn:
-    target: the History panel should open
-- tapOn:
-    target: the panel title should display "History"
-- pressKey: Back
-- tapOn:
-    target: Add new tab
+    target: Close History panel
+    locator:
+      resourceId: com.microsoft.emmx:id/close_button
+- assertVisible:
+    target: New Tab Page
+    locator:
+      resourceId: com.microsoft.emmx:id/edge_ntp_scrollview
+    optional: false
 - tapOn:
     target: Browser menu
+    locator:
+      resourceId: com.microsoft.emmx:id/overflow_button_bottom
 - tapOn:
     target: History
-- tapOn:
-    target: the panel title should display "History"
+    locator:
+      xpath: "//android.widget.TextView[@text='History']"
+- assert:
+    element:
+      resourceId: com.microsoft.emmx:id/hint_text
+    text:
+      contains: History
+    optional: false
 - pressKey: Back
-- tapOn:
-    target: Add new tab
+- assertVisible:
+    target: New Tab Page
+    locator:
+      resourceId: com.microsoft.emmx:id/edge_ntp_scrollview
+    optional: false
 - killApp

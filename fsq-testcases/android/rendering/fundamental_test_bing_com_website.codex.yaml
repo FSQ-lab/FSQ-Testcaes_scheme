@@ -9,17 +9,28 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: Search box
+    target: Search box in NTP page
+    locator:
+      resourceId: com.microsoft.emmx:id/url_bar
 - inputText:
     text: bing.com
     target: Search box
-- tapOn:
-    target: I press enter to navigate to the page
-- tapOn:
-    target: I wait for the page to load completely
-- assertVisible:
-    target: the tab with the title "bing.com"
+    locator:
+      resourceId: com.microsoft.emmx:id/url_bar
+- pressKey: Enter
+- performActions:
+  - type: none
+    id: codex-wait-page-load
+    actions:
+    - type: pause
+      duration: 3000
+- assert:
+    element:
+      resourceId: com.microsoft.emmx:id/url_bar
+    text:
+      contains: bing.com
     optional: false
-- tapOn:
-    target: Analyze the screenshot to verify bing webpage displayed normally
+- assertWithAI:
+    prompt: Analyze the screenshot to verify bing webpage displayed normally with Microsoft Bing logo, search box, and typical Bing homepage layout.
+    optional: false
 - killApp

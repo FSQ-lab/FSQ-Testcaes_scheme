@@ -10,13 +10,31 @@ tags:
 - launchApp
 - tapOn:
     target: Browser menu
+    locator:
+      resourceId: com.microsoft.emmx:id/overflow_button_bottom
 - tapOn:
     target: Settings
     locator:
       xpath: "//android.widget.TextView[@text='Settings']"
-- swipe:
-    direction: up
-    duration: 500
+- performActions:
+  - type: pointer
+    id: codex-scroll-up
+    parameters:
+      pointerType: touch
+    actions:
+    - type: pointerMove
+      origin: viewport
+      x: 540
+      y: 1500
+    - type: pointerDown
+      button: 0
+    - type: pointerMove
+      origin: viewport
+      x: 540
+      y: 800
+      duration: 2000
+    - type: pointerUp
+      button: 0
 - tapOn:
     target: Languages section
     locator:
@@ -26,7 +44,10 @@ tags:
     locator:
       xpath: "//android.widget.TextView[@text='Languages']"
     optional: false
-- pressKey: Back
+- tapOn:
+    target: Navigate up
+    locator:
+      accessibilityId: Navigate up
 - tapOn:
     target: Site Settings section
     locator:
@@ -36,7 +57,10 @@ tags:
     locator:
       xpath: "//android.widget.TextView[@text='Site settings']"
     optional: false
-- pressKey: Back
+- tapOn:
+    target: Navigate up
+    locator:
+      accessibilityId: Navigate up
 - tapOn:
     target: Notifications section
     locator:
@@ -46,10 +70,29 @@ tags:
     locator:
       xpath: "//android.widget.TextView[@text='Notifications']"
     optional: false
-- pressKey: Back
-- swipe:
-    direction: up
-    duration: 500
+- tapOn:
+    target: Navigate up
+    locator:
+      accessibilityId: Navigate up
+- performActions:
+  - type: pointer
+    id: codex-scroll-up
+    parameters:
+      pointerType: touch
+    actions:
+    - type: pointerMove
+      origin: viewport
+      x: 540
+      y: 1500
+    - type: pointerDown
+      button: 0
+    - type: pointerMove
+      origin: viewport
+      x: 540
+      y: 800
+      duration: 2000
+    - type: pointerUp
+      button: 0
 - tapOn:
     target: About Microsoft Edge section
     locator:

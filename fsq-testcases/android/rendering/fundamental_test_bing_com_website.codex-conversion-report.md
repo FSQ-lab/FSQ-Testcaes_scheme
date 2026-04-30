@@ -49,3 +49,10 @@ Codex-produced conversion report.
 - Confirm target wording is specific enough for accessibility-tree locator resolution.
 - Add stable Android locators from knowledge base when available.
 - Confirm every assertion should remain blocking.
+
+## Codex Whole-pass Reconciliation
+
+- Replaced prose `tapOn` commands for Enter and wait with `pressKey: Enter` and a pause action.
+- Preserved source `url_bar` locator for input and the `bing.com` address-bar assertion.
+- Converted source `verify_visual_task` into blocking `assertWithAI` with the original visual task intent.
+
