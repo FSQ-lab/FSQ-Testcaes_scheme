@@ -10,44 +10,83 @@ tags:
 - launchApp
 - tapOn:
     target: Browser menu
+    locator:
+      resourceId: com.microsoft.emmx:id/overflow_button_bottom
 - tapOn:
     target: Settings
+    locator:
+      xpath: "//android.widget.TextView[@text='Settings']"
 - tapOn:
     target: Search
+    locator:
+      xpath: "//android.widget.TextView[@text='Search']"
 - tapOn:
     target: Search engine
+    locator:
+      xpath: "//android.widget.TextView[@text='Search engine']"
 - tapOn:
-    target: I select "Google" radio button
+    target: Google radio button
+    locator:
+      xpath: "//android.widget.TextView[@text='Google']"
 - pressKey: Back
-- tapOn:
-    target: I see "Google" shown on "Search engine" section
-- pressKey: Back
-- pressKey: Back
-- tapOn:
-    target: Address bar
-- tapOn:
-    target: Go
-- assertVisible:
-    target: the omnibox with "google.com" in the search box
+- assert:
+    element:
+      xpath: "//android.widget.TextView[@resource-id='android:id/summary' and @text='Google']"
+    text:
+      contains: Google
     optional: false
+- pressKey: Back
+- pressKey: Back
 - tapOn:
-    target: I perform a long press gesture on address bar
+    target: Top address bar on NTP page
+    locator:
+      resourceId: com.microsoft.emmx:id/search_box_text
+- inputText:
+    text: microsoft
+    target: Search box
+    locator:
+      resourceId: com.microsoft.emmx:id/url_bar
+- pressKey: Enter
+- assert:
+    element:
+      xpath: "//android.widget.EditText[@resource-id='com.microsoft.emmx:id/url_bar' and @text='google.com']"
+    optional: false
+- longPressOn:
+    target: Address bar
+    locator:
+      resourceId: com.microsoft.emmx:id/url_bar
 - tapOn:
     target: Move address bar to bottom
 - assertVisible:
     target: address bar on the bottom of screen
+    locator:
+      resourceId: com.microsoft.emmx:id/edge_bottom_omnibox_container
     optional: false
 - tapOn:
     target: Browser menu
+    locator:
+      resourceId: com.microsoft.emmx:id/overflow_button_bottom
 - tapOn:
     target: Settings
+    locator:
+      xpath: "//android.widget.TextView[@text='Settings']"
 - tapOn:
     target: Search
+    locator:
+      xpath: "//android.widget.TextView[@text='Search']"
 - tapOn:
     target: Search engine
+    locator:
+      xpath: "//android.widget.TextView[@text='Search engine']"
 - tapOn:
-    target: I select "Bing" radio button
+    target: Bing radio button
+    locator:
+      xpath: "//android.widget.TextView[@text='Bing']"
 - pressKey: Back
-- tapOn:
-    target: I see "Bing" shown on "Search engine" section
+- assert:
+    element:
+      xpath: "//android.widget.TextView[@resource-id='android:id/summary' and @text='Bing']"
+    text:
+      contains: Bing
+    optional: false
 - killApp

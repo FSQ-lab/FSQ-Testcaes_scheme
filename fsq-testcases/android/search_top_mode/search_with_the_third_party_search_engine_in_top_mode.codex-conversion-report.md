@@ -67,3 +67,10 @@ Codex-produced conversion report.
 - Confirm target wording is specific enough for accessibility-tree locator resolution.
 - Add stable Android locators from knowledge base when available.
 - Confirm every assertion should remain blocking.
+
+## Post-run Corrections
+
+- Preserved source settings/search/search-engine XPath locators and Google/Bing summary assertions.
+- Fixed keyword submission to `inputText` followed by `pressKey: Enter`.
+- Preserved source `google.com` address-bar assertion, top address-bar locator, bottom omnibox assertion, and browser menu resource id.
+

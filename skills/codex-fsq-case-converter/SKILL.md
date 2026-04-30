@@ -49,7 +49,7 @@ Every generated artifact must include `codex` in the filename or artifact name.
 ## Workflow
 
 1. Inspect existing converted cases in the destination repo before writing new ones.
-2. Read source feature/scenario files and nearby step definitions when available.
+2. Read source feature/scenario files and resolve each BDD step to its implementation when step definitions are available.
 3. Select cases with clear action/assertion intent first; avoid skipped, broken, highly coordinate-driven, or environment-heavy cases in pilot batches.
 4. Convert source steps into direct FSQ actions: `tapOn`, `inputText`, `pressKey`, `assertVisible`, `assert`, `assertWithAI`, `performActions`, or `executeMethod` only when needed.
 5. Preserve `steps` as commands; do not collapse a scenario into a prose objective.
@@ -63,7 +63,15 @@ Read `references/codex-fsq-conversion-rules.md` when converting more than one ca
 
 Core rules:
 
-- Do not guess coordinates.
+- Use dual-source conversion for BDD/Behave cases. The feature file defines the scenario intent, ordering, and human-readable `target`; the step implementation defines executable facts such as Appium calls, locators, assertions, waits, preconditions, and helper flows. Do not convert from feature prose alone when matching step implementation code is available.
+- Match BDD steps to implementations using Behave semantics: support `@given`, `@when`, `@then`, and `@step`; normalize the leading keyword (`Given`/`When`/`Then`/`And`/`But`); preserve quoted parameters; and match exact decorators, parameterized decorators, or nearby helper functions before falling back to semantic prose.
+- Extract executable operations from step implementations, including `click_element`, `send_keys`, `verify_element_exists`, `verify_element_not_exists`, `verify_element_attribute`, `press_key`, `swipe`, waits, app lifecycle calls, and helper/tool wrappers. Convert those operations into direct DSL commands rather than prose `tapOn` placeholders.
+- Preserve operation order inside compound implementation steps. If a step implementation types text and then presses Enter, emit `inputText` before `pressKey`; do not infer a separate `tapOn: Go` unless the source actually clicks a UI element.
+- Translate preconditions from Background, fixtures, `before_scenario`, and helper steps when they materially affect execution, such as launch state, NTP state, signed-in/account state, top/bottom omnibox mode, app foreground/background, or required permissions. Put stable setup into commands only when needed for the case to run; document uncertain preconditions in the conversion report.
+- Preserve deterministic locators from source automation. When Behave/Appium step definitions call `verify_element_exists`, `verify_element_attribute`, `click_element`, `send_keys`, or similar with `locator_strategy` and `locator_value`, carry that into the DSL as dual-layer `target` + `locator` or `assert.element` instead of dropping to pure natural language or generic URL assertions.
+- Preserve URL/current-page assertions through the source observable state. If the source verifies `url_bar` text or an XPath over the address bar, convert it to locator-backed `assert.element` plus `assert.text` when possible; do not convert it to bare `assert.url` unless the source actually reads browser current URL.
+- Treat icon wording carefully: if the source checks an icon through Appium ID/accessibility ID, keep the locator; use screenshot `assertWithAI` only when the source is truly visual/screenshot based or no accessibility locator exists.
+- Do not guess coordinates. If the source implementation contains exact gesture coordinates, preserve them as source evidence, preferably with W3C `performActions` pointer actions when path and target matter.
 - Do not use screenshot-based coordinate inference under a non-vision model.
 - Convert screenshot verification into blocking `assertWithAI`, not a fallback tap location.
 - Do not invent stable locators. Use semantic `target` when locator is unknown.
@@ -100,6 +108,50 @@ Known address bar locator pattern:
 locator:
   name: Address and search bar
   controlType: Edit
+```
+
+Android Behave locator preservation example:
+
+```python
+# Source step definition
+name="verify_element_exists"
+arguments={
+  "locator_strategy": "AppiumBy.ID",
+  "locator_value": f"{package}:id/attachment_right_camera_button"
+}
+```
+
+```yaml
+- assertVisible:
+    target: the camera search icon on omnibox
+    locator:
+      resourceId: com.microsoft.emmx:id/attachment_right_camera_button
+    optional: false
+```
+
+Prefer `resourceId` for Android `AppiumBy.ID`, `xpath` for `AppiumBy.XPATH`, `accessibilityId` for accessibility ID, and `uiautomator` for Android UiAutomator selectors.
+
+Android URL/current-page assertion preservation example:
+
+```python
+# Source step definition
+name="verify_element_attribute"
+arguments={
+  "locator_strategy": "AppiumBy.ID",
+  "locator_value": f"{package}:id/url_bar",
+  "attribute_name": "text",
+  "rule": "contains",
+  "expected_value": "chinatravel.com"
+}
+```
+
+```yaml
+- assert:
+    element:
+      resourceId: com.microsoft.emmx:id/url_bar
+    text:
+      contains: chinatravel.com
+    optional: false
 ```
 
 ## Validation
@@ -140,6 +192,10 @@ Codex-produced conversion report.
 | Source step | FSQ command | Notes |
 | --- | --- | --- |
 
+## Step Implementation Evidence
+| Source step | Implementation file:line | Extracted operations |
+| --- | --- | --- |
+
 ## Unresolved Or Low-Confidence Items
 
 ## Conversion Rules Applied
@@ -151,6 +207,8 @@ Codex-produced conversion report.
 
 - Waiting for a URL after a direct download URL when the browser may keep focus on the current page. Prefer asserting the downloads panel/page state.
 - Turning BDD phrases into prose `step` items. Use direct action commands instead.
-- Adding locator fields because they look plausible. Keep unknowns semantic and let the executor resolve through the accessibility tree and repair flow.
+- Dropping source locators and keeping only prose. Preserve verified source locators; only keep unknowns semantic and let the executor resolve through the accessibility tree and repair flow.
+- Reordering compound steps. Preserve the implementation order for focus, input, keyboard, click, wait, and assertion operations.
+- Treating feature prose as the only source of truth. For BDD/Behave repositories, always inspect step implementation before deciding command type, locator, assertion, or precondition.
 - Marking AI visual assertions optional. Visual assertions often carry the real product requirement.
 - Editing source test repositories. Treat them as read-only unless the user explicitly asks otherwise.

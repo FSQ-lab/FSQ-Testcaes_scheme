@@ -12,25 +12,39 @@ tags:
     target: Browser menu
 - tapOn:
     target: Settings
+    locator:
+      xpath: "//android.widget.TextView[@text='Settings']"
 - swipe:
     direction: up
     duration: 500
 - tapOn:
     target: Languages section
+    locator:
+      xpath: "//android.widget.TextView[@text='Languages']"
 - assertVisible:
     target: Languages page title
+    locator:
+      xpath: "//android.widget.TextView[@text='Languages']"
     optional: false
 - pressKey: Back
 - tapOn:
     target: Site Settings section
+    locator:
+      xpath: "//android.widget.TextView[@text='Site settings']"
 - assertVisible:
     target: Site Settings page title
+    locator:
+      xpath: "//android.widget.TextView[@text='Site settings']"
     optional: false
 - pressKey: Back
 - tapOn:
     target: Notifications section
+    locator:
+      xpath: "//android.widget.TextView[@text='Notifications']"
 - assertVisible:
     target: Notifications page title
+    locator:
+      xpath: "//android.widget.TextView[@text='Notifications']"
     optional: false
 - pressKey: Back
 - swipe:
@@ -38,7 +52,11 @@ tags:
     duration: 500
 - tapOn:
     target: About Microsoft Edge section
+    locator:
+      xpath: "//android.widget.TextView[@text='About Microsoft Edge']"
 - assertVisible:
     target: About Microsoft Edge page title
+    locator:
+      xpath: "//android.widget.TextView[@text='About Microsoft Edge']"
     optional: false
 - killApp

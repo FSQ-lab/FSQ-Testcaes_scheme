@@ -36,6 +36,20 @@ Rules:
 
 ## Step Mapping Patterns
 
+For BDD/Behave sources, first resolve each feature step to the decorated Python implementation. Use the feature step for intent and human-readable target text, then use the implementation body for executable facts.
+
+Implementation extraction rules:
+
+- `click_element` -> `tapOn` with preserved locator.
+- `send_keys` -> `inputText` with preserved locator and text.
+- `verify_element_exists` -> `assertVisible` or `assert.element` with preserved locator.
+- `verify_element_not_exists` -> `assertNotVisible` with preserved locator.
+- `verify_element_attribute` -> `assert.element` plus state/text matcher when schema supports it.
+- `press_key` -> `pressKey`.
+- `swipe` -> `swipe` or `performActions`; do not convert it to prose `tapOn`.
+- Screenshot analysis -> blocking `assertWithAI` or the runner's visual assertion path; never use screenshots for coordinate fallback.
+- Helper/setup code -> explicit precondition commands only when required for isolated execution.
+
 | Source intent | FSQ pattern |
 | --- | --- |
 | Launch browser/app | `launchApp` |
@@ -49,6 +63,20 @@ Rules:
 | Visual layout/theme verification | blocking `assertWithAI` |
 | Not displayed | `assertNotVisible.target` |
 | Restart app | `stopApp`, then `launchApp` |
+
+
+## Android Behave Lessons From Pilot Runs
+
+Apply these rules when converting Android Behave cases with Appium step implementations:
+
+- Preserve operation order inside compound BDD steps. A step such as `input ... and click Go` maps to source order: focus/type first, then `pressKey: Enter`; never emit `tapOn: Go` before `inputText`.
+- Preserve exact source swipe coordinates when the implementation uses Appium `swipe(start_x, start_y, end_x, end_y, duration)`. Convert those to W3C `performActions` pointer sequences when generic `swipe.direction` would change the gesture target or path.
+- Convert waits and page-scroll helper steps to executable waits or gestures, not prose `tapOn` commands. If a source step is `time_sleep`, use a pause-style `performActions` only when the wait is material to execution.
+- Convert Behave fixtures, `before_scenario`, `Background`, and helper setup when they materially establish NTP, signed-in state, top/bottom omnibox mode, or tab count. Do not assume source fixtures are automatically applied by the FSQ runner.
+- Treat helper flows such as `Given I login to edge with MSA` as preconditions or expanded helper flows. Do not convert them into a single `tapOn` against the sentence text.
+- When the source says the app should return to NTP, convert that to an assertion for the NTP surface, not an extra `Add new tab` action.
+- Preserve locator-backed icon, topsite, suggestion-list, refresh, and URL/current-page assertions from the step implementation. Use screenshot AI only when the source assertion is truly visual or no accessibility locator exists.
+- For tab thumbnail close actions, prefer the most specific locator visible in source/evidence, such as resource id plus content description, before using broad sibling XPath.
 
 ## Locator Policy
 

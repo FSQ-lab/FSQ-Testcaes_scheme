@@ -26,12 +26,12 @@ Codex-produced conversion report.
 | `And I input a keyword "developer.wikimedia.org" in the search box and click "Go" on keyboard` | `tapOn` |  |
 | `And I input a keyword "developer.wikimedia.org" in the search box` | `inputText` |  |
 | `And I select "Discover and build Wikimedia technology" from the auto suggestion list` | `tapOn` | I select "Discover and build Wikimedia technology" from the auto suggestion list |
-| `Then I should navigate to "developer.wikimedia.org"` | `assert` |  |
+| `Then I should navigate to "developer.wikimedia.org"` | `assert` | Preserved source XPath for `url_bar` text equals `developer.wikimedia.org`. |
 | `When I click the first link on page to navigate to other pages` | `tapOn` |  |
 | `And I scroll the page up for 2 seconds` | `swipe` |  |
 | `And I scroll the page down for 2 seconds` | `tapOn` | I scroll the page down for 2 seconds |
 | `And I click the back button on bottom toolbar` | `pressKey` |  |
-| `Then I should navigate to "developer.wikimedia.org"` | `assert` |  |
+| `Then I should navigate to "developer.wikimedia.org"` | `assert` | Preserved source XPath for `url_bar` text equals `developer.wikimedia.org`. |
 
 ## Unresolved Or Low-Confidence Items
 
@@ -43,6 +43,7 @@ Codex-produced conversion report.
 - Android scenarios without explicit launch steps receive an implicit `launchApp`.
 - Known literal UI labels are converted to semantic `target` actions.
 - Unknown UI targets are preserved as semantic `target` descriptions.
+- URL navigation assertions preserve the source Appium address-bar XPath instead of using a generic browser URL assertion.
 - No coordinates were generated.
 - No screenshot-based coordinate guessing was used.
 
@@ -50,5 +51,13 @@ Codex-produced conversion report.
 
 - Confirm `appId: com.microsoft.emmx` matches the runner environment.
 - Confirm target wording is specific enough for accessibility-tree locator resolution.
-- Add stable Android locators from knowledge base when available.
+- Confirm preserved Appium address-bar XPath still matches the current Android app build.
 - Confirm every assertion should remain blocking.
+
+## Post-run Corrections
+
+- Fixed compound step ordering: focus/type `developer.wikimedia.org`, press Enter, focus/type again, then tap the suggestion.
+- Preserved source `url_bar` resource id and source suggestion dropdown XPath.
+- Converted source scroll helpers to exact W3C pointer `performActions` using source coordinates.
+- Preserved bottom toolbar `Go back` accessibility id.
+

@@ -10,26 +10,53 @@ tags:
 - launchApp
 - tapOn:
     target: I enter tab center by clicking on the tab center icon
+    locator:
+      resourceId: com.microsoft.emmx:id/tab_center_button
 - tapOn:
     target: I open tab center settings menu
+    locator:
+      resourceId: com.microsoft.emmx:id/menu_button
 - tapOn:
     target: Clear all tabs
+    locator:
+      resourceId: com.microsoft.emmx:id/close_all_tabs_menu_id
 - tapOn:
     target: Close all tabs and groups
+    locator:
+      resourceId: com.microsoft.emmx:id/positive_button
 - tapOn:
     target: Open a new tab
+    locator:
+      resourceId: com.microsoft.emmx:id/empty_state_button
+- tapOn:
+    target: Search box
+    locator:
+      resourceId: com.microsoft.emmx:id/url_bar
 - inputText:
     text: https://www.google.com
     target: Search box
+    locator:
+      resourceId: com.microsoft.emmx:id/url_bar
 - pressKey: Enter
-- assertVisible:
-    target: tab center icon count 1
+- assert:
+    element:
+      resourceId: android:id/text1
+    text:
+      contains: "1"
     optional: false
 - tapOn:
     target: Add new tab
-- tapOn:
-    target: Add new tab
+    locator:
+      resourceId: com.microsoft.emmx:id/edge_bottom_bar_plus_button
 - assertVisible:
-    target: tab center icon count 2
+    target: New Tab Page search box
+    locator:
+      resourceId: com.microsoft.emmx:id/url_bar
+    optional: false
+- assert:
+    element:
+      resourceId: android:id/text1
+    text:
+      contains: "2"
     optional: false
 - killApp

@@ -8,30 +8,66 @@ tags:
 - codex-converted
 ---
 - launchApp
+- tapOn:
+    target: Search box
+    locator:
+      resourceId: com.microsoft.emmx:id/url_bar
 - inputText:
     text: https://www.microsoft.com/en-us
     target: Search box
+    locator:
+      resourceId: com.microsoft.emmx:id/url_bar
 - pressKey: Enter
 - tapOn:
     target: Add new tab
+    locator:
+      resourceId: com.microsoft.emmx:id/edge_bottom_bar_plus_button
+- tapOn:
+    target: Search box
+    locator:
+      resourceId: com.microsoft.emmx:id/url_bar
 - inputText:
     text: https://www.google.com
     target: Search box
+    locator:
+      resourceId: com.microsoft.emmx:id/url_bar
 - pressKey: Enter
 - tapOn:
     target: Add new tab
+    locator:
+      resourceId: com.microsoft.emmx:id/edge_bottom_bar_plus_button
+- tapOn:
+    target: Search box
+    locator:
+      resourceId: com.microsoft.emmx:id/url_bar
 - inputText:
     text: https://bing.com
     target: Search box
+    locator:
+      resourceId: com.microsoft.emmx:id/url_bar
 - pressKey: Enter
 - tapOn:
     target: I enter tab center by clicking on the tab center icon
+    locator:
+      resourceId: com.microsoft.emmx:id/tab_center_button
 - assertVisible:
     target: 4 tab thumbnails
+    locator:
+      xpath: "//android.widget.LinearLayout[@content-desc='4 standard tabs']"
     optional: false
 - tapOn:
-    target: I Click on close button of Google thumbnails
+    target: Close Google tab button
+    locator:
+      xpath: "//android.widget.ImageView[@resource-id='com.microsoft.emmx:id/action_button' and @content-desc='Close Google tab']"
+- performActions:
+  - type: none
+    id: codex-wait-after-close-tab
+    actions:
+    - type: pause
+      duration: 1000
 - assertVisible:
     target: 3 tab thumbnails
+    locator:
+      xpath: "//android.widget.LinearLayout[@content-desc='3 standard tabs']"
     optional: false
 - killApp

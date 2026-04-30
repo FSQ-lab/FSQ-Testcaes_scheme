@@ -81,6 +81,8 @@ python3 skills/codex-fsq-case-runner/scripts/run_fsq_cases.py \
 
 The simple Android runner is not an MCP adapter. It uses Appium Python client against an Appium server, captures `before` and `after` accessibility XML for every step, and captures `failed` XML plus a `failureClass` when a step fails. Screenshots are optional and disabled by default.
 
+The Android harness runner also supports a Codex simple visual-assertion path for screenshot analysis steps. It saves a screenshot and `*-visual-assertion.json`, then evaluates lightweight accessibility-backed visual signals. This path is assertion-only and must never be used for coordinate fallback or tap targeting.
+
 If no `--runner-command` is provided, the script still validates cases and creates a run bundle, then records each selected case as `skipped` with a missing runner message.
 
 ## References

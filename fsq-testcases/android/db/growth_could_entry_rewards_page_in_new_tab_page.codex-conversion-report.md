@@ -47,3 +47,10 @@ Codex-produced conversion report.
 - Confirm target wording is specific enough for accessibility-tree locator resolution.
 - Add stable Android locators from knowledge base when available.
 - Confirm every assertion should remain blocking.
+
+## Post-run Corrections
+
+- Reclassified `Given I login to edge with MSA` as a precondition/helper flow, not a single `tapOn` action.
+- The pilot DSL now assumes the device is already signed in and asserts the NTP account entry before opening Rewards.
+- Full conditional login expansion remains out of scope for this pilot conversion because it requires account credentials and multiple helper steps.
+

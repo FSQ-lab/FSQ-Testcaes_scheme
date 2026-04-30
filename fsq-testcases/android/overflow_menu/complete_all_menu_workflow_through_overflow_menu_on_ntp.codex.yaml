@@ -10,47 +10,142 @@ tags:
 - launchApp
 - tapOn:
     target: Browser menu
-- tapOn:
-    target: I swipe within the scrollable area on menu from right to left to go to the second page
+    locator:
+      resourceId: com.microsoft.emmx:id/overflow_button_bottom
+- performActions:
+  - type: pointer
+    id: codex-menu-page-swipe
+    parameters:
+      pointerType: touch
+    actions:
+    - type: pointerMove
+      duration: 0
+      origin: viewport
+      x: 800
+      y: 1900
+    - type: pointerDown
+      button: 0
+    - type: pointerMove
+      duration: 1000
+      origin: viewport
+      x: 200
+      y: 1900
+    - type: pointerUp
+      button: 0
 - tapOn:
     target: All Menu
-- tapOn:
+    locator:
+      xpath: "//android.widget.TextView[@text='All menu']"
+- assertVisible:
     target: the All Menu panel should open
+    locator:
+      xpath: "//android.widget.TextView[@text='All Menu']"
+    optional: false
 - tapOn:
     target: Edit
-- tapOn:
+    locator:
+      resourceId: com.microsoft.emmx:id/toolbar_button_edit_done
+- assertVisible:
     target: The All menu edit mode should be opened
-- tapOn:
-    target: The "Favorites" is disabled
+    locator:
+      xpath: "//android.widget.TextView[@text='Edit Menu']"
+    optional: false
+- assert:
+    element:
+      xpath: "//android.widget.FrameLayout[@resource-id='com.microsoft.emmx:id/grid_item_view'][1]"
+      enabled: false
+    optional: false
 - tapOn:
     target: Drop
+    locator:
+      xpath: "//android.widget.TextView[@text='Drop']/.."
 - tapOn:
     target: Done
-- pressKey: Back
+    locator:
+      xpath: "//android.widget.Button[@text='Done']"
+- tapOn:
+    target: Back button on All menu panel
+    locator:
+      resourceId: com.microsoft.emmx:id/back_button
 - tapOn:
     target: Browser menu
-- tapOn:
-    target: I swipe within the scrollable area on menu from right to left to go to the second page
+    locator:
+      resourceId: com.microsoft.emmx:id/overflow_button_bottom
+- performActions:
+  - type: pointer
+    id: codex-menu-page-swipe
+    parameters:
+      pointerType: touch
+    actions:
+    - type: pointerMove
+      duration: 0
+      origin: viewport
+      x: 800
+      y: 1900
+    - type: pointerDown
+      button: 0
+    - type: pointerMove
+      duration: 1000
+      origin: viewport
+      x: 200
+      y: 1900
+    - type: pointerUp
+      button: 0
 - assertNotVisible:
     target: Drop menu item
+    locator:
+      xpath: "//android.widget.TextView[@text='Drop']"
     optional: false
 - tapOn:
     target: All Menu
+    locator:
+      xpath: "//android.widget.TextView[@text='All menu']"
 - tapOn:
     target: Edit
+    locator:
+      resourceId: com.microsoft.emmx:id/toolbar_button_edit_done
 - swipe:
     direction: up
-    duration: 500
+    duration: 1000
 - tapOn:
     target: Drop
+    locator:
+      xpath: "//android.widget.TextView[@text='Drop']/.."
 - tapOn:
     target: Done
-- pressKey: Back
+    locator:
+      xpath: "//android.widget.Button[@text='Done']"
+- tapOn:
+    target: Back button on All menu panel
+    locator:
+      resourceId: com.microsoft.emmx:id/back_button
 - tapOn:
     target: Browser menu
-- tapOn:
-    target: I swipe within the scrollable area on menu from right to left to go to the second page
+    locator:
+      resourceId: com.microsoft.emmx:id/overflow_button_bottom
+- performActions:
+  - type: pointer
+    id: codex-menu-page-swipe
+    parameters:
+      pointerType: touch
+    actions:
+    - type: pointerMove
+      duration: 0
+      origin: viewport
+      x: 800
+      y: 1900
+    - type: pointerDown
+      button: 0
+    - type: pointerMove
+      duration: 1000
+      origin: viewport
+      x: 200
+      y: 1900
+    - type: pointerUp
+      button: 0
 - assertVisible:
     target: Drop menu item
+    locator:
+      xpath: "//android.widget.TextView[@text='Drop']"
     optional: false
 - killApp

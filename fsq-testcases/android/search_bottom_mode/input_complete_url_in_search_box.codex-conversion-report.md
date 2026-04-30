@@ -24,12 +24,12 @@ Codex-produced conversion report.
 | `Implicit conversion assumption` | `launchApp` | Android source scenarios commonly omit explicit launch step. |
 | `When I click on the search box on NTP page` | `tapOn` |  |
 | `And I input "https://www.chinatravel.com" in search box and navigate to it` | `inputText, pressKey` |  |
-| `Then I should navigate to "https://www.chinatravel.com"` | `assert` |  |
+| `Then I should navigate to "https://www.chinatravel.com"` | `assert` | Preserved `verify_element_attribute`: `com.microsoft.emmx:id/url_bar` text contains `chinatravel.com`. |
 | `When I click "Create My Trip" on page` | `tapOn` |  |
 | `And I scroll the page up for 2 seconds` | `swipe` |  |
 | `And I scroll the page down for 2 seconds` | `tapOn` | I scroll the page down for 2 seconds |
 | `And I click the back button on bottom toolbar` | `pressKey` |  |
-| `Then I should navigate to "https://www.chinatravel.com"` | `assert` |  |
+| `Then I should navigate to "https://www.chinatravel.com"` | `assert` | Preserved `verify_element_attribute`: `com.microsoft.emmx:id/url_bar` text contains `chinatravel.com`. |
 
 ## Unresolved Or Low-Confidence Items
 
@@ -40,6 +40,7 @@ Codex-produced conversion report.
 - Android scenarios without explicit launch steps receive an implicit `launchApp`.
 - Known literal UI labels are converted to semantic `target` actions.
 - Unknown UI targets are preserved as semantic `target` descriptions.
+- URL navigation assertions preserve the source Appium address-bar locator instead of using a generic browser URL assertion.
 - No coordinates were generated.
 - No screenshot-based coordinate guessing was used.
 
@@ -47,5 +48,13 @@ Codex-produced conversion report.
 
 - Confirm `appId: com.microsoft.emmx` matches the runner environment.
 - Confirm target wording is specific enough for accessibility-tree locator resolution.
-- Add stable Android locators from knowledge base when available.
+- Confirm preserved Appium address-bar resource IDs still match the current Android app build.
 - Confirm every assertion should remain blocking.
+
+## Post-run Corrections
+
+- Preserved source `url_bar` resource id for both focus and input steps.
+- Converted source scroll helpers to exact W3C pointer `performActions` using source coordinates `(540,1500)->(540,800)` and `(540,800)->(540,1500)`.
+- Preserved `Create My Trip` XPath and bottom toolbar `Go back` accessibility id.
+- Removed prose `tapOn` placeholders for scroll/wait-style helper steps.
+

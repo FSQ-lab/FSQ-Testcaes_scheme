@@ -51,3 +51,10 @@ Codex-produced conversion report.
 - Confirm target wording is specific enough for accessibility-tree locator resolution.
 - Add stable Android locators from knowledge base when available.
 - Confirm every assertion should remain blocking.
+
+## Post-run Corrections
+
+- Preserved source URL-entry order and `url_bar` locator for each tab setup step.
+- Strengthened the Google close action with resource id plus content description: `action_button` and `Close Google tab`.
+- Added a short pause before asserting the tab count drops to 3.
+

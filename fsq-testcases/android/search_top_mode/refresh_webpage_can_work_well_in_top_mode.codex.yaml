@@ -9,23 +9,57 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: Search box
+    target: Search box on NTP page
+    locator:
+      resourceId: com.microsoft.emmx:id/url_bar
 - inputText:
     text: https://www.chinatravel.com
     target: Search box
+    locator:
+      resourceId: com.microsoft.emmx:id/url_bar
 - pressKey: Enter
-- tapOn:
-    target: I perform a long press gesture on address bar
+- longPressOn:
+    target: Address bar
+    locator:
+      resourceId: com.microsoft.emmx:id/url_bar
 - tapOn:
     target: Move address bar to top
+- assertVisible:
+    target: Refresh button on omnibox
+    locator:
+      resourceId: com.microsoft.emmx:id/refresh_button
+    optional: false
 - tapOn:
-    target: Refresh
-- tapOn:
-    target: Refresh
-- tapOn:
-    target: the web page is reloaded completedly
-- tapOn:
-    target: I scroll the page down for 2 seconds
-- tapOn:
-    target: the web page is reloaded completedly
+    target: Refresh button
+    locator:
+      resourceId: com.microsoft.emmx:id/refresh_button
+- assertVisible:
+    target: Web page after reload
+    locator:
+      className: android.webkit.WebView
+    optional: false
+- performActions:
+  - type: pointer
+    id: codex-scroll-page-down
+    parameters:
+      pointerType: touch
+    actions:
+    - type: pointerMove
+      origin: viewport
+      x: 540
+      y: 800
+    - type: pointerDown
+      button: 0
+    - type: pointerMove
+      origin: viewport
+      x: 540
+      y: 1500
+      duration: 2000
+    - type: pointerUp
+      button: 0
+- assertVisible:
+    target: Web page after scroll
+    locator:
+      className: android.webkit.WebView
+    optional: false
 - killApp

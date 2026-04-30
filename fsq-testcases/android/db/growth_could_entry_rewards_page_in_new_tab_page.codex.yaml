@@ -1,20 +1,30 @@
 schemaVersion: fsq.ai-test/v1
 name: Growth Could entry rewards page in New Tab page
-description: Converted from Edge Android Behave BDD scenario.
+description: Converted from Edge Android Behave BDD scenario. This pilot case assumes the test device is already signed in with MSA; full conditional login helper flow is documented in the conversion report.
 platform: android
 appId: com.microsoft.emmx
 tags:
 - p0
 - codex-converted
+- requires-msa
 ---
 - launchApp
-- tapOn:
-    target: I login to edge with MSA
+- assertVisible:
+    target: Signed-in account entry on NTP page
+    locator:
+      resourceId: com.microsoft.emmx:id/edge_account_image_view
+    optional: false
 - tapOn:
     target: I click the account in NTP page
+    locator:
+      resourceId: com.microsoft.emmx:id/edge_account_image_view
 - tapOn:
     target: I click the "Microsoft Rewards" option
+    locator:
+      resourceId: com.microsoft.emmx:id/rewards_entry
 - assertVisible:
     target: the Microsoft Rewards page open normally
+    locator:
+      resourceId: com.microsoft.emmx:id/title_bar
     optional: false
 - killApp

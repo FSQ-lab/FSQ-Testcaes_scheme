@@ -49,3 +49,10 @@ Codex-produced conversion report.
 - Confirm target wording is specific enough for accessibility-tree locator resolution.
 - Add stable Android locators from knowledge base when available.
 - Confirm every assertion should remain blocking.
+
+## Post-run Corrections
+
+- Preserved source `search_box_text` locator for the top address bar.
+- Preserved source locators for top sites, camera icon, Copilot voice icon, suggestion dropdown, and final `chinatravel.com` address-bar assertion.
+- Fixed keyboard submit to `pressKey: Enter` instead of `tapOn: Go`.
+

@@ -53,3 +53,10 @@ Codex-produced conversion report.
 - Confirm target wording is specific enough for accessibility-tree locator resolution.
 - Add stable Android locators from knowledge base when available.
 - Confirm every assertion should remain blocking.
+
+## Post-run Corrections
+
+- Converted long press on address bar to `longPressOn` with the source `url_bar` locator.
+- Preserved source `refresh_button` locator for both assertion and tap.
+- Converted page reload checks to `assertVisible` on `android.webkit.WebView` and scroll helper to W3C pointer actions.
+

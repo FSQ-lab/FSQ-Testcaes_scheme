@@ -9,17 +9,43 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: Search box
+    target: Search box on NTP page
+    locator:
+      resourceId: com.microsoft.emmx:id/url_bar
 - assertVisible:
-    target: Omnibox with Camera icon and Copilot voice icon
+    target: Camera icon on omnibox
+    locator:
+      resourceId: com.microsoft.emmx:id/attachment_right_camera_button
+    optional: false
+- assertVisible:
+    target: Copilot voice icon on omnibox
+    locator:
+      resourceId: com.microsoft.emmx:id/attachment_right_mic_button
+    optional: false
+- inputText:
+    text: microsoft
+    target: Search box
+    locator:
+      resourceId: com.microsoft.emmx:id/url_bar
+- pressKey: Enter
+- assertVisible:
+    target: Copilot icon on omnibox
+    locator:
+      resourceId: com.microsoft.emmx:id/edge_location_bar_copilot_button
+    optional: false
+- assertVisible:
+    target: Refresh icon on omnibox
+    locator:
+      resourceId: com.microsoft.emmx:id/refresh_button
     optional: false
 - tapOn:
-    target: Go
-- tapOn:
-    target: Refresh
-- tapOn:
     target: Search box
-- assertVisible:
-    target: the omnibox with "microsoft" in the search box
+    locator:
+      resourceId: com.microsoft.emmx:id/url_bar
+- assert:
+    element:
+      resourceId: com.microsoft.emmx:id/url_bar
+    text:
+      contains: microsoft
     optional: false
 - killApp

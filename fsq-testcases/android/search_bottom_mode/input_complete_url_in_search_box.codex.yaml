@@ -9,25 +9,71 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: Search box
+    target: Search box on NTP page
+    locator:
+      resourceId: com.microsoft.emmx:id/url_bar
 - inputText:
     text: https://www.chinatravel.com
     target: Search box
+    locator:
+      resourceId: com.microsoft.emmx:id/url_bar
 - pressKey: Enter
 - assert:
-    url:
-      contains: https://www.chinatravel.com
+    element:
+      resourceId: com.microsoft.emmx:id/url_bar
+    text:
+      contains: chinatravel.com
     optional: false
 - tapOn:
     target: Create My Trip
-- swipe:
-    direction: up
-    duration: 500
+    locator:
+      xpath: "//android.view.View[@content-desc='Create My Trip']"
+- performActions:
+  - type: pointer
+    id: codex-scroll-page-up
+    parameters:
+      pointerType: touch
+    actions:
+    - type: pointerMove
+      origin: viewport
+      x: 540
+      y: 1500
+    - type: pointerDown
+      button: 0
+    - type: pointerMove
+      origin: viewport
+      x: 540
+      y: 800
+      duration: 2000
+    - type: pointerUp
+      button: 0
+- performActions:
+  - type: pointer
+    id: codex-scroll-page-down
+    parameters:
+      pointerType: touch
+    actions:
+    - type: pointerMove
+      origin: viewport
+      x: 540
+      y: 800
+    - type: pointerDown
+      button: 0
+    - type: pointerMove
+      origin: viewport
+      x: 540
+      y: 1500
+      duration: 2000
+    - type: pointerUp
+      button: 0
 - tapOn:
-    target: I scroll the page down for 2 seconds
-- pressKey: Back
+    target: Back button on bottom toolbar
+    locator:
+      accessibilityId: Go back
 - assert:
-    url:
-      contains: https://www.chinatravel.com
+    element:
+      resourceId: com.microsoft.emmx:id/url_bar
+    text:
+      contains: chinatravel.com
     optional: false
 - killApp

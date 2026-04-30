@@ -9,28 +9,80 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: Search box
-- tapOn:
-    target: Go
+    target: Search box on NTP page
+    locator:
+      resourceId: com.microsoft.emmx:id/url_bar
 - inputText:
     text: developer.wikimedia.org
     target: Search box
+    locator:
+      resourceId: com.microsoft.emmx:id/url_bar
+- pressKey: Enter
 - tapOn:
-    target: I select "Discover and build Wikimedia technology" from the auto suggestion list
+    target: Search box on page
+    locator:
+      resourceId: com.microsoft.emmx:id/url_bar
+- inputText:
+    text: developer.wikimedia.org
+    target: Search box
+    locator:
+      resourceId: com.microsoft.emmx:id/url_bar
+- tapOn:
+    target: Discover and build Wikimedia technology suggestion
+    locator:
+      xpath: "//androidx.recyclerview.widget.RecyclerView[@resource-id='com.microsoft.emmx:id/omnibox_suggestions_dropdown']/android.view.ViewGroup[1]"
 - assert:
-    url:
-      contains: developer.wikimedia.org
+    element:
+      xpath: "//android.widget.EditText[@resource-id='com.microsoft.emmx:id/url_bar' and @text='developer.wikimedia.org']"
     optional: false
 - tapOn:
     target: First link on page
-- swipe:
-    direction: up
-    duration: 500
+    locator:
+      xpath: "//android.widget.TextView[@text='Wikimedia projects']"
+- performActions:
+  - type: pointer
+    id: codex-scroll-page-up
+    parameters:
+      pointerType: touch
+    actions:
+    - type: pointerMove
+      origin: viewport
+      x: 540
+      y: 1500
+    - type: pointerDown
+      button: 0
+    - type: pointerMove
+      origin: viewport
+      x: 540
+      y: 800
+      duration: 2000
+    - type: pointerUp
+      button: 0
+- performActions:
+  - type: pointer
+    id: codex-scroll-page-down
+    parameters:
+      pointerType: touch
+    actions:
+    - type: pointerMove
+      origin: viewport
+      x: 540
+      y: 800
+    - type: pointerDown
+      button: 0
+    - type: pointerMove
+      origin: viewport
+      x: 540
+      y: 1500
+      duration: 2000
+    - type: pointerUp
+      button: 0
 - tapOn:
-    target: I scroll the page down for 2 seconds
-- pressKey: Back
+    target: Back button on bottom toolbar
+    locator:
+      accessibilityId: Go back
 - assert:
-    url:
-      contains: developer.wikimedia.org
+    element:
+      xpath: "//android.widget.EditText[@resource-id='com.microsoft.emmx:id/url_bar' and @text='developer.wikimedia.org']"
     optional: false
 - killApp

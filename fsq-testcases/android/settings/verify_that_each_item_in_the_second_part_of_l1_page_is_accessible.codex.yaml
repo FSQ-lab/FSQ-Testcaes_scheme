@@ -12,26 +12,44 @@ tags:
     target: Browser menu
 - tapOn:
     target: Settings
+    locator:
+      xpath: "//android.widget.TextView[@text='Settings']"
 - tapOn:
     target: Set as Default Browser section
+    locator:
+      xpath: "//android.widget.TextView[@text='Set as default browser' and contains(@resource-id, 'android:id/title')]"
 - assertVisible:
     target: Set edge as your default browser app? dialog
+    locator:
+      xpath: "//android.widget.TextView[contains(@text, 'Set Edge') and contains(@text, 'as your default browser app?')]"
     optional: false
 - tapOn:
     target: Cancel
+    locator:
+      xpath: "//android.widget.Button[@text='Cancel']"
 - assertNotVisible:
     target: Dialog
+    locator:
+      xpath: "//android.widget.TextView[contains(@text, 'Set Edge')]"
     optional: false
 - tapOn:
     target: Search section
+    locator:
+      xpath: "//android.widget.TextView[@text='Search']"
 - assertVisible:
     target: Search page title
+    locator:
+      xpath: "//android.widget.TextView[@text='Search']"
     optional: false
 - pressKey: Back
 - tapOn:
     target: Appearance and layout
+    locator:
+      xpath: "//android.widget.TextView[@text='Appearance and layout']"
 - assertVisible:
     target: Appearance and Layout page title
+    locator:
+      xpath: "//android.widget.TextView[@text='Appearance and layout']"
     optional: false
 - pressKey: Back
 - swipe:
@@ -39,22 +57,35 @@ tags:
     duration: 500
 - tapOn:
     target: New Tab Page section
-- tapOn:
-    target: Add new tab
+    locator:
+      xpath: "//android.widget.TextView[@text='New tab page']"
+- assertVisible:
+    target: New Tab Page title
+    locator:
+      xpath: "//android.widget.TextView[@text='New tab page']"
+    optional: false
 - pressKey: Back
 - swipe:
     direction: up
     duration: 500
 - tapOn:
     target: Tabs section
+    locator:
+      xpath: "//android.widget.TextView[@text='Tabs']"
 - assertVisible:
     target: Tabs page title
+    locator:
+      xpath: "//android.widget.TextView[contains(@text,'Tabs')]"
     optional: false
 - pressKey: Back
 - tapOn:
     target: Accessibility section
+    locator:
+      xpath: "//android.widget.TextView[@text='Accessibility']"
 - assertVisible:
     target: Accessibility page title
+    locator:
+      xpath: "//android.widget.TextView[@text='Accessibility']"
     optional: false
 - pressKey: Back
 - pressKey: Back

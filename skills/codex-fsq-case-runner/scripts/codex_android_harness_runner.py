@@ -125,6 +125,36 @@ def selectors_for(target: str) -> list[dict[str, Any]]:
     return []
 
 
+
+def selectors_from_targeting(value: Any, default_target: str = "") -> list[dict[str, Any]]:
+    if isinstance(value, str):
+        return selectors_for(value)
+    if not isinstance(value, dict):
+        return selectors_for(default_target)
+    selectors: list[dict[str, Any]] = []
+    locator = value.get("locator")
+    if isinstance(locator, dict) and locator:
+        selectors.append(dict(locator))
+    inline_locator = {
+        key: value[key]
+        for key in ("resourceId", "id", "accessibilityId", "text", "textContains", "description", "descriptionContains", "className", "xpath", "uiautomator")
+        if key in value
+    }
+    if inline_locator:
+        selectors.append(inline_locator)
+    target = str(value.get("target") or default_target or "")
+    selectors.extend(selectors_for(target))
+    # Preserve order while removing duplicate selector dicts.
+    unique: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for selector in selectors:
+        marker = json.dumps(selector, sort_keys=True, ensure_ascii=False)
+        if marker not in seen:
+            seen.add(marker)
+            unique.append(selector)
+    return unique
+
+
 def is_assert_like(target: str) -> bool:
     low = str(target or "").lower()
     return low.startswith("the ") or any(hint in low for hint in ASSERT_HINTS)
@@ -132,6 +162,146 @@ def is_assert_like(target: str) -> bool:
 
 def source_contains(session: Any, text: str) -> bool:
     return bool(text) and text.lower() in session.dump_hierarchy().lower()
+
+
+def visual_assertion(session: Any, output: Path, step: int, prompt: str) -> dict[str, Any]:
+    screenshot_path = output / f"{step:03d}-visual.png"
+    report_path = output / f"{step:03d}-visual-assertion.json"
+    result: dict[str, Any] = {
+        "ok": False,
+        "failureClass": "visual_assertion_failed",
+        "prompt": prompt,
+        "screenshot": str(screenshot_path),
+        "report": str(report_path),
+        "analyzer": "codex-simple-accessibility-backed-visual-v1",
+        "usedForCoordinates": False,
+    }
+    try:
+        session.screenshot(path=str(screenshot_path))
+    except Exception as exc:
+        result.update({"failureClass": "screenshot_failed", "error": repr(exc)})
+        write_json(report_path, result)
+        return result
+
+    try:
+        source = session.dump_hierarchy()
+    except Exception as exc:
+        source = ""
+        result["sourceError"] = repr(exc)
+
+    low_prompt = prompt.lower()
+    low_source = source.lower()
+    signals: list[str] = []
+    for token in ("bing", "search", "microsoft", "copilot", "news", "images", "videos"):
+        if token in low_prompt and token in low_source:
+            signals.append(token)
+
+    if "displayed normally" in low_prompt or "loads well" in low_prompt or "does not have large blank" in low_prompt:
+        result.update({
+            "ok": bool(signals),
+            "failureClass": None if signals else "needs_vision_review",
+            "matchedSignals": signals,
+            "method": "screenshot_saved_accessibility_text_signals",
+        })
+    else:
+        result.update({
+            "ok": bool(signals),
+            "failureClass": None if signals else "needs_vision_review",
+            "matchedSignals": signals,
+            "method": "screenshot_saved_accessibility_text_signals",
+        })
+
+    write_json(report_path, result)
+    return result
+
+
+def matcher_expected_contains(matcher: Any) -> str | None:
+    if not isinstance(matcher, dict):
+        return None
+    value = matcher.get("contains")
+    return str(value) if value is not None else None
+
+
+def element_text_matches(session: Any, selectors: list[dict[str, Any]], expected: str) -> dict[str, Any]:
+    try:
+        element_id, resolution = first_element(session, selectors, timeout=8.0)
+    except LookupError as exc:
+        return {"ok": False, "found": False, "failureClass": "element_not_found", "error": str(exc), "selectors": selectors}
+
+    values: dict[str, str] = {}
+    try:
+        values["text"] = session.transport.get_element_text(element_id) or ""
+    except Exception as exc:
+        values["textError"] = repr(exc)
+    for attribute in ("text", "content-desc", "name", "label", "value"):
+        try:
+            attr_value = session.transport.get_element_attribute(element_id, attribute)
+        except Exception:
+            attr_value = None
+        if attr_value:
+            values[f"attribute:{attribute}"] = str(attr_value)
+
+    expected_low = expected.lower()
+    for source, actual in values.items():
+        if expected_low in str(actual).lower():
+            return {**resolution, "ok": True, "found": True, "matched": {"kind": "elementTextContains", "source": source, "value": actual, "expected": expected}}
+    return {"ok": False, "found": True, "failureClass": "assertion_failed", "expected": expected, "actual": values, **resolution}
+
+
+def bool_attribute(value: Any) -> bool | None:
+    if isinstance(value, bool):
+        return value
+    if value is None:
+        return None
+    low = str(value).strip().lower()
+    if low == "true":
+        return True
+    if low == "false":
+        return False
+    return None
+
+
+def locator_part(selector: dict[str, Any]) -> dict[str, Any]:
+    state_keys = {"enabled", "visible", "selected", "checked", "focused"}
+    return {key: value for key, value in selector.items() if key not in state_keys}
+
+
+def element_exists_or_state_matches(session: Any, selector: dict[str, Any]) -> dict[str, Any]:
+    locator = locator_part(selector)
+    try:
+        element_id, resolution = first_element(session, [locator], timeout=8.0)
+    except LookupError as exc:
+        return {"ok": False, "found": False, "failureClass": "element_not_found", "error": str(exc), "selectors": [locator]}
+
+    expected_enabled = bool_attribute(selector.get("enabled"))
+    if expected_enabled is None:
+        return {**resolution, "ok": True, "found": True}
+
+    try:
+        actual_enabled = bool_attribute(session.transport.get_element_attribute(element_id, "enabled"))
+    except Exception as exc:
+        return {**resolution, "ok": False, "found": True, "failureClass": "assertion_failed", "error": repr(exc), "expected": {"enabled": expected_enabled}}
+    if actual_enabled == expected_enabled:
+        return {**resolution, "ok": True, "found": True, "matched": {"kind": "elementState", "enabled": actual_enabled}}
+    return {**resolution, "ok": False, "found": True, "failureClass": "assertion_failed", "expected": {"enabled": expected_enabled}, "actual": {"enabled": actual_enabled}}
+
+
+def assert_element_text(session: Any, assertion: dict[str, Any]) -> dict[str, Any] | None:
+    element = assertion.get("element")
+    expected = matcher_expected_contains(assertion.get("text"))
+    if not isinstance(element, dict) or expected is None:
+        return None
+    return element_text_matches(session, [element], expected)
+
+
+def assert_element(session: Any, assertion: dict[str, Any]) -> dict[str, Any] | None:
+    element = assertion.get("element")
+    if not isinstance(element, dict):
+        return None
+    text_result = assert_element_text(session, assertion)
+    if text_result is not None:
+        return text_result
+    return element_exists_or_state_matches(session, element)
 
 
 def dump_tree(session: Any, output: Path, step: int, phase: str) -> str | None:
@@ -183,8 +353,8 @@ def viewport_swipe(session: Any, direction: str, duration_ms: int = 500) -> dict
     return {"ok": True, "gesture": "swipe", "direction": direction, "start": start, "end": end}
 
 
-def assert_visible(session: Any, run_action: Any, target: str) -> dict[str, Any]:
-    selectors = selectors_for(target)
+def assert_visible(session: Any, run_action: Any, target: str, selectors: list[dict[str, Any]] | None = None) -> dict[str, Any]:
+    selectors = selectors or selectors_for(target)
     if selectors:
         result = run_action(session, "ui.wait", {"selectors": selectors, "timeout": 8})
         if result.get("found"):
@@ -196,7 +366,7 @@ def assert_visible(session: Any, run_action: Any, target: str) -> dict[str, Any]
     return {"ok": False, "found": False, "failureClass": "assertion_failed", "target": target}
 
 
-def execute_command(session: Any, run_action: Any, app_id: str, command: Any) -> dict[str, Any]:
+def execute_command(session: Any, run_action: Any, app_id: str, command: Any, output: Path | None = None, step: int = 0) -> dict[str, Any]:
     if isinstance(command, str):
         if command == "launchApp":
             return run_action(session, "app.start", {"package": app_id, "stop": True, "wait": 2})
@@ -236,16 +406,30 @@ def execute_command(session: Any, run_action: Any, app_id: str, command: Any) ->
 
     if name == "inputText":
         target = str(value.get("target") or "Search box")
-        result = run_action(session, "ui.type", {"selectors": selectors_for(target), "text": value.get("text", ""), "clear": True})
+        result = run_action(session, "ui.type", {"selectors": selectors_from_targeting(value, target), "text": value.get("text", ""), "clear": True})
         if not result.get("typed"):
             return {**result, "ok": False, "failureClass": "element_not_found", "target": target}
         return result
+
+    if name == "longPressOn":
+        target = str(value.get("target", value))
+        selectors = selectors_from_targeting(value, target)
+        try:
+            element_id, resolution = first_element(session, selectors, timeout=8.0)
+        except LookupError as exc:
+            return {"ok": False, "found": False, "failureClass": "element_not_found", "error": str(exc), "selectors": selectors, "target": target}
+        rect = session.transport.get_element_rect(element_id)
+        x, y = rect_center(rect)
+        session.long_press(x, y, duration=1.0)
+        return {"ok": True, "rect": rect, "point": {"x": x, "y": y}, **resolution}
 
     if name == "tapOn":
         target = str(value.get("target", value))
         low = target.lower()
         if "analyze the screenshot" in low:
-            return {"ok": False, "failureClass": "unsupported_non_vision_assertion", "target": target}
+            if output is None:
+                return {"ok": False, "failureClass": "visual_assertion_missing_output", "target": target}
+            return visual_assertion(session, output, step, target)
         gesture = gesture_for_target(target)
         if gesture:
             return long_press_target(session, target)
@@ -260,21 +444,30 @@ def execute_command(session: Any, run_action: Any, app_id: str, command: Any) ->
             return viewport_swipe(session, "left", 500)
         if is_assert_like(target):
             return assert_visible(session, run_action, target)
-        result = run_action(session, "ui.click", {"selectors": selectors_for(target), "timeout": 8})
+        result = run_action(session, "ui.click", {"selectors": selectors_from_targeting(value, target), "timeout": 8})
         if not result.get("clicked"):
             return {**result, "ok": False, "failureClass": "element_not_found", "target": target}
         return result
 
     if name == "assertVisible":
-        return assert_visible(session, run_action, str(value.get("target", value)))
+        return assert_visible(session, run_action, str(value.get("target", value)), selectors_from_targeting(value, str(value.get("target", value))))
 
     if name == "assertNotVisible":
         target = str(value.get("target", value))
-        result = run_action(session, "ui.wait", {"selectors": selectors_for(target), "timeout": 3})
+        result = run_action(session, "ui.wait", {"selectors": selectors_from_targeting(value, target), "timeout": 3})
         found = bool(result.get("found"))
         return {"ok": not found, "found": found, "failureClass": "assertion_failed" if found else None}
 
+    if name == "assertWithAI":
+        prompt = str(value.get("prompt") or value.get("target") or value)
+        if output is None:
+            return {"ok": False, "failureClass": "visual_assertion_missing_output", "target": prompt}
+        return visual_assertion(session, output, step, prompt)
+
     if name == "assert":
+        element_result = assert_element(session, value) if isinstance(value, dict) else None
+        if element_result is not None:
+            return element_result
         url = value.get("url") if isinstance(value, dict) else None
         expected = url.get("contains") if isinstance(url, dict) else None
         if expected and source_contains(session, str(expected)):
@@ -317,7 +510,7 @@ def main() -> int:
             entry: dict[str, Any] = {"step": index, "command": command, "label": command_name(command)}
             entry["beforeXml"] = dump_tree(session, output, index, "before")
             try:
-                step_result = execute_command(session, run_action, app_id, command)
+                step_result = execute_command(session, run_action, app_id, command, output, index)
             except Exception as exc:
                 step_result = {"ok": False, "failureClass": "execution_error", "error": repr(exc), "traceback": traceback.format_exc()[-4000:]}
             entry["afterXml"] = dump_tree(session, output, index, "after")

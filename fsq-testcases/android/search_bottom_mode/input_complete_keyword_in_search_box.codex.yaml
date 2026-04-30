@@ -10,8 +10,12 @@ tags:
 - launchApp
 - tapOn:
     target: Search box
-- tapOn:
-    target: Go
+- inputText:
+    text: machine learning tutorials
+    target: Search box
+    locator:
+      resourceId: com.microsoft.emmx:id/url_bar
+- pressKey: Enter
 - performActions:
   - type: none
     id: wait
@@ -27,11 +31,15 @@ tags:
     - type: pause
       duration: 3000
 - assert:
-    url:
+    element:
+      resourceId: com.microsoft.emmx:id/url_bar
+    text:
       contains: machine learning tutorials
     optional: false
 - assertVisible:
     target: Search results for machine learning tutorials
+    locator:
+      xpath: "//android.widget.TextView[contains(@text, 'machine') or contains(@text, 'Machine')]"
     optional: false
 - swipe:
     direction: up
@@ -39,7 +47,9 @@ tags:
 - tapOn:
     target: I scroll the page down for 2 seconds
 - assert:
-    url:
+    element:
+      resourceId: com.microsoft.emmx:id/url_bar
+    text:
       contains: machine learning tutorials
     optional: false
 - killApp

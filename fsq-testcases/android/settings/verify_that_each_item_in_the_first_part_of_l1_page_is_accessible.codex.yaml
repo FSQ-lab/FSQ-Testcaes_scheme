@@ -12,34 +12,56 @@ tags:
     target: Browser menu
 - tapOn:
     target: Settings
+    locator:
+      xpath: "//android.widget.TextView[@text='Settings']"
 - tapOn:
     target: Password Manager section
+    locator:
+      xpath: "//android.widget.TextView[@text='Microsoft password manager']"
 - assertVisible:
     target: Microsoft Password Manager page title
+    locator:
+      xpath: "//android.widget.TextView[@text='Microsoft password manager']"
     optional: false
 - pressKey: Back
 - tapOn:
     target: Payment Methods section
+    locator:
+      xpath: "//android.widget.TextView[@text='Payment methods']"
 - assertVisible:
     target: Payment Methods page title
+    locator:
+      xpath: "//android.widget.TextView[@text='Payment methods']"
     optional: false
 - pressKey: Back
 - tapOn:
     target: Personal Info section
+    locator:
+      xpath: "//android.widget.TextView[@text='Personal info']"
 - assertVisible:
     target: Personal Info page title
+    locator:
+      xpath: "//android.widget.TextView[@text='Personal info']"
     optional: false
 - pressKey: Back
 - tapOn:
     target: Privacy and Security section
+    locator:
+      xpath: "//android.widget.TextView[@text='Privacy and security']"
 - assertVisible:
     target: Privacy and Security page title
+    locator:
+      xpath: "//android.widget.TextView[@text='Privacy and security']"
     optional: false
 - pressKey: Back
 - tapOn:
     target: Microsoft Services section
+    locator:
+      xpath: "//android.widget.TextView[@text='Microsoft services']"
 - assertVisible:
     target: Microsoft Services page title
+    locator:
+      xpath: "//android.widget.TextView[@text='Microsoft services']"
     optional: false
 - pressKey: Back
 - pressKey: Back

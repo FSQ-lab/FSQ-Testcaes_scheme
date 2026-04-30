@@ -9,25 +9,37 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: Address bar
+    target: Top address bar on NTP page
+    locator:
+      resourceId: com.microsoft.emmx:id/search_box_text
 - assertVisible:
     target: the topsites shown on ZIP
+    locator:
+      resourceId: com.microsoft.emmx:id/suggestion_top_sites_list
     optional: false
 - assertVisible:
     target: the camera search icon on omnibox
+    locator:
+      resourceId: com.microsoft.emmx:id/attachment_right_camera_button
     optional: false
 - assertVisible:
     target: the Copilot voice icon on omnibox
+    locator:
+      resourceId: com.microsoft.emmx:id/attachment_right_mic_button
     optional: false
 - inputText:
     text: chinatravel.com
     target: Search box
+    locator:
+      resourceId: com.microsoft.emmx:id/url_bar
 - assertVisible:
     target: the suggestion list shown next to Omnibox
+    locator:
+      resourceId: com.microsoft.emmx:id/omnibox_suggestions_dropdown
     optional: false
-- tapOn:
-    target: Go
-- assertVisible:
-    target: the address bar is fully expanded and show "chinatravel.com"
+- pressKey: Enter
+- assert:
+    element:
+      xpath: "//android.widget.EditText[@text='chinatravel.com']"
     optional: false
 - killApp

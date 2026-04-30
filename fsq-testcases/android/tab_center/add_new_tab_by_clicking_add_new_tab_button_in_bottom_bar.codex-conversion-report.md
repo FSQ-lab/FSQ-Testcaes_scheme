@@ -52,3 +52,10 @@ Codex-produced conversion report.
 - Confirm target wording is specific enough for accessibility-tree locator resolution.
 - Add stable Android locators from knowledge base when available.
 - Confirm every assertion should remain blocking.
+
+## Post-run Corrections
+
+- Removed the duplicated Add New Tab action introduced by the first conversion.
+- Converted `Then I should return to the New Tab Page` to an NTP search-box assertion instead of another action.
+- Preserved source tab-count assertions through `android:id/text1`.
+
