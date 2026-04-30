@@ -6,7 +6,7 @@ Codex-produced conversion report.
 
 - Source repo: `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_iOS`
 - Source feature: `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_iOS/features/fundamental/rendering.feature`
-- Feature: `rendering`
+- Feature: `Rendering`
 - Scenario: `Fundamental Test bing website`
 - Tags: `@p0`
 
@@ -21,29 +21,36 @@ Codex-produced conversion report.
 
 | Source step | FSQ command | Notes |
 | --- | --- | --- |
-| `Implicit conversion assumption` | `launchApp` | iOS source scenarios commonly omit explicit launch step. |
-| `When I click the search box in NTP page` | `tapOn` | I click the search box in NTP page |
-| `And I type "www.bing.com" in the search box` | `inputText` |  |
-| `And I press go button to search` | `tapOn` | I press go button to search |
-| `Then I should see the Microsoft bing logo` | `assertVisible` |  |
+| `When I click the search box in NTP page` | `tapOn` | Converted from matched step implementation. |
+| `And I type "www.bing.com" in the search box` | `inputText` | Converted from matched step implementation. |
+| `And I press go button to search` | `tapOn` | Converted from matched step implementation. |
+| `Then I should see the Microsoft bing logo` | `assertVisible` | Converted from matched step implementation. |
+
+## Step Implementation Evidence
+
+| Source step | Implementation file:line | Extracted operations |
+| --- | --- | --- |
+| `When I click the search box in NTP page` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_iOS/features/steps/fundamental/rendering.py:13` | operations=click_element; locator={"accessibilityId": "Search and address bar"} |
+| `And I type "www.bing.com" in the search box` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_iOS/features/steps/fundamental/rendering.py:117` | operations=send_keys; locator={"name": "Address"} |
+| `And I press go button to search` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_iOS/features/steps/fundamental/rendering.py:53` | operations=click_element; locator={"accessibilityId": "Go"} |
+| `Then I should see the Microsoft bing logo` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_iOS/features/steps/fundamental/rendering.py:131` | operations=verify_element_exists; locator={"name": "Microsoft Logo Image"} |
 
 ## Unresolved Or Low-Confidence Items
 
-- I click the search box in NTP page
-- I press go button to search
+- None
 
 ## Conversion Rules Applied
 
-- iOS scenarios without explicit launch steps receive an implicit `launchApp`.
-- Known literal UI labels are converted to semantic `target` actions.
-- Screenshot analysis steps are converted to blocking `assertWithAI` commands.
-- Unknown UI targets are preserved as semantic `target` descriptions.
-- No coordinates were generated.
+- Applied Codex dual-source conversion: feature scenario for intent/order and Behave step implementation for executable operations.
+- Preserved source locators from Appium/pywinauto step definitions where available.
+- Preserved URL/current-page checks as locator-backed element assertions when source code verifies UI state.
+- Converted screenshot/visual checks to blocking `assertWithAI` assertions instead of coordinate fallback.
+- Every case starts with `launchApp` and ends with `killApp` for isolated runs.
 - No screenshot-based coordinate guessing was used.
 
 ## Manual Review Checklist
 
-- Confirm `appId: com.microsoft.msedge` matches the runner environment.
-- Confirm target wording is specific enough for accessibility-tree locator resolution.
-- Add stable iOS locators from knowledge base when available.
-- Confirm every assertion should remain blocking.
+- Confirm app identity and runner backend match the target execution environment.
+- Confirm semantic targets remain specific enough for accessibility-tree locator resolution.
+- Confirm any unresolved source steps before using this case for gating.
+- Confirm visual assertions are run with a vision-capable analysis path.

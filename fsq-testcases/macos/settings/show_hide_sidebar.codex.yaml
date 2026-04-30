@@ -20,14 +20,33 @@ tags:
     target: Address bar
     locator:
       accessibilityId: Address and search bar
+- pressKey: Enter
+- inputText:
+    text: edge://settings/appearance/copilotAndSidebar
+    target: input "edge://settings/appearance/copilotAndSidebar" to the address bar
+    locator:
+      accessibilityId: Address and search bar
+- pressKey: Enter
 - tapOn:
-    target: I select "Always on" option in Settings page
+    target: select "Always on" option in Settings page
+    locator:
+      name: Always on
+    timeout: 10000
 - assertVisible:
-    target: Sidebar
+    target: sidebar should be visible
+    locator:
+      name: Side bar
+    timeout: 10000
     optional: false
 - tapOn:
-    target: I select "Off" option in Settings page
+    target: select "Off" option in Settings page
+    locator:
+      name: 'Off'
+    timeout: 10000
 - assertNotVisible:
-    target: Sidebar
+    target: sidebar should be hidden
+    locator:
+      name: Side bar
+    timeout: 10000
     optional: false
 - killApp

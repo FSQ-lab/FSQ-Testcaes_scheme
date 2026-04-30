@@ -9,19 +9,39 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: Dismiss permission dialog
+    target: dismiss the permission dialog from bing
+    locator:
+      name: Allow While Using App
+    timeout: 10000
 - tapOn:
-    target: Search box
+    target: the search box on NTP page
+    locator:
+      name: Search and address bar
+    timeout: 10000
 - inputText:
-    text: microsoft
-    target: Search box
+    text: 'microsoft '
+    target: input a keyword "microsoft" in the search box
+    locator:
+      name: Address
 - tapOn:
-    target: Go
+    target: '"Go" on keyboard'
+    locator:
+      name: Go
+    timeout: 10000
 - tapOn:
-    target: New tab button
+    target: + button on the bottom toolbar
+    locator:
+      accessibilityId: kToolbarEdgeNewTabButtonIdentifier
+    timeout: 10000
 - tapOn:
-    target: Search box
-- assertVisible:
-    target: microsoft search history keyword
+    target: the search box on NTP page
+    locator:
+      name: Search and address bar
+    timeout: 10000
+- assert:
+    element:
+      xpath: //XCUIElementTypeStaticText[@value='microsoft']
+    text:
+      contains: microsoft
     optional: false
 - killApp

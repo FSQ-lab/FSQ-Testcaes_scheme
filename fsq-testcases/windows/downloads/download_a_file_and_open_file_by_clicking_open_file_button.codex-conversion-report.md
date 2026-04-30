@@ -6,9 +6,9 @@ Codex-produced conversion report.
 
 - Source repo: `/Users/qunmi/Documents/MS_ADO/FSQ_AI_TestCases_Windows`
 - Source feature: `/Users/qunmi/Documents/MS_ADO/FSQ_AI_TestCases_Windows/features/downloads/downloads.feature`
-- Feature: `downloads`
+- Feature: `Downloads`
 - Scenario: `Download a file and open file by clicking Open file button`
-- Tags: `@downloads, @regression, @p0`
+- Tags: `@downloads, @regression, @P0`
 
 ## Output
 
@@ -21,26 +21,38 @@ Codex-produced conversion report.
 
 | Source step | FSQ command | Notes |
 | --- | --- | --- |
-| `When I navigate to "https://getsamplefiles.com/download/pdf/sample-1.pdf"` | `tapOn, inputText, pressKey, waitUntil` | Conservative semantic conversion. |
-| `Then the Downloads page should appear` | `assert/assertVisible/assertWithAI` | Conservative semantic conversion. |
-| `When I click "Open file" for "sample-1.pdf"` | `tapOn` | Conservative semantic conversion. |
-| `Then the downloaded file "sample-1.pdf" should be opened in a new tab` | `assert/assertVisible/assertWithAI` | Conservative semantic conversion. |
+| `Given I launch Edge with empty user data directory` | `tapOn` | Converted from matched step implementation. |
+| `When I navigate to "https://getsamplefiles.com/download/pdf/sample-1.pdf"` | `tapOn` | Converted from matched step implementation. |
+| `Then the Downloads page should appear` | `assertWithAI` | Converted from matched step implementation. |
+| `When I click "Open file" for "sample-1.pdf"` | `tapOn` | Converted from matched step implementation. |
+| `Then the downloaded file "sample-1.pdf" should be opened in a new tab` | `assertVisible` | Converted from matched step implementation. |
+
+## Step Implementation Evidence
+
+| Source step | Implementation file:line | Extracted operations |
+| --- | --- | --- |
+| `Given I launch Edge with empty user data directory` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_TestCases_Windows/features/steps/common.py:27` | operations=app_launch |
+| `When I navigate to "https://getsamplefiles.com/download/pdf/sample-1.pdf"` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_TestCases_Windows/features/steps/common.py:48` | operations=native_navigate |
+| `Then the Downloads page should appear` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_TestCases_Windows/features/steps/downloads/downloads.py:314` | operations=verify_visual_task |
+| `When I click "Open file" for "sample-1.pdf"` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_TestCases_Windows/features/steps/downloads/downloads.py:1154` | operations=element_click; locator={"name": "sample-1.pdf"} |
+| `Then the downloaded file "sample-1.pdf" should be opened in a new tab` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_TestCases_Windows/features/steps/downloads/downloads.py:1132` | operations=verify_element_exists; locator={"name": "sample-1.pdf"} |
 
 ## Unresolved Or Low-Confidence Items
 
-- Confirm Windows accessibility names against pywinauto MCP tree during first execution.
+- None
 
 ## Conversion Rules Applied
 
-- Windows cases use `runner.backend: pywinauto-mcp` and Edge app metadata.
-- Known address bar interactions use `name: Address and search bar` with `controlType: Edit`.
-- Unknown UI targets are preserved as semantic `target` descriptions for accessibility-tree locator resolution.
-- Screenshot/visual validation steps are represented as blocking `assertWithAI`; no visual coordinate fallback was generated.
-- No coordinates were generated.
+- Applied Codex dual-source conversion: feature scenario for intent/order and Behave step implementation for executable operations.
+- Preserved source locators from Appium/pywinauto step definitions where available.
+- Preserved URL/current-page checks as locator-backed element assertions when source code verifies UI state.
+- Converted screenshot/visual checks to blocking `assertWithAI` assertions instead of coordinate fallback.
+- Every case starts with `launchApp` and ends with `killApp` for isolated runs.
+- No screenshot-based coordinate guessing was used.
 
 ## Manual Review Checklist
 
-- Confirm Edge executable path matches the runner machine.
-- Confirm target wording is specific enough for accessibility-tree locator resolution.
-- Add stable Windows locators from knowledge base when available.
-- Confirm every assertion should remain blocking.
+- Confirm app identity and runner backend match the target execution environment.
+- Confirm semantic targets remain specific enough for accessibility-tree locator resolution.
+- Confirm any unresolved source steps before using this case for gating.
+- Confirm visual assertions are run with a vision-capable analysis path.

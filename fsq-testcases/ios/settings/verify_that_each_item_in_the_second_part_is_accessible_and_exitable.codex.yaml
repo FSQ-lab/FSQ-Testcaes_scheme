@@ -10,41 +10,103 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: Browser menu
+    target: navigate to the Settings page
+    locator:
+      name: kLegacyToolbarToolsMenuButtonIdentifier
+    timeout: 10000
 - tapOn:
-    target: Settings
-- tapOn:
-    target: Search section
+    target: navigate to the "Search" section
+    locator:
+      name: kEdgeSettingsSearchCellId
+    timeout: 10000
 - assertVisible:
-    target: Search page title
+    target: the page title "Search"
+    locator:
+      accessibilityId: Search
+    timeout: 10000
     optional: false
-- pressKey: Back
 - tapOn:
-    target: Appearance and layout
-- assertVisible:
-    target: Appearance and Layout page title
-    optional: false
-- pressKey: Back
+    target: back button on the upper left corner
+    locator:
+      name: Settings
+    timeout: 10000
 - tapOn:
-    target: New Tab Page section
+    target: '"Appearance and layout" button'
+    locator:
+      name: kEdgeSettingsAppearanceCellId
+    timeout: 10000
 - assertVisible:
-    target: New Tab Page page title
+    target: the page title "Appearance and Layout"
+    locator:
+      name: Appearance and Layout
+    timeout: 10000
     optional: false
-- pressKey: Back
-- swipe:
-    direction: up
-    duration: 1000
+- tapOn:
+    target: back button on the upper left corner
+    locator:
+      name: Settings
+    timeout: 10000
+- tapOn:
+    target: navigate to the "New Tab Page" section
+    locator:
+      name: kEdgeSettingsNTPCellId
+    timeout: 10000
+- assertVisible:
+    target: the page title "New Tab Page"
+    locator:
+      xpath: //XCUIElementTypeStaticText[@value="New Tab Page"]
+    timeout: 10000
+    optional: false
+- tapOn:
+    target: back button on the upper left corner
+    locator:
+      name: Settings
+    timeout: 10000
+- performActions:
+  - type: pointer
+    id: finger1
+    parameters:
+      pointerType: touch
+    actions:
+    - type: pointerMove
+      duration: 0
+      origin: viewport
+      x: 196
+      y: 700
+    - type: pointerDown
+      button: 0
+    - type: pointerMove
+      duration: 1000
+      origin: viewport
+      x: 196
+      y: 300
+    - type: pointerUp
+      button: 0
 - assertWithAI:
-    prompt: analyze the screenshot to verify that settings page contains the following items2
+    prompt: 'Analyze the screenshot to verify that settings page contains the following
+      items2: '
+    optional: false
+    timeout: 30000
+- tapOn:
+    target: navigate to the "Tabs and Tab Groups" section
+    locator:
+      name: Tabs and Tab Groups
+    timeout: 10000
+- assertVisible:
+    target: the page title "Tabs and Tab Groups"
+    locator:
+      accessibilityId: Tabs and Tab Groups
+    timeout: 10000
     optional: false
 - tapOn:
-    target: Tabs and Tab Groups section
+    target: '"Done" button on the top right corner'
+    locator:
+      name: kSettingsDoneButtonId
+    timeout: 10000
 - assertVisible:
-    target: Tabs and Tab Groups page title
-    optional: false
-- tapOn:
-    target: Done
-- assertVisible:
-    target: New tab page
+    target: am landing on new tab page
+    locator:
+      name: NTPCollectionViewIdentifier
+    timeout: 10000
     optional: false
 - killApp

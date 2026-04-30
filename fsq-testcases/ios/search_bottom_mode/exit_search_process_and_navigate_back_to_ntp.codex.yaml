@@ -9,23 +9,50 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: Search box
-- pressKey: Back
+    target: the search box on NTP page
+    locator:
+      name: Search and address bar
+    timeout: 10000
+- tapOn:
+    target: the back arrow button
+    locator:
+      name: OmniboxCancelButtonAccessibilityIdentifier
+    timeout: 10000
 - assertVisible:
-    target: New tab page
+    target: can see the new tab page
+    locator:
+      name: NTPCollectionViewIdentifier
+    timeout: 10000
     optional: false
 - tapOn:
-    target: Search box
+    target: the address bar on NTP page
+    locator:
+      name: Search and address bar
+    timeout: 10000
 - inputText:
     text: https://www.chinatravel.com
-    target: Search box
+    target: input "https://www.chinatravel.com" in search box
+    locator:
+      name: Address
 - tapOn:
-    target: Go
+    target: '"Go" on keyboard'
+    locator:
+      name: Go
+    timeout: 10000
 - tapOn:
-    target: Browser menu
+    target: open browser menu
+    locator:
+      name: kLegacyToolbarToolsMenuButtonIdentifier
+    timeout: 10000
 - tapOn:
-    target: Home
+    target: the "Home" button
+    locator:
+      xpath: //XCUIElementTypeCell[@name='Home' and @visible='true']
+    timeout: 10000
 - assertVisible:
-    target: New tab page
+    target: can see the new tab page
+    locator:
+      name: NTPCollectionViewIdentifier
+    timeout: 10000
     optional: false
 - killApp

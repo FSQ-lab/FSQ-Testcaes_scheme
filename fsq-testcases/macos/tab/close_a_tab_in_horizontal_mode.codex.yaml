@@ -20,8 +20,26 @@ tags:
       accessibilityId: Address and search bar
 - pressKey: Enter
 - tapOn:
-    target: I click the "Close Tab" button on tab header
-- assertVisible:
-    target: the "Apple" tab should be closed
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+    timeout: 10000
+- inputText:
+    text: https://www.apple.com
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+- pressKey: Enter
+- tapOn:
+    target: the "Close Tab" button on tab header
+    locator:
+      xpath: //XCUIElementTypeTab[@label='Apple' and @selected='true']//XCUIElementTypeButton[@label='Close
+        tab']
+    timeout: 10000
+- assertNotVisible:
+    target: '"Apple" tab should be closed'
+    locator:
+      xpath: //XCUIElementTypeTab[@label='Apple']
+    timeout: 10000
     optional: false
 - killApp

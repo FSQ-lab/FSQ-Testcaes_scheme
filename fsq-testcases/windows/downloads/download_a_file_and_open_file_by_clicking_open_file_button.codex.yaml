@@ -21,10 +21,6 @@ tags:
       name: Address and search bar
       controlType: Edit
     timeout: 10000
-- pressKey:
-    key: A
-    modifiers:
-    - Control
 - inputText:
     text: https://getsamplefiles.com/download/pdf/sample-1.pdf
     target: Address bar
@@ -32,12 +28,20 @@ tags:
       name: Address and search bar
       controlType: Edit
 - pressKey: Enter
-- assertVisible:
-    target: Downloads page or panel
-- tapOn:
-    target: Open file for sample-1.pdf
 - assertWithAI:
-    prompt: Verify the downloaded file sample-1.pdf is opened in a new Edge tab.
+    prompt: Verify that the Downloads page appears
     optional: false
     timeout: 30000
+- tapOn:
+    target: '"Open file" for "sample-1.pdf"'
+    locator:
+      name: sample-1.pdf
+    timeout: 10000
+- assertVisible:
+    target: downloaded file "sample-1.pdf" should be opened in a new tab
+    locator:
+      name: sample-1.pdf
+      controlType: TabItem
+    timeout: 10000
+    optional: false
 - killApp

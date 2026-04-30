@@ -21,33 +21,31 @@ tags:
       accessibilityId: Address and search bar
 - pressKey: Enter
 - tapOn:
-    target: New Tab button
+    target: open a new tab
     locator:
       accessibilityId: New Tab
+    timeout: 10000
 - tapOn:
-    target: Address bar
+    target: type "www.app" in the address bar
     locator:
       accessibilityId: Address and search bar
     timeout: 10000
 - inputText:
     text: www.app
-    target: Address bar
+    target: type "www.app" in the address bar
     locator:
       accessibilityId: Address and search bar
 - pressKey: Enter
-- tapOn:
-    target: Address bar
+- assertVisible:
+    target: should navigate to "https://www.apple.com" successfully
     locator:
       accessibilityId: Address and search bar
     timeout: 10000
-- inputText:
-    text: https://www.apple.com
-    target: Address bar
+    optional: false
+- assertVisible:
+    target: address bar should display the complete URL "https://www.apple.com"
     locator:
-      accessibilityId: Address and search bar
-- pressKey: Enter
-- assert:
-    url:
-      equals: https://www.apple.com
+      xpath: //XCUIElementTypeTextField[@label='Address and search bar' and @value='https://www.apple.com']
+    timeout: 10000
     optional: false
 - killApp

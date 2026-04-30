@@ -16,20 +16,11 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: New Tab button
-    locator:
-      name: New Tab
-      controlType: Button
-- tapOn:
     target: Address bar
     locator:
       name: Address and search bar
       controlType: Edit
     timeout: 10000
-- pressKey:
-    key: A
-    modifiers:
-    - Control
 - inputText:
     text: http://www.faqs.org/faqs/
     target: Address bar
@@ -37,15 +28,25 @@ tags:
       name: Address and search bar
       controlType: Edit
 - pressKey: Enter
-- waitUntil:
-    url:
-      contains: faqs.org
-    timeout: 30000
+- assertVisible:
+    target: should navigate to "FAQs" page successfully
+    locator:
+      name: Internet FAQ Archives
+      controlType: TabItem
+    timeout: 10000
     optional: false
 - assertVisible:
-    target: not secure connection indicator in the address bar
-- assertWithAI:
-    prompt: Verify the FAQs page is loaded and the address bar security indicator shows a not secure connection.
+    target: '"FAQs" page should load completely'
+    locator:
+      automationId: RootWebArea
+      controlType: Document
+    timeout: 10000
     optional: false
-    timeout: 30000
+- assertVisible:
+    target: security indicator should show a not secure connection
+    locator:
+      name: Not secure
+      controlType: Button
+    timeout: 10000
+    optional: false
 - killApp

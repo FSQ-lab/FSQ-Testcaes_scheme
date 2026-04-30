@@ -12,7 +12,7 @@ Codex-produced conversion report.
 
 ## Output
 
-- Output YAML: `fsq-testcases/macos/ominibox/edit_all_url_to_navigate_to_new_site.codex.yaml`
+- Output YAML: `fsq-testcases/macos/omnibox/edit_all_url_to_navigate_to_new_site.codex.yaml`
 - Platform: `macos`
 - Schema target: `docs/codex-fsq-ai-test-dsl-v1.schema.json`
 - Review status: `draft`
@@ -21,30 +21,44 @@ Codex-produced conversion report.
 
 | Source step | FSQ command | Notes |
 | --- | --- | --- |
-| `Given Edge is launched` | `launchApp` |  |
-| `When I type "https://www.google.com" in the address bar` | `tapOn, inputText` |  |
-| `And the address bar should display the complete URL "https://www.google.com"` | `assert` |  |
-| `When I select all text in the address bar` | `tapOn` | I select all text in the address bar |
-| `And I type "https://www.apple.com" in the address bar` | `tapOn, inputText` |  |
-| `And I press the "Enter" key` | `pressKey` |  |
-| `Then I should navigate to "https://www.apple.com" successfully` | `tapOn, inputText, pressKey` |  |
-| `And the address bar should display the complete URL "https://www.apple.com"` | `assert` |  |
+| `Given Edge is launched` | `tapOn` | Converted from matched step implementation. |
+| `When I type "https://www.google.com" in the address bar` | `tapOn, inputText` | Converted from matched step implementation. |
+| `And the address bar should display the complete URL "https://www.google.com"` | `assertVisible` | Converted from matched step implementation. |
+| `When I select all text in the address bar` | `tapOn, pressKey` | Converted from matched step implementation. |
+| `And I type "https://www.apple.com" in the address bar` | `inputText` | Converted from matched step implementation. |
+| `And I press the "Enter" key` | `pressKey` | Converted from matched step implementation. |
+| `Then I should navigate to "https://www.apple.com" successfully` | `assertVisible` | Converted from matched step implementation. |
+| `And the address bar should display the complete URL "https://www.apple.com"` | `assertVisible` | Converted from matched step implementation. |
+
+## Step Implementation Evidence
+
+| Source step | Implementation file:line | Extracted operations |
+| --- | --- | --- |
+| `Given Edge is launched` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_Mac/features/steps/common/common.py:154` | operations=semantic/no direct tool call detected |
+| `When I type "https://www.google.com" in the address bar` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_Mac/features/steps/ominibox/ominibox.py:238` | operations=click_element, send_keys; locator={"xpath": "//XCUIElementTypeTextField[@label='Address and search bar']"} |
+| `And the address bar should display the complete URL "https://www.google.com"` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_Mac/features/steps/ominibox/ominibox.py:277` | operations=verify_element_exists; locator={"xpath": "//XCUIElementTypeTextField[@label='Address and search bar' and @value='https://www.google.com']"} |
+| `When I select all text in the address bar` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_Mac/features/steps/ominibox/ominibox.py:298` | operations=click_element, press_key; locator={"xpath": "//XCUIElementTypeTextField[@label='Address and search bar']"} |
+| `And I type "https://www.apple.com" in the address bar` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_Mac/features/steps/ominibox/ominibox.py:335` | operations=send_keys; locator={"xpath": "//XCUIElementTypeTextField[@label='Address and search bar']"} |
+| `And I press the "Enter" key` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_Mac/features/steps/ominibox/ominibox.py:805` | operations=press_key |
+| `Then I should navigate to "https://www.apple.com" successfully` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_Mac/features/steps/ominibox/ominibox.py:217` | operations=verify_element_exists; locator={"accessibilityId": "Address and search bar"} |
+| `And the address bar should display the complete URL "https://www.apple.com"` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_Mac/features/steps/ominibox/ominibox.py:357` | operations=verify_element_exists; locator={"xpath": "//XCUIElementTypeTextField[@label='Address and search bar' and @value='https://www.apple.com']"} |
 
 ## Unresolved Or Low-Confidence Items
 
-- I select all text in the address bar
+- None
 
 ## Conversion Rules Applied
 
-- Known address bar interactions use `accessibilityId: Address and search bar`.
-- Unknown UI targets are preserved as semantic `target` descriptions.
-- Relation locators are used only when the source step explicitly provides context.
-- No coordinates were generated.
+- Applied Codex dual-source conversion: feature scenario for intent/order and Behave step implementation for executable operations.
+- Preserved source locators from Appium/pywinauto step definitions where available.
+- Preserved URL/current-page checks as locator-backed element assertions when source code verifies UI state.
+- Converted screenshot/visual checks to blocking `assertWithAI` assertions instead of coordinate fallback.
+- Every case starts with `launchApp` and ends with `killApp` for isolated runs.
 - No screenshot-based coordinate guessing was used.
 
 ## Manual Review Checklist
 
-- Confirm `appId: com.microsoft.edgemac` matches the runner environment.
-- Confirm target wording is specific enough for accessibility-tree locator resolution.
-- Add stable locators from knowledge base when available.
-- Confirm every assertion should remain blocking.
+- Confirm app identity and runner backend match the target execution environment.
+- Confirm semantic targets remain specific enough for accessibility-tree locator resolution.
+- Confirm any unresolved source steps before using this case for gating.
+- Confirm visual assertions are run with a vision-capable analysis path.

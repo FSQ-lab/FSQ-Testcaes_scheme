@@ -16,11 +16,6 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: New Tab button
-    locator:
-      name: New Tab
-      controlType: Button
-- tapOn:
     target: Address bar
     locator:
       name: Address and search bar
@@ -32,17 +27,39 @@ tags:
     locator:
       name: Address and search bar
       controlType: Edit
+- pressKey: Enter
 - assertVisible:
-    target: URL suggestion list for www.apple.com
+    target: dropdown list should appear with URL suggestions
+    locator:
+      name: Suggestions
+      controlType: List
+    timeout: 10000
+    optional: false
 - tapOn:
-    target: top suggestion www.apple.com in the address bar dropdown
-- waitUntil:
-    url:
-      contains: apple.com
-    timeout: 30000
+    target: the top item "www.apple.com" in the dropdown list
+    locator:
+      name: www.apple.com
+      controlType: ListItem
+    timeout: 10000
+- assertVisible:
+    target: should navigate to "Apple" page successfully
+    locator:
+      name: Apple
+      controlType: TabItem
+    timeout: 10000
     optional: false
-- assertWithAI:
-    prompt: Verify the Apple page is loaded completely in the active tab.
+- assert:
+    element:
+      name: https://www.apple.com
+      controlType: Edit
+    text:
+      contains: https://www.apple.com
     optional: false
-    timeout: 30000
+- assertVisible:
+    target: '"Apple" page should load completely'
+    locator:
+      automationId: RootWebArea
+      controlType: Document
+    timeout: 10000
+    optional: false
 - killApp

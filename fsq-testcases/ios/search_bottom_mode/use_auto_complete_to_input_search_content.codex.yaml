@@ -9,27 +9,55 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: Search box
+    target: the search box on NTP page
+    locator:
+      name: Search and address bar
+    timeout: 10000
 - inputText:
     text: apple
-    target: Search box
+    target: input a keyword "apple" in the search box
+    locator:
+      name: Address
 - tapOn:
-    target: Go
+    target: '"Go" on keyboard'
+    locator:
+      name: Go
+    timeout: 10000
 - tapOn:
-    target: Dismiss permission dialog
+    target: dismiss the permission dialog from bing
+    locator:
+      name: Allow While Using App
+    timeout: 10000
 - tapOn:
-    target: New tab button
+    target: + button on the bottom toolbar
+    locator:
+      accessibilityId: kToolbarEdgeNewTabButtonIdentifier
+    timeout: 10000
 - tapOn:
-    target: Search box
-- inputText:
-    text: a
-    target: Search box
-- assertVisible:
-    target: apple shown in search box
+    target: the search box on NTP page
+    locator:
+      name: Search and address bar
+    timeout: 10000
+- tapOn:
+    target: type "a" in the search box
+    locator:
+      name: a
+    timeout: 10000
+- assert:
+    element:
+      accessibilityId: Address
+    text:
+      contains: apple
     optional: false
 - tapOn:
-    target: Go
+    target: '"Go" on keyboard'
+    locator:
+      name: Go
+    timeout: 10000
 - assertVisible:
-    target: Search results for apple
+    target: search results for "apple"
+    locator:
+      xpath: //*[contains(@label, 'Apple')]
+    timeout: 10000
     optional: false
 - killApp

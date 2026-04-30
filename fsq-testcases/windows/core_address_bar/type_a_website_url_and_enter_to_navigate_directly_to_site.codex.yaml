@@ -16,20 +16,11 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: New Tab button
-    locator:
-      name: New Tab
-      controlType: Button
-- tapOn:
     target: Address bar
     locator:
       name: Address and search bar
       controlType: Edit
     timeout: 10000
-- pressKey:
-    key: A
-    modifiers:
-    - Control
 - inputText:
     text: www.bbc.com
     target: Address bar
@@ -37,13 +28,25 @@ tags:
       name: Address and search bar
       controlType: Edit
 - pressKey: Enter
-- waitUntil:
-    url:
-      contains: bbc.com
-    timeout: 30000
+- assertVisible:
+    target: should navigate to "BBC" page successfully
+    locator:
+      name: BBC Home
+      controlType: TabItem
+    timeout: 10000
     optional: false
-- assertWithAI:
-    prompt: Verify the BBC page is loaded completely in the active tab.
+- assert:
+    element:
+      name: https://www.bbc.com
+      controlType: Edit
+    text:
+      contains: https://www.bbc.com
     optional: false
-    timeout: 30000
+- assertVisible:
+    target: '"BBC" page should load completely'
+    locator:
+      automationId: RootWebArea
+      controlType: Document
+    timeout: 10000
+    optional: false
 - killApp

@@ -9,27 +9,60 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: I click on the top address bar on NTP page
+    target: the top address bar on NTP page
+    locator:
+      name: NTPHomeFakeOmniboxAccessibilityID
+    timeout: 10000
 - inputText:
     text: apple
-    target: Search box
+    target: input a keyword "apple" in the search box
+    locator:
+      name: Address
 - tapOn:
-    target: Go
+    target: '"Go" on keyboard'
+    locator:
+      name: Go
+    timeout: 10000
 - tapOn:
-    target: Dismiss permission dialog
+    target: dismiss the permission dialog from bing
+    locator:
+      name: Allow While Using App
+    timeout: 10000
 - tapOn:
-    target: New tab button
+    target: + button on the bottom toolbar
+    locator:
+      accessibilityId: kToolbarEdgeNewTabButtonIdentifier
+    timeout: 10000
 - tapOn:
-    target: I click on the top address bar on NTP page
+    target: the top address bar on NTP page
+    locator:
+      name: NTPHomeFakeOmniboxAccessibilityID
+    timeout: 10000
 - inputText:
     text: appl
-    target: Search box
-- assertVisible:
-    target: apple shown in search box
+    target: type "appl" in the search box
+    locator:
+      name: Address
+- assert:
+    element:
+      accessibilityId: Address
+    text:
+      contains: apple
     optional: false
 - tapOn:
-    target: Go
+    target: '"Go" on keyboard'
+    locator:
+      name: Go
+    timeout: 10000
 - assertWithAI:
-    prompt: analyze the screenshot to verify the search result is apple related
+    prompt: verify the web page the page is Apple official website and the search
+      address bar is on the top of the page
+    optional: false
+    timeout: 30000
+- assertVisible:
+    target: analyze the screenshot to the search result is apple related
+    locator:
+      xpath: //*[contains(@label, 'Apple') or contains(@value, 'apple')]
+    timeout: 10000
     optional: false
 - killApp

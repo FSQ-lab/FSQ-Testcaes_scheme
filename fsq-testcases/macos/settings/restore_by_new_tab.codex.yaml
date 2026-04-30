@@ -20,12 +20,23 @@ tags:
     target: Address bar
     locator:
       accessibilityId: Address and search bar
+- pressKey: Enter
+- inputText:
+    text: edge://settings/startHomeNTP
+    target: input "edge://settings/startHomeNTP" to the address bar
+    locator:
+      accessibilityId: Address and search bar
+- pressKey: Enter
 - tapOn:
-    target: Open the new tab page option
+    target: select the option "Open the new tab page"
+    locator:
+      accessibilityId: Open the new tab page
+    timeout: 10000
 - tapOn:
-    target: New Tab button
+    target: open a new tab
     locator:
       accessibilityId: New Tab
+    timeout: 10000
 - tapOn:
     target: Address bar
     locator:
@@ -37,9 +48,12 @@ tags:
     locator:
       accessibilityId: Address and search bar
 - pressKey: Enter
-- killApp: {}
-- launchApp
+- tapOn:
+    target: close and restart Edge
 - assertVisible:
     target: edge should open with a page titled "New Tab"
+    locator:
+      name: New Tab
+    timeout: 10000
     optional: false
 - killApp

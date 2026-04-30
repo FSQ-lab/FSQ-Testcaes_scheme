@@ -6,7 +6,7 @@ Codex-produced conversion report.
 
 - Source repo: `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_iOS`
 - Source feature: `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_iOS/features/core/settings.feature`
-- Feature: `settings`
+- Feature: `L2 Settings Page`
 - Scenario: `Check UI elements and toggle defaults in the "Privacy and Security" section`
 - Tags: `@settings, @P0`
 
@@ -21,16 +21,29 @@ Codex-produced conversion report.
 
 | Source step | FSQ command | Notes |
 | --- | --- | --- |
-| `Implicit conversion assumption` | `launchApp` | iOS source scenarios commonly omit explicit launch step. |
-| `When I navigate to the Settings page` | `tapOn, tapOn` |  |
-| `And I navigate to the "Privacy and Security" section` | `tapOn` |  |
-| `And I should see the element "Diagnostic Data"` | `assertVisible` |  |
-| `And the toggle "Tracking Prevention" should be on by default` | `assertVisible` |  |
-| `And the toggle "Protect InPrivate Tabs by Passcode" should be off by default` | `assertVisible` |  |
-| `And the toggle "Microsoft Defender SmartScreen" should be on by default` | `assertVisible` |  |
-| `And the toggle "Website Typo Protection" should be on by default` | `assertVisible` |  |
-| `When I click on "Done" button on the top right corner` | `tapOn` |  |
-| `Then I am landing on new tab page` | `assertVisible` |  |
+| `When I navigate to the Settings page` | `tapOn, tapOn` | Converted from matched step implementation. |
+| `And I navigate to the "Privacy and Security" section` | `tapOn, tapOn` | Converted from matched step implementation. |
+| `And I should see the element "Diagnostic Data"` | `assertVisible` | Converted from matched step implementation. |
+| `And the toggle "Tracking Prevention" should be on by default` | `assert` | Converted from matched step implementation. |
+| `And the toggle "Protect InPrivate Tabs by Passcode" should be off by default` | `assert` | Converted from matched step implementation. |
+| `And the toggle "Microsoft Defender SmartScreen" should be on by default` | `assert` | Converted from matched step implementation. |
+| `And the toggle "Website Typo Protection" should be on by default` | `assert` | Converted from matched step implementation. |
+| `When I click on "Done" button on the top right corner` | `tapOn` | Converted from matched step implementation. |
+| `Then I am landing on new tab page` | `assertVisible` | Converted from matched step implementation. |
+
+## Step Implementation Evidence
+
+| Source step | Implementation file:line | Extracted operations |
+| --- | --- | --- |
+| `When I navigate to the Settings page` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_iOS/features/steps/core/settings.py:9` | operations=click_element, click_element, Settings; locator={"name": "kLegacyToolbarToolsMenuButtonIdentifier"} |
+| `And I navigate to the "Privacy and Security" section` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_iOS/features/steps/core/settings.py:48` | operations=click_element, click_element; locator={"name": "Privacy and Security"} |
+| `And I should see the element "Diagnostic Data"` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_iOS/features/steps/core/settings.py:70` | operations=verify_element_exists; locator={"name": "Diagnostic Data"} |
+| `And the toggle "Tracking Prevention" should be on by default` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_iOS/features/steps/core/settings.py:172` | operations=verify_element_attribute; locator={"name": "kEdgeSettingsPrivacyTrackingPreventionCellId"} |
+| `And the toggle "Protect InPrivate Tabs by Passcode" should be off by default` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_iOS/features/steps/core/settings.py:188` | operations=verify_element_attribute; locator={"name": "Protect InPrivate Tabs by Passcode, Switch button"} |
+| `And the toggle "Microsoft Defender SmartScreen" should be on by default` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_iOS/features/steps/core/settings.py:204` | operations=verify_element_attribute; locator={"name": "kEdgeSettingsPrivacySmartScreenCellId"} |
+| `And the toggle "Website Typo Protection" should be on by default` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_iOS/features/steps/core/settings.py:220` | operations=verify_element_attribute; locator={"name": "kEdgeSettingsPrivacyTyposquattingCellId"} |
+| `When I click on "Done" button on the top right corner` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_iOS/features/steps/core/settings.py:424` | operations=click_element; locator={"name": "kSettingsDoneButtonId"} |
+| `Then I am landing on new tab page` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_iOS/features/steps/core/default_bottom_omnibox.py:270` | operations=verify_element_exists; locator={"name": "NTPCollectionViewIdentifier"} |
 
 ## Unresolved Or Low-Confidence Items
 
@@ -38,16 +51,16 @@ Codex-produced conversion report.
 
 ## Conversion Rules Applied
 
-- iOS scenarios without explicit launch steps receive an implicit `launchApp`.
-- Known literal UI labels are converted to semantic `target` actions.
-- Screenshot analysis steps are converted to blocking `assertWithAI` commands.
-- Unknown UI targets are preserved as semantic `target` descriptions.
-- No coordinates were generated.
+- Applied Codex dual-source conversion: feature scenario for intent/order and Behave step implementation for executable operations.
+- Preserved source locators from Appium/pywinauto step definitions where available.
+- Preserved URL/current-page checks as locator-backed element assertions when source code verifies UI state.
+- Converted screenshot/visual checks to blocking `assertWithAI` assertions instead of coordinate fallback.
+- Every case starts with `launchApp` and ends with `killApp` for isolated runs.
 - No screenshot-based coordinate guessing was used.
 
 ## Manual Review Checklist
 
-- Confirm `appId: com.microsoft.msedge` matches the runner environment.
-- Confirm target wording is specific enough for accessibility-tree locator resolution.
-- Add stable iOS locators from knowledge base when available.
-- Confirm every assertion should remain blocking.
+- Confirm app identity and runner backend match the target execution environment.
+- Confirm semantic targets remain specific enough for accessibility-tree locator resolution.
+- Confirm any unresolved source steps before using this case for gating.
+- Confirm visual assertions are run with a vision-capable analysis path.

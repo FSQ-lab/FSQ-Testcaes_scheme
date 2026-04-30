@@ -9,22 +9,25 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: New Tab button
+    target: open a new tab
     locator:
       accessibilityId: New Tab
+    timeout: 10000
 - tapOn:
-    target: Address bar
+    target: input "cat" in address bar
     locator:
       accessibilityId: Address and search bar
     timeout: 10000
 - inputText:
     text: cat
-    target: Address bar
+    target: input "cat" in address bar
     locator:
       accessibilityId: Address and search bar
 - pressKey: Enter
 - assert:
-    title:
-      equals: cat - Search
+    element:
+      name: cat - Search
+    text:
+      contains: cat - Search
     optional: false
 - killApp

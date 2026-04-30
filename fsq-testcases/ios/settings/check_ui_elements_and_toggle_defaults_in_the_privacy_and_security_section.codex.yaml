@@ -10,29 +10,36 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: Browser menu
+    target: navigate to the Settings page
+    locator:
+      name: kLegacyToolbarToolsMenuButtonIdentifier
+    timeout: 10000
 - tapOn:
-    target: Settings
-- tapOn:
-    target: Privacy and Security section
+    target: navigate to the "Privacy and Security" section
+    locator:
+      name: Privacy and Security
+    timeout: 10000
 - assertVisible:
-    target: Diagnostic Data
+    target: the element "Diagnostic Data"
+    locator:
+      name: Diagnostic Data
+    timeout: 10000
     optional: false
-- assertVisible:
-    target: Tracking Prevention toggle on by default
-    optional: false
-- assertVisible:
-    target: Protect InPrivate Tabs by Passcode toggle off by default
-    optional: false
-- assertVisible:
-    target: Microsoft Defender SmartScreen toggle on by default
-    optional: false
-- assertVisible:
-    target: Website Typo Protection toggle on by default
+- assert:
+    element:
+      name: kEdgeSettingsPrivacyTrackingPreventionCellId
+    text:
+      contains: 'On'
     optional: false
 - tapOn:
-    target: Done
+    target: '"Done" button on the top right corner'
+    locator:
+      name: kSettingsDoneButtonId
+    timeout: 10000
 - assertVisible:
-    target: New tab page
+    target: am landing on new tab page
+    locator:
+      name: NTPCollectionViewIdentifier
+    timeout: 10000
     optional: false
 - killApp

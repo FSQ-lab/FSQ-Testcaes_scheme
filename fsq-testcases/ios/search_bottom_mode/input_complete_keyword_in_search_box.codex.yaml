@@ -9,27 +9,78 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: New tab button
+    target: + button on the bottom toolbar
+    locator:
+      accessibilityId: kToolbarEdgeNewTabButtonIdentifier
+    timeout: 10000
 - tapOn:
-    target: Search box
+    target: the search box on NTP page
+    locator:
+      name: Search and address bar
+    timeout: 10000
 - inputText:
     text: machine learning tutorials
-    target: Search box
+    target: input a keyword "machine learning tutorials" in the search box
+    locator:
+      name: Address
 - tapOn:
-    target: Go
+    target: '"Go" on keyboard'
+    locator:
+      name: Go
+    timeout: 10000
 - tapOn:
-    target: Dismiss permission dialog
+    target: dismiss the permission dialog from bing
+    locator:
+      name: Allow While Using App
+    timeout: 10000
 - assertWithAI:
-    prompt: Analyze the screenshot to verify search result is machine learning related
+    prompt: 'Verify that the search results page contains machine '
     optional: false
-- swipe:
-    direction: up
-    duration: 2000
-- swipe:
-    direction: down
-    duration: 2000
+    timeout: 30000
+- performActions:
+  - type: pointer
+    id: finger1
+    parameters:
+      pointerType: touch
+    actions:
+    - type: pointerMove
+      duration: 0
+      origin: viewport
+      x: 196
+      y: 400
+    - type: pointerDown
+      button: 0
+    - type: pointerMove
+      duration: 2000
+      origin: viewport
+      x: 196
+      y: 500
+    - type: pointerUp
+      button: 0
+- performActions:
+  - type: pointer
+    id: finger1
+    parameters:
+      pointerType: touch
+    actions:
+    - type: pointerMove
+      duration: 0
+      origin: viewport
+      x: 196
+      y: 500
+    - type: pointerDown
+      button: 0
+    - type: pointerMove
+      duration: 2000
+      origin: viewport
+      x: 196
+      y: 300
+    - type: pointerUp
+      button: 0
 - assert:
-    url:
+    element:
+      name: Search and address bar
+    text:
       contains: machine learning tutorials
     optional: false
 - killApp

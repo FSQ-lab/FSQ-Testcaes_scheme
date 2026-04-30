@@ -15,23 +15,41 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: New Tab button
+    target: '"···" button in toolbar'
     locator:
-      name: New Tab
+      name: Settings and more (Alt+F)
       controlType: Button
-- tapOn:
-    target: Settings and more button in toolbar
-    locator:
-      name: Settings and more
-      controlType: Button
+    timeout: 10000
 - rightClickOn:
-    target: History button in the menu
+    target: right "History" button in the menu
+    locator:
+      name: History Ctrl+H
+      controlType: MenuItem
+    timeout: 10000
 - tapOn:
-    target: Show in toolbar in menu
+    target: '"Show in toolbar" in menu'
+    locator:
+      name: Show in toolbar
+      controlType: MenuItem
+    timeout: 10000
 - assertVisible:
-    target: History button in the toolbar
+    target: History button should be displayed in the toolbar
+    locator:
+      name: History
+      controlType: Button
+    timeout: 10000
+    optional: false
 - tapOn:
-    target: History button in the toolbar
+    target: '"History" button in the toolbar'
+    locator:
+      name: History
+      controlType: Button
+    timeout: 10000
 - assertVisible:
-    target: history hub
+    target: '"history hub" should be displayed'
+    locator:
+      name: History
+      controlType: Window
+    timeout: 10000
+    optional: false
 - killApp

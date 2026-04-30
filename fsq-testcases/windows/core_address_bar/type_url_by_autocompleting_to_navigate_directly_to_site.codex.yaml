@@ -21,10 +21,6 @@ tags:
       name: Address and search bar
       controlType: Edit
     timeout: 10000
-- pressKey:
-    key: A
-    modifiers:
-    - Control
 - inputText:
     text: https://www.apple.com
     target: Address bar
@@ -32,16 +28,12 @@ tags:
       name: Address and search bar
       controlType: Edit
 - pressKey: Enter
-- waitUntil:
-    url:
-      contains: apple.com
-    timeout: 30000
-    optional: false
 - tapOn:
-    target: New Tab button
+    target: open a new tab
     locator:
       name: New Tab
       controlType: Button
+    timeout: 10000
 - tapOn:
     target: Address bar
     locator:
@@ -55,13 +47,25 @@ tags:
       name: Address and search bar
       controlType: Edit
 - pressKey: Enter
-- waitUntil:
-    url:
-      contains: apple.com
-    timeout: 30000
+- assertVisible:
+    target: should navigate to "Apple" page successfully
+    locator:
+      name: Apple
+      controlType: TabItem
+    timeout: 10000
     optional: false
-- assertWithAI:
-    prompt: Verify autocomplete navigated to the Apple website from partial input "www.app".
+- assert:
+    element:
+      name: https://www.apple.com
+      controlType: Edit
+    text:
+      contains: https://www.apple.com
     optional: false
-    timeout: 30000
+- assertVisible:
+    target: '"Apple" page should load completely'
+    locator:
+      automationId: RootWebArea
+      controlType: Document
+    timeout: 10000
+    optional: false
 - killApp

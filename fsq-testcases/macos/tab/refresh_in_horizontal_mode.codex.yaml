@@ -20,13 +20,33 @@ tags:
       accessibilityId: Address and search bar
 - pressKey: Enter
 - tapOn:
-    target: I right click on the tab header of "Youtube" tab
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+    timeout: 10000
+- inputText:
+    text: https://www.youtube.com
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+- pressKey: Enter
 - tapOn:
-    target: I click "Refresh" from the context menu
+    target: right the tab header of "Youtube" tab
+- tapOn:
+    target: '"Refresh" from the context menu'
+    locator:
+      xpath: //XCUIElementTypeMenuItem[@title='Refresh']
+    timeout: 10000
 - assertVisible:
-    target: the page should be refreshed
+    target: page should be refreshed
+    locator:
+      xpath: //XCUIElementTypeStaticText[@value='Try searching to get started']
+    timeout: 10000
     optional: false
 - assertVisible:
-    target: the address bar still displays the complete URL "https://www.youtube.com"
+    target: address bar still displays the complete URL "https://www.youtube.com"
+    locator:
+      xpath: //XCUIElementTypeTextField[@label='Address and search bar' and @value='https://www.youtube.com']
+    timeout: 10000
     optional: false
 - killApp

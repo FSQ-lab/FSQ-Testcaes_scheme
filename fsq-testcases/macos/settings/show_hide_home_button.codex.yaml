@@ -20,14 +20,33 @@ tags:
     target: Address bar
     locator:
       accessibilityId: Address and search bar
+- pressKey: Enter
+- inputText:
+    text: edge://settings/appearance/toolbar
+    target: input "edge://settings/appearance/toolbar" to the address bar
+    locator:
+      xpath: //XCUIElementTypeTextField[@label="Address and search bar"]
+- pressKey: Enter
 - tapOn:
-    target: Home button
+    target: '"Home" button on the settings page'
+    locator:
+      xpath: //XCUIElementTypeSwitch[@label='Home']
+    timeout: 10000
 - assertVisible:
-    target: Home button on toolbar
+    target: home button should be visible on the toolbar
+    locator:
+      accessibilityId: Home
+    timeout: 10000
     optional: false
 - tapOn:
-    target: Home button
+    target: '"Home" button on the settings page'
+    locator:
+      xpath: //XCUIElementTypeSwitch[@label='Home']
+    timeout: 10000
 - assertNotVisible:
-    target: Home button on toolbar
+    target: home button should be hidden on the toolbar
+    locator:
+      xpath: '//XCUIElementTypeToolbar[@label=''App '
+    timeout: 10000
     optional: false
 - killApp

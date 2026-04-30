@@ -10,41 +10,103 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: Browser menu
-- tapOn:
-    target: Settings
-- swipe:
-    direction: up
-    duration: 1000
+    target: navigate to the Settings page
+    locator:
+      name: kLegacyToolbarToolsMenuButtonIdentifier
+    timeout: 10000
+- performActions:
+  - type: pointer
+    id: finger1
+    parameters:
+      pointerType: touch
+    actions:
+    - type: pointerMove
+      duration: 0
+      origin: viewport
+      x: 196
+      y: 700
+    - type: pointerDown
+      button: 0
+    - type: pointerMove
+      duration: 1000
+      origin: viewport
+      x: 196
+      y: 300
+    - type: pointerUp
+      button: 0
 - assertWithAI:
-    prompt: analyze the screenshot to verify that settings page contains the following items3
+    prompt: 'Analyze the screenshot to verify that settings page contains the following
+      items3: '
+    optional: false
+    timeout: 30000
+- tapOn:
+    target: navigate to the "Languages" section
+    locator:
+      name: kEdgeSettingsLanguagesCellId
+    timeout: 10000
+- assertVisible:
+    target: the page title "Languages"
+    locator:
+      name: Languages
+    timeout: 10000
     optional: false
 - tapOn:
-    target: Languages section
-- assertVisible:
-    target: Languages page title
-    optional: false
-- pressKey: Back
+    target: back button on the upper left corner
+    locator:
+      name: Settings
+    timeout: 10000
 - tapOn:
-    target: Site Settings section
+    target: navigate to the "Site Settings" section
+    locator:
+      name: kEdgeSettingsSiteSettingsCellId
+    timeout: 10000
 - assertVisible:
-    target: Site Settings page title
-    optional: false
-- pressKey: Back
-- tapOn:
-    target: Notifications section
-- assertVisible:
-    target: Notifications page title
-    optional: false
-- pressKey: Back
-- tapOn:
-    target: About Microsoft Edge section
-- assertVisible:
-    target: About Microsoft Edge page title
+    target: the page title "Site Settings"
+    locator:
+      name: Site Settings
+    timeout: 10000
     optional: false
 - tapOn:
-    target: Done
+    target: back button on the upper left corner
+    locator:
+      name: Settings
+    timeout: 10000
+- tapOn:
+    target: navigate to the "Notifications" section
+    locator:
+      name: kEdgeSettingsNotificationCellId
+    timeout: 10000
 - assertVisible:
-    target: New tab page
+    target: the page title "Notifications"
+    locator:
+      name: Notifications
+    timeout: 10000
+    optional: false
+- tapOn:
+    target: back button on the upper left corner
+    locator:
+      name: Settings
+    timeout: 10000
+- tapOn:
+    target: navigate to the "About Microsoft Edge" section
+    locator:
+      name: kEdgeSettingsAboutEdgeCellId
+    timeout: 10000
+- assertVisible:
+    target: the page title "About Microsoft Edge"
+    locator:
+      name: About Microsoft Edge
+    timeout: 10000
+    optional: false
+- tapOn:
+    target: '"Done" button on the top right corner'
+    locator:
+      name: kSettingsDoneButtonId
+    timeout: 10000
+- assertVisible:
+    target: am landing on new tab page
+    locator:
+      name: NTPCollectionViewIdentifier
+    timeout: 10000
     optional: false
 - killApp

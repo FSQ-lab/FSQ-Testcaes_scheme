@@ -16,27 +16,46 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: Settings and more button on toolbar
+    target: '"Settings and more" button on toolbar'
     locator:
       name: Settings and more
       controlType: Button
+    timeout: 10000
 - tapOn:
-    target: Settings button from dropdown menu
+    target: select "Settings" button from the dropdown menu
+- assertVisible:
+    target: settings page should be opened
     locator:
       name: Settings
-      controlType: MenuItem
-- assert:
-    url:
-      contains: edge://settings
+      controlType: Text
+    timeout: 10000
     optional: false
 - tapOn:
-    target: Start, home, and new tab page
+    target: '"Start, home, and new tab page"'
 - tapOn:
-    target: Home button toggle on the settings page
+    target: '"Home" button on the settings page'
+    locator:
+      name: Show home button on the toolbar
+      controlType: Button
+    timeout: 10000
 - assertVisible:
-    target: Home button on the toolbar
+    target: Home button should be visible on the toolbar
+    locator:
+      name: Home
+      controlType: Button
+    timeout: 10000
+    optional: false
 - tapOn:
-    target: Home button toggle on the settings page
+    target: '"Home" button on the settings page'
+    locator:
+      name: Show home button on the toolbar
+      controlType: Button
+    timeout: 10000
 - assertNotVisible:
-    target: Home button on the toolbar
+    target: Home button should be invisible on the toolbar
+    locator:
+      name: Home
+      controlType: Button
+    timeout: 10000
+    optional: false
 - killApp

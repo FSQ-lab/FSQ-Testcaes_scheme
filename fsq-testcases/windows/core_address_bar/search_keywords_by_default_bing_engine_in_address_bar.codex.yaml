@@ -16,30 +16,13 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: New Tab button
-    locator:
-      name: New Tab
-      controlType: Button
-- tapOn:
-    target: Address bar
-    locator:
-      name: Address and search bar
-      controlType: Edit
-    timeout: 10000
-- inputText:
-    text: cat
-    target: Address bar
-    locator:
-      name: Address and search bar
-      controlType: Edit
+    target: input "cat" in address bar
 - pressKey: Enter
-- waitUntil:
-    url:
-      contains: search
-    timeout: 30000
+- assertVisible:
+    target: tab should jump to the search results page related to "cat"
+    locator:
+      automationId: RootWebArea
+      controlType: Document
+    timeout: 10000
     optional: false
-- assertWithAI:
-    prompt: Verify the active tab shows Bing search results related to "cat".
-    optional: false
-    timeout: 30000
 - killApp

@@ -20,37 +20,35 @@ tags:
     locator:
       accessibilityId: Address and search bar
 - pressKey: Enter
-- assert:
-    url:
-      equals: https://www.apple.com
+- assertVisible:
+    target: address bar should display the complete URL "https://www.apple.com"
+    locator:
+      xpath: //XCUIElementTypeTextField[@label='Address and search bar' and @value='https://www.apple.com']
+    timeout: 10000
     optional: false
 - tapOn:
-    target: I select all text in address bar
-- pressKey: Backspace
-- tapOn:
-    target: Address bar
+    target: select all text in address bar
     locator:
       accessibilityId: Address and search bar
     timeout: 10000
+- pressKey: command+a
+- pressKey: Delete
 - inputText:
     text: www.expedia.com
-    target: Address bar
+    target: input "www.expedia.com" in address bar
     locator:
       accessibilityId: Address and search bar
 - pressKey: Enter
-- tapOn:
-    target: Address bar
+- assertVisible:
+    target: should navigate to "Expedia" page successfully
     locator:
-      accessibilityId: Address and search bar
+      accessibilityId: Expedia logo
     timeout: 10000
-- inputText:
-    text: Expedia
-    target: Address bar
-    locator:
-      accessibilityId: Address and search bar
-- pressKey: Enter
+    optional: false
 - assert:
-    url:
-      equals: https://www.expedia.com
+    element:
+      accessibilityId: Address and search bar
+    text:
+      contains: https://www.expedia.com
     optional: false
 - killApp

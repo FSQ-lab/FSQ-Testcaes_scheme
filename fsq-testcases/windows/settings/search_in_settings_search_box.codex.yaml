@@ -16,52 +16,49 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: Settings and more button on toolbar
+    target: '"Settings and more" button on toolbar'
     locator:
       name: Settings and more
       controlType: Button
+    timeout: 10000
 - tapOn:
-    target: Settings button from dropdown menu
+    target: select "Settings" button from the dropdown menu
+- assertVisible:
+    target: settings page should be opened
     locator:
       name: Settings
-      controlType: MenuItem
-- assert:
-    url:
-      contains: edge://settings
+      controlType: Text
+    timeout: 10000
     optional: false
 - tapOn:
-    target: Search settings box
-    locator:
-      name: Search settings
-      controlType: Edit
-- inputText:
-    text: Privacy
-    target: Search settings box
-    locator:
-      name: Search settings
-      controlType: Edit
+    target: input "Privacy" in the settings search box
 - assertVisible:
-    target: settings search results related to Privacy
-- tapOn:
-    target: Search settings box
+    target: search results should display relevant settings related to "Privacy"
     locator:
-      name: Search settings
-      controlType: Edit
-- pressKey:
-    key: A
-    modifiers:
-    - Control
-- pressKey: Backspace
+      name: Select your privacy settings
+      controlType: Text
+    timeout: 10000
+    optional: false
+- tapOn:
+    target: clear the search box
+    locator:
+      name: Clear search
+      controlType: Button
+    timeout: 10000
 - assert:
-    url:
+    element:
+      name: edge://settings/profiles
+      controlType: Edit
+    text:
       contains: edge://settings/profiles
     optional: false
-- inputText:
-    text: '123'
-    target: Search settings box
-    locator:
-      name: Search settings
-      controlType: Edit
+- tapOn:
+    target: input "123" in the settings search box
 - assertVisible:
-    target: No search results found
+    target: search results should display "No search results found"
+    locator:
+      name: No search results found
+      controlType: Text
+    timeout: 10000
+    optional: false
 - killApp

@@ -16,34 +16,32 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: Settings and more button on toolbar
+    target: '"Settings and more" button on toolbar'
     locator:
       name: Settings and more
       controlType: Button
+    timeout: 10000
 - tapOn:
-    target: Settings button from dropdown menu
+    target: select "Settings" button from the dropdown menu
+- assertVisible:
+    target: settings page should be opened
     locator:
       name: Settings
-      controlType: MenuItem
-- assert:
-    url:
-      contains: edge://settings
+      controlType: Text
+    timeout: 10000
     optional: false
 - tapOn:
-    target: New Tab button
+    target: open a new tab by clicking the "New Tab" button
     locator:
       name: New Tab
       controlType: Button
+    timeout: 10000
 - tapOn:
     target: Address bar
     locator:
       name: Address and search bar
       controlType: Edit
     timeout: 10000
-- pressKey:
-    key: A
-    modifiers:
-    - Control
 - inputText:
     text: edge://settings
     target: Address bar
@@ -51,13 +49,11 @@ tags:
       name: Address and search bar
       controlType: Edit
 - pressKey: Enter
-- waitUntil:
-    url:
-      contains: edge://settings
-    timeout: 30000
-    optional: false
-- assert:
-    url:
-      contains: edge://settings
+- assertVisible:
+    target: settings page should be opened
+    locator:
+      name: Settings
+      controlType: Text
+    timeout: 10000
     optional: false
 - killApp

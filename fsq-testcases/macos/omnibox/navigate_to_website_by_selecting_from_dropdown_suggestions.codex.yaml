@@ -10,36 +10,41 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: New Tab button
+    target: open a new tab
     locator:
       accessibilityId: New Tab
+    timeout: 10000
 - tapOn:
-    target: Address bar
+    target: type "www.apple.com" in the address bar
     locator:
       accessibilityId: Address and search bar
     timeout: 10000
 - inputText:
     text: www.apple.com
-    target: Address bar
+    target: type "www.apple.com" in the address bar
     locator:
       accessibilityId: Address and search bar
+- assertVisible:
+    target: dropdown list should appear with URL suggestions
+    locator:
+      accessibilityId: Suggestions
+    timeout: 10000
+    optional: false
 - tapOn:
-    target: a dropdown list should appear with URL suggestions
-- tapOn:
-    target: I click the top item "www.apple.com" in the dropdown list
-- tapOn:
-    target: Address bar
+    target: the top item "www.apple.com" in the dropdown list
+    locator:
+      xpath: '//XCUIElementTypeStaticText[@value="www.apple.com" and '
+    timeout: 10000
+- assertVisible:
+    target: should navigate to "https://www.apple.com" successfully
     locator:
       accessibilityId: Address and search bar
     timeout: 10000
-- inputText:
-    text: https://www.apple.com
-    target: Address bar
+    optional: false
+- assertVisible:
+    target: address bar should display the complete URL "https://www.apple.com"
     locator:
-      accessibilityId: Address and search bar
-- pressKey: Enter
-- assert:
-    url:
-      equals: https://www.apple.com
+      xpath: //XCUIElementTypeTextField[@label='Address and search bar' and @value='https://www.apple.com']
+    timeout: 10000
     optional: false
 - killApp

@@ -11,17 +11,31 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: Settings and more button
+    target: '"Settings and more" button on toolbar'
+    locator:
+      accessibilityId: Settings and more
+    timeout: 10000
 - tapOn:
-    target: Settings button from dropdown menu
-- assert:
-    url:
-      contains: edge://settings
+    target: select "Settings" button from the dropdown menu
+    locator:
+      accessibilityId: Settings ⌘Comma ⌘Comma
+    timeout: 10000
+- assertVisible:
+    target: settings page should be opened
+    locator:
+      accessibilityId: Settings
+    timeout: 10000
     optional: false
 - tapOn:
-    target: New Tab button
+    target: open a new tab by clicking the "New Tab" button
     locator:
       accessibilityId: New Tab
+    timeout: 10000
+- inputText:
+    text: edge://settings
+    target: input "edge://settings" to the address bar
+    locator:
+      accessibilityId: Address and search bar
 - tapOn:
     target: Address bar
     locator:
@@ -32,8 +46,11 @@ tags:
     target: Address bar
     locator:
       accessibilityId: Address and search bar
-- assert:
-    url:
-      contains: edge://settings
+- pressKey: Enter
+- assertVisible:
+    target: settings page should be opened
+    locator:
+      accessibilityId: Settings
+    timeout: 10000
     optional: false
 - killApp

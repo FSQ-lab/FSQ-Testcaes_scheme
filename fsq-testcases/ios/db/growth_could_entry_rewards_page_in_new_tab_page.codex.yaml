@@ -9,12 +9,21 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: I sign in to Edge with MSA
+    target: sign in to Edge with MSA
 - tapOn:
-    target: I click the account in NTP page
+    target: the account in NTP page
+    locator:
+      name: kEdgeNTPViewAvatarViewIdentifier
+    timeout: 10000
 - tapOn:
-    target: Microsoft Rewards
+    target: the "Microsoft Rewards" option
+    locator:
+      name: Microsoft Rewards
+    timeout: 10000
 - assertVisible:
-    target: the Microsoft Rewards page open normally
+    target: can see the Microsoft Rewards page open normally
+    locator:
+      name: Microsoft Rewards
+    timeout: 10000
     optional: false
 - killApp

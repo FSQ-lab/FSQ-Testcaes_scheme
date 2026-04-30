@@ -21,10 +21,6 @@ tags:
       name: Address and search bar
       controlType: Edit
     timeout: 10000
-- pressKey:
-    key: A
-    modifiers:
-    - Control
 - inputText:
     text: https://getsamplefiles.com/download/pdf/sample-1.pdf
     target: Address bar
@@ -33,17 +29,18 @@ tags:
       controlType: Edit
 - pressKey: Enter
 - assertVisible:
-    target: Downloads panel
+    target: Downloads panel should appear
+    locator:
+      name: Downloads
+      controlType: Window
+    timeout: 10000
+    optional: false
 - tapOn:
     target: Address bar
     locator:
       name: Address and search bar
       controlType: Edit
     timeout: 10000
-- pressKey:
-    key: A
-    modifiers:
-    - Control
 - inputText:
     text: edge://downloads
     target: Address bar
@@ -51,11 +48,10 @@ tags:
       name: Address and search bar
       controlType: Edit
 - pressKey: Enter
-- waitUntil:
-    url:
-      contains: edge://downloads
-    timeout: 30000
-    optional: false
 - assertVisible:
-    target: sample-1.pdf in download list
+    target: '"sample-1.pdf" should appear in download list'
+    locator:
+      name: sample-1.pdf
+    timeout: 10000
+    optional: false
 - killApp

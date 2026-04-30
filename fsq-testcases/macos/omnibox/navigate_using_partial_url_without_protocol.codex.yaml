@@ -20,19 +20,22 @@ tags:
     locator:
       accessibilityId: Address and search bar
 - pressKey: Enter
-- tapOn:
-    target: Address bar
-    locator:
-      accessibilityId: Address and search bar
-    timeout: 10000
 - inputText:
-    text: https://www.apple.com
-    target: Address bar
+    text: apple.com
+    target: input "apple.com" in address bar
     locator:
       accessibilityId: Address and search bar
 - pressKey: Enter
-- assert:
-    url:
-      equals: https://www.apple.com
+- assertVisible:
+    target: should navigate to "https://www.apple.com" successfully
+    locator:
+      accessibilityId: Address and search bar
+    timeout: 10000
+    optional: false
+- assertVisible:
+    target: address bar should display the complete URL "https://www.apple.com"
+    locator:
+      xpath: //XCUIElementTypeTextField[@label='Address and search bar' and @value='https://www.apple.com']
+    timeout: 10000
     optional: false
 - killApp

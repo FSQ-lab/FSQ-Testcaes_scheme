@@ -20,13 +20,32 @@ tags:
     target: Address bar
     locator:
       accessibilityId: Address and search bar
+- pressKey: Enter
+- inputText:
+    text: edge://settings/startHomeNTP
+    target: input "edge://settings/startHomeNTP" to the address bar
+    locator:
+      accessibilityId: Address and search bar
+- pressKey: Enter
 - tapOn:
-    target: show home button on the toolbar option
+    target: turn on the option "show home button on the toolbar"
+    locator:
+      accessibilityId: Show home button on the toolbar
+    timeout: 10000
 - tapOn:
-    target: New tab page option
+    target: select the option "New tab page"
+    locator:
+      accessibilityId: New tab page
+    timeout: 10000
 - tapOn:
-    target: Home button
-- assertVisible:
-    target: should open a page titled "New Tab"
+    target: '"Home" button to the left of the address bar'
+    locator:
+      accessibilityId: Home
+    timeout: 10000
+- assert:
+    element:
+      xpath: //XCUIElementTypeWindow
+    text:
+      contains: New Tab
     optional: false
 - killApp

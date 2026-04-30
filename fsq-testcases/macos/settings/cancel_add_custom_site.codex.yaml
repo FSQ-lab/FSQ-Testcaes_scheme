@@ -20,27 +20,65 @@ tags:
     target: Address bar
     locator:
       accessibilityId: Address and search bar
+- pressKey: Enter
+- inputText:
+    text: edge://settings/startHomeNTP
+    target: input "edge://settings/startHomeNTP" to the address bar
+    locator:
+      accessibilityId: Address and search bar
+- pressKey: Enter
 - tapOn:
-    target: Open custom sites option
+    target: select the option "Open custom sites"
+    locator:
+      name: Open custom sites
+    timeout: 10000
 - tapOn:
-    target: I click the "Add site" button
+    target: the "Add site" button
+    locator:
+      accessibilityId: Add site
+    timeout: 10000
 - assertVisible:
-    target: Add site dialog
+    target: '"Add site" dialog should be opened'
+    locator:
+      accessibilityId: Website
+    timeout: 10000
     optional: false
+- tapOn:
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+    timeout: 10000
 - inputText:
     text: https://www.bing.com
-    target: URL field
+    target: Address bar
     locator:
-      text: URL
-      childOf:
-        text: Add site
+      accessibilityId: Address and search bar
+- pressKey: Enter
 - tapOn:
-    target: Cancel button on Add site dialog
+    target: Address bar
     locator:
-      text: Cancel
-      childOf:
-        text: Add site
+      accessibilityId: Address and search bar
+    timeout: 10000
+- inputText:
+    text: https://www.bing.com
+    target: Address bar
+    locator:
+      accessibilityId: Address and search bar
+- pressKey: Enter
+- inputText:
+    text: https://www.bing.com
+    target: input "https://www.bing.com" in the URL field on the "Add site" dialog
+    locator:
+      xpath: (//XCUIElementTypeGroup[@label="Website"])
+- tapOn:
+    target: the "Cancel" button on the "Add site" dialog
+    locator:
+      name: Cancel
+    timeout: 10000
 - assertNotVisible:
-    target: Add site dialog
+    target: '"Add site" dialog should be closed'
+    locator:
+      xpath: //XCUIElementTypeTextField[@title="Website"]
+    timeout: 10000
     optional: false
 - killApp

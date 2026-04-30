@@ -16,20 +16,11 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: New Tab button
-    locator:
-      name: New Tab
-      controlType: Button
-- tapOn:
     target: Address bar
     locator:
       name: Address and search bar
       controlType: Edit
     timeout: 10000
-- pressKey:
-    key: A
-    modifiers:
-    - Control
 - inputText:
     text: https://www.bbc.com
     target: Address bar
@@ -37,35 +28,39 @@ tags:
       name: Address and search bar
       controlType: Edit
 - pressKey: Enter
-- waitUntil:
-    url:
-      contains: bbc.com
-    timeout: 30000
+- assert:
+    element:
+      name: https://www.bbc.com
+      controlType: Edit
+    text:
+      contains: https://www.bbc.com
     optional: false
 - tapOn:
-    target: Address bar
-    locator:
-      name: Address and search bar
-      controlType: Edit
-    timeout: 10000
-- pressKey:
-    key: A
-    modifiers:
-    - Control
+    target: select all text in address bar
+- pressKey: Enter
 - inputText:
     text: https://www.apple.com
-    target: Address bar
-    locator:
-      name: Address and search bar
-      controlType: Edit
+    target: type "https://www.apple.com" in address bar
 - pressKey: Enter
-- waitUntil:
-    url:
-      contains: apple.com
-    timeout: 30000
+- assertVisible:
+    target: should navigate to "Apple" page successfully
+    locator:
+      name: Apple
+      controlType: TabItem
+    timeout: 10000
     optional: false
-- assertWithAI:
-    prompt: Verify the active tab changed from BBC to the Apple website and finished loading.
+- assert:
+    element:
+      name: https://www.apple.com
+      controlType: Edit
+    text:
+      contains: https://www.apple.com
     optional: false
-    timeout: 30000
+- assertVisible:
+    target: '"Apple" page should load completely'
+    locator:
+      automationId: RootWebArea
+      controlType: Document
+    timeout: 10000
+    optional: false
 - killApp

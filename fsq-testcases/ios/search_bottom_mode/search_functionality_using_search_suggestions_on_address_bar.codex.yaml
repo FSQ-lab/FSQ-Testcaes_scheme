@@ -9,15 +9,29 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: Search box
+    target: the search box on NTP page
+    locator:
+      name: Search and address bar
+    timeout: 10000
 - inputText:
     text: apple
-    target: Search box
+    target: input a keyword "apple" in the search box
+    locator:
+      name: Address
 - tapOn:
-    target: First search suggestion
+    target: select the first search suggestion from the Search suggestion list
+    locator:
+      name: omnibox suggestion 0 7
+    timeout: 10000
 - tapOn:
-    target: Dismiss permission dialog
+    target: dismiss the permission dialog from bing
+    locator:
+      name: Allow While Using App
+    timeout: 10000
 - assertVisible:
-    target: Search results for apple
+    target: search results for "apple"
+    locator:
+      xpath: //*[contains(@label, 'Apple')]
+    timeout: 10000
     optional: false
 - killApp

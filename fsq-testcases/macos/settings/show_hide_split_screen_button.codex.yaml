@@ -20,14 +20,33 @@ tags:
     target: Address bar
     locator:
       accessibilityId: Address and search bar
+- pressKey: Enter
+- inputText:
+    text: edge://settings/appearance/toolbar
+    target: input "edge://settings/appearance/toolbar" to the address bar
+    locator:
+      xpath: //XCUIElementTypeTextField[@label="Address and search bar"]
+- pressKey: Enter
 - tapOn:
-    target: Split screen button
+    target: '"Split screen" button switch in Toolbar Settings page'
+    locator:
+      xpath: //XCUIElementTypeSwitch[@label='Split screen']
+    timeout: 10000
 - assertVisible:
-    target: Split screen button on toolbar
+    target: Split screen button should be visible on the toolbar
+    locator:
+      xpath: //XCUIElementTypeButton[@label='Split screen']
+    timeout: 10000
     optional: false
 - tapOn:
-    target: Split screen button
+    target: '"Split screen" button switch in Toolbar Settings page'
+    locator:
+      xpath: //XCUIElementTypeSwitch[@label='Split screen']
+    timeout: 10000
 - assertNotVisible:
-    target: Split screen button on toolbar
+    target: Split screen button should be hidden on the toolbar
+    locator:
+      xpath: //XCUIElementTypeButton[@label='Split screen']
+    timeout: 10000
     optional: false
 - killApp

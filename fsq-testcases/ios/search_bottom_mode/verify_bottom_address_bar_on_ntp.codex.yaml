@@ -9,37 +9,126 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: New tab button
+    target: + button on the bottom toolbar
+    locator:
+      accessibilityId: kToolbarEdgeNewTabButtonIdentifier
+    timeout: 10000
 - tapOn:
-    target: I change the NTP page layout to Partial view
+    target: change the NTP page layout to Partial view
+    locator:
+      name: New tab page layout settings
+    timeout: 10000
 - tapOn:
-    target: Close page settings dialog
-- swipe:
-    direction: up
-    duration: 3000
+    target: close the Page settings dialog
+- performActions:
+  - type: pointer
+    id: finger1
+    parameters:
+      pointerType: touch
+    actions:
+    - type: pointerMove
+      duration: 0
+      origin: viewport
+      x: 196
+      y: 1000
+    - type: pointerDown
+      button: 0
+    - type: pointerMove
+      duration: 3000
+      origin: viewport
+      x: 196
+      y: 300
+    - type: pointerUp
+      button: 0
 - assertVisible:
     target: the omnibox with Copilot icon and Copilot voice icon
+    locator:
+      name: Copilot
+    timeout: 10000
     optional: false
-- swipe:
-    direction: down
-    duration: 3000
+- performActions:
+  - type: pointer
+    id: finger1
+    parameters:
+      pointerType: touch
+    actions:
+    - type: pointerMove
+      duration: 0
+      origin: viewport
+      x: 196
+      y: 300
+    - type: pointerDown
+      button: 0
+    - type: pointerMove
+      duration: 3000
+      origin: viewport
+      x: 196
+      y: 1000
+    - type: pointerUp
+      button: 0
 - assertVisible:
     target: the omnibox with Copilot icon and Copilot voice icon
+    locator:
+      name: Copilot
+    timeout: 10000
     optional: false
 - tapOn:
-    target: I change the NTP page layout to Headings view
+    target: change the NTP page layout to Headings view
+    locator:
+      name: New tab page layout settings
+    timeout: 10000
 - tapOn:
-    target: Close page settings dialog
-- swipe:
-    direction: up
-    duration: 3000
+    target: close the Page settings dialog
+- performActions:
+  - type: pointer
+    id: finger1
+    parameters:
+      pointerType: touch
+    actions:
+    - type: pointerMove
+      duration: 0
+      origin: viewport
+      x: 196
+      y: 1000
+    - type: pointerDown
+      button: 0
+    - type: pointerMove
+      duration: 3000
+      origin: viewport
+      x: 196
+      y: 300
+    - type: pointerUp
+      button: 0
 - assertVisible:
     target: the omnibox with Copilot icon and Copilot voice icon
+    locator:
+      name: Copilot
+    timeout: 10000
     optional: false
-- swipe:
-    direction: down
-    duration: 3000
+- performActions:
+  - type: pointer
+    id: finger1
+    parameters:
+      pointerType: touch
+    actions:
+    - type: pointerMove
+      duration: 0
+      origin: viewport
+      x: 196
+      y: 300
+    - type: pointerDown
+      button: 0
+    - type: pointerMove
+      duration: 3000
+      origin: viewport
+      x: 196
+      y: 1000
+    - type: pointerUp
+      button: 0
 - assertVisible:
     target: the omnibox with Copilot icon and Copilot voice icon
+    locator:
+      name: Copilot
+    timeout: 10000
     optional: false
 - killApp

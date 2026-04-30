@@ -11,32 +11,48 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: Settings and more button
+    target: '"Settings and more" button on toolbar'
+    locator:
+      accessibilityId: Settings and more
+    timeout: 10000
 - tapOn:
-    target: Settings button from dropdown menu
-- assert:
-    url:
-      contains: edge://settings
+    target: select "Settings" button from the dropdown menu
+    locator:
+      accessibilityId: Settings ⌘Comma ⌘Comma
+    timeout: 10000
+- assertVisible:
+    target: settings page should be opened
+    locator:
+      accessibilityId: Settings
+    timeout: 10000
     optional: false
 - inputText:
     text: Privacy
-    target: Settings search box
-- assertVisible:
-    target: Search result Privacy
+    target: input "Privacy" in the settings search box
     locator:
-      text: Privacy
-    optional: false
-- clearText:
-    target: Settings search box
+      xpath: //XCUIElementTypeTextField[@placeholderValue='Search settings']
 - assertVisible:
-    target: All settings search results
+    target: search results should display relevant settings related to "Privacy"
+    locator:
+      accessibilityId: Privacy, search, and services
+    timeout: 10000
+    optional: false
+- tapOn:
+    target: clear the search box
+    locator:
+      accessibilityId: Clear search
+    timeout: 10000
+- assertVisible:
+    target: search results should reset to show all settings
+    locator:
+      accessibilityId: Top settings
+    timeout: 10000
     optional: false
 - inputText:
     text: '123'
-    target: Settings search box
-- assertVisible:
-    target: Search result No search results found
+    target: input "123" in the settings search box
     locator:
-      text: No search results found
-    optional: false
+      xpath: //XCUIElementTypeTextField[@placeholderValue='Search settings']
+- tapOn:
+    target: search results should display "No search results found"
 - killApp

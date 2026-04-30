@@ -10,45 +10,43 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: Address bar
+    target: type "https://www.google.com" in the address bar
     locator:
-      accessibilityId: Address and search bar
+      xpath: //XCUIElementTypeTextField[@label='Address and search bar']
     timeout: 10000
 - inputText:
     text: https://www.google.com
-    target: Address bar
+    target: type "https://www.google.com" in the address bar
     locator:
-      accessibilityId: Address and search bar
-- assert:
-    url:
-      equals: https://www.google.com
+      xpath: //XCUIElementTypeTextField[@label='Address and search bar']
+- assertVisible:
+    target: address bar should display the complete URL "https://www.google.com"
+    locator:
+      xpath: //XCUIElementTypeTextField[@label='Address and search bar' and @value='https://www.google.com']
+    timeout: 10000
     optional: false
 - tapOn:
-    target: I select all text in the address bar
-- tapOn:
-    target: Address bar
+    target: select all text in the address bar
+    locator:
+      xpath: //XCUIElementTypeTextField[@label='Address and search bar']
+    timeout: 10000
+- pressKey: command+a
+- inputText:
+    text: https://www.apple.com
+    target: type "https://www.apple.com" in the address bar
+    locator:
+      xpath: //XCUIElementTypeTextField[@label='Address and search bar']
+- pressKey: Enter
+- assertVisible:
+    target: should navigate to "https://www.apple.com" successfully
     locator:
       accessibilityId: Address and search bar
     timeout: 10000
-- inputText:
-    text: https://www.apple.com
-    target: Address bar
+    optional: false
+- assertVisible:
+    target: address bar should display the complete URL "https://www.apple.com"
     locator:
-      accessibilityId: Address and search bar
-- pressKey: Enter
-- tapOn:
-    target: Address bar
-    locator:
-      accessibilityId: Address and search bar
+      xpath: //XCUIElementTypeTextField[@label='Address and search bar' and @value='https://www.apple.com']
     timeout: 10000
-- inputText:
-    text: https://www.apple.com
-    target: Address bar
-    locator:
-      accessibilityId: Address and search bar
-- pressKey: Enter
-- assert:
-    url:
-      equals: https://www.apple.com
     optional: false
 - killApp

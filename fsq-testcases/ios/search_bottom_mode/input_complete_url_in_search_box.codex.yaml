@@ -9,12 +9,20 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: Search box
+    target: the search box on NTP page
+    locator:
+      name: Search and address bar
+    timeout: 10000
 - inputText:
-    text: https://apple.com
-    target: Search box
+    text: https://www.apple.com
+    target: input "https://apple.com" in search box
+    locator:
+      name: Address
 - tapOn:
-    target: Go
+    target: '"Go" on keyboard'
+    locator:
+      name: Go
+    timeout: 10000
 - performActions:
   - type: none
     id: wait
@@ -22,23 +30,70 @@ tags:
     - type: pause
       duration: 3000
 - assert:
-    url:
-      contains: https://www.apple.com
+    element:
+      name: Search and address bar
+    text:
+      contains: apple.com
     optional: false
 - tapOn:
-    target: I click the link on page to navigate to other pages
+    target: the link on page to navigate to other pages
+    locator:
+      name: Search apple.com
+    timeout: 10000
 - tapOn:
-    target: Dismiss permission dialog
-- swipe:
-    direction: down
-    duration: 2000
-- swipe:
-    direction: up
-    duration: 2000
+    target: dismiss the permission dialog from bing
+    locator:
+      name: Allow While Using App
+    timeout: 10000
+- performActions:
+  - type: pointer
+    id: finger1
+    parameters:
+      pointerType: touch
+    actions:
+    - type: pointerMove
+      duration: 0
+      origin: viewport
+      x: 196
+      y: 500
+    - type: pointerDown
+      button: 0
+    - type: pointerMove
+      duration: 2000
+      origin: viewport
+      x: 196
+      y: 300
+    - type: pointerUp
+      button: 0
+- performActions:
+  - type: pointer
+    id: finger1
+    parameters:
+      pointerType: touch
+    actions:
+    - type: pointerMove
+      duration: 0
+      origin: viewport
+      x: 196
+      y: 400
+    - type: pointerDown
+      button: 0
+    - type: pointerMove
+      duration: 2000
+      origin: viewport
+      x: 196
+      y: 500
+    - type: pointerUp
+      button: 0
 - tapOn:
-    target: I click the back button on bottom toolbar
+    target: the back button on bottom toolbar
+    locator:
+      accessibilityId: Back
+    timeout: 10000
 - assert:
-    url:
-      contains: https://www.apple.com
+    element:
+      name: Search and address bar
+    text:
+      contains: apple.com
     optional: false
 - killApp

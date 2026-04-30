@@ -9,13 +9,24 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: I click the search box in NTP page
+    target: the search box in NTP page
+    locator:
+      accessibilityId: Search and address bar
+    timeout: 10000
 - inputText:
     text: www.bing.com
-    target: Search box
+    target: type "www.bing.com" in the search box
+    locator:
+      name: Address
 - tapOn:
-    target: I press go button to search
+    target: press go button to search
+    locator:
+      accessibilityId: Go
+    timeout: 10000
 - assertVisible:
     target: the Microsoft bing logo
+    locator:
+      name: Microsoft Logo Image
+    timeout: 10000
     optional: false
 - killApp

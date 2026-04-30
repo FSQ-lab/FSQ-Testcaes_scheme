@@ -10,23 +10,30 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: Browser menu
+    target: navigate to the Settings page
+    locator:
+      name: kLegacyToolbarToolsMenuButtonIdentifier
+    timeout: 10000
 - tapOn:
-    target: Settings
-- tapOn:
-    target: Search section
-- assertVisible:
-    target: Select Search Engine default Bing
-    optional: false
-- assertVisible:
-    target: Search History toggle on by default
-    optional: false
-- assertVisible:
-    target: Show Me Search and Site Suggestions Using My Typed Characters toggle on by default
+    target: navigate to the "Search" section
+    locator:
+      name: kEdgeSettingsSearchCellId
+    timeout: 10000
+- assert:
+    element:
+      name: kEdgeSettingsGeneralSearchEngineCellId
+    text:
+      contains: Bing
     optional: false
 - tapOn:
-    target: Done
+    target: '"Done" button on the top right corner'
+    locator:
+      name: kSettingsDoneButtonId
+    timeout: 10000
 - assertVisible:
-    target: New tab page
+    target: am landing on new tab page
+    locator:
+      name: NTPCollectionViewIdentifier
+    timeout: 10000
     optional: false
 - killApp

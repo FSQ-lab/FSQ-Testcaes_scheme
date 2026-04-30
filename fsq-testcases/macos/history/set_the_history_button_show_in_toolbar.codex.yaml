@@ -11,11 +11,21 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: Settings and more button
+    target: '"Settings and more" button in toolbar'
+    locator:
+      accessibilityId: Settings and more
+    timeout: 10000
 - tapOn:
-    target: History button
+    target: right "History" button in menu
 - tapOn:
-    target: I click "Show in toolbar" in menu
-- tapOn:
+    target: '"Show in toolbar" in menu'
+    locator:
+      accessibilityId: Show in Toolbar
+    timeout: 10000
+- assertVisible:
     target: '"History" should be displayed in toolbar'
+    locator:
+      accessibilityId: History
+    timeout: 10000
+    optional: false
 - killApp

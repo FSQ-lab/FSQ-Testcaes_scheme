@@ -15,20 +15,11 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: New Tab button
-    locator:
-      name: New Tab
-      controlType: Button
-- tapOn:
     target: Address bar
     locator:
       name: Address and search bar
       controlType: Edit
     timeout: 10000
-- pressKey:
-    key: A
-    modifiers:
-    - Control
 - inputText:
     text: https://www.cgtn.com
     target: Address bar
@@ -36,22 +27,21 @@ tags:
       name: Address and search bar
       controlType: Edit
 - pressKey: Enter
-- waitUntil:
-    url:
-      contains: cgtn.com
-    timeout: 30000
+- assertVisible:
+    target: '"cgtn" website should be opnened'
+    locator:
+      name: CGTN
+      controlType: Document
+    timeout: 10000
     optional: false
-- pressKey:
-    key: H
-    modifiers:
-    - Control
-- assertVisible:
-    target: history hub
+- pressKey: Ctrl+H
 - tapOn:
-    target: Search history box in history hub
-- inputText:
-    text: cgtn
-    target: Search history box in history hub
+    target: search "cgtn" in history hub
 - assertVisible:
-    target: cgtn website in the history hub
+    target: '"cgtn" website should be displayed in the history hub'
+    locator:
+      name: CGTN
+      controlType: TreeItem
+    timeout: 10000
+    optional: false
 - killApp

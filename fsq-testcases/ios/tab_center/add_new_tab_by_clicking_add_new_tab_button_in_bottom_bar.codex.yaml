@@ -9,30 +9,72 @@ tags:
 ---
 - launchApp
 - tapOn:
-    target: I enter tab center by clicking on the tab center icon
+    target: enter tab center by clicking on the tab center icon
+    locator:
+      accessibilityId: kToolbarStackButtonIdentifier
+    timeout: 10000
 - tapOn:
-    target: Edit
+    target: '"Edit" button on tab center page'
+    locator:
+      name: kTabGridEditButtonIdentifier
+    timeout: 10000
 - tapOn:
-    target: Close all tabs and groups
+    target: '"Close all tabs and groups" on menu'
+    locator:
+      name: Close All Tabs and Groups
+    timeout: 10000
 - tapOn:
-    target: I click tab grid add button in tab center
+    target: tab grid add button in tab center
+    locator:
+      name: Open a new tab.
+    timeout: 10000
 - assertVisible:
-    target: New tab page
+    target: should return to new tab page
+    locator:
+      name: NTPCollectionViewIdentifier
+    timeout: 10000
     optional: false
 - tapOn:
-    target: Search box
+    target: the search box on NTP page
+    locator:
+      name: Search and address bar
+    timeout: 10000
 - inputText:
     text: https://www.microsoft.com
-    target: Search box
-- assertVisible:
-    target: '"1" on the tab center icon'
+    target: input "https://www.microsoft.com" in search box and navigate to it
+    locator:
+      name: Address
+- tapOn:
+    target: Address bar
+    locator:
+      name: Address
+    timeout: 10000
+- inputText:
+    text: https://www.microsoft.com
+    target: Address bar
+    locator:
+      name: Address
+- assert:
+    element:
+      name: kToolbarStackButtonIdentifier
+    text:
+      contains: '1'
     optional: false
 - tapOn:
-    target: I click on new tab button to open a new tab
+    target: new tab button to open a new tab
+    locator:
+      name: kToolbarEdgeNewTabButtonIdentifier
+    timeout: 10000
 - assertVisible:
-    target: New tab page
+    target: should return to new tab page
+    locator:
+      name: NTPCollectionViewIdentifier
+    timeout: 10000
     optional: false
-- assertVisible:
-    target: '"2" on the tab center icon'
+- assert:
+    element:
+      name: kToolbarStackButtonIdentifier
+    text:
+      contains: '2'
     optional: false
 - killApp
