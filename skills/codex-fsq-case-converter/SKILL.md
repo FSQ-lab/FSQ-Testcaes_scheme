@@ -49,13 +49,14 @@ Every generated artifact must include `codex` in the filename or artifact name.
 ## Workflow
 
 1. Inspect existing converted cases in the destination repo before writing new ones.
-2. Read source feature/scenario files and resolve each BDD step to its implementation when step definitions are available.
-3. Select cases with clear action/assertion intent first; avoid skipped, broken, highly coordinate-driven, or environment-heavy cases in pilot batches.
-4. Convert source steps into direct FSQ actions: `tapOn`, `inputText`, `pressKey`, `assertVisible`, `assert`, `assertWithAI`, `performActions`, or `executeMethod` only when needed.
-5. Preserve `steps` as commands; do not collapse a scenario into a prose objective.
-6. Generate a conversion report for each case with source path, scenario name, tags, step mapping, unresolved items, and manual review checklist.
-7. Validate all generated YAML against the FSQ schema before claiming completion.
-8. Commit converted cases only after validation passes.
+2. For BDD/Gherkin/Behave sources, build a BDD Execution Model before writing YAML. Read `references/codex-bdd-execution-model.md` for Gherkin parsing, Behave step resolution, and `context.execute_steps()` expansion.
+3. Normalize Behave hooks before command generation. Read `references/codex-behave-hook-normalization.md` when `environment.py`, fixtures, `before_scenario`, `after_scenario`, or environment variables affect execution.
+4. Select cases with clear action/assertion intent first; avoid skipped, broken, highly coordinate-driven, or environment-heavy cases in pilot batches.
+5. Convert extracted operations into direct FSQ actions: `tapOn`, `inputText`, `pressKey`, `assertVisible`, `assert`, `assertWithAI`, `performActions`, or `executeMethod` only when needed.
+6. Preserve `steps` as commands; do not collapse a scenario into a prose objective.
+7. Generate a conversion report for each case with source path, scenario name, tags, BDD execution model evidence, hook normalization, step mapping, unresolved items, and manual review checklist.
+8. Validate all generated YAML against the FSQ schema before claiming completion.
+9. Commit converted cases only after validation passes.
 
 ## Conversion Discipline
 
@@ -63,14 +64,19 @@ Read `references/codex-fsq-conversion-rules.md` when converting more than one ca
 
 Core rules:
 
+- For BDD/Behave cases, never generate FSQ YAML from feature prose alone. First construct the effective scenario from Gherkin, resolve each step implementation from the global Behave registry, expand nested `context.execute_steps()`, classify hooks, then generate commands.
 - Use dual-source conversion for BDD/Behave cases. The feature file defines the scenario intent, ordering, and human-readable `target`; the step implementation defines executable facts such as Appium calls, locators, assertions, waits, preconditions, and helper flows. Do not convert from feature prose alone when matching step implementation code is available.
 - Match BDD steps to implementations using Behave semantics: support `@given`, `@when`, `@then`, and `@step`; normalize the leading keyword (`Given`/`When`/`Then`/`And`/`But`); preserve quoted parameters; and match exact decorators, parameterized decorators, or nearby helper functions before falling back to semantic prose.
-- Extract executable operations from step implementations, including `click_element`, `send_keys`, `verify_element_exists`, `verify_element_not_exists`, `verify_element_attribute`, `press_key`, `swipe`, waits, app lifecycle calls, and helper/tool wrappers. Convert those operations into direct DSL commands rather than prose `tapOn` placeholders.
+- Treat `features/steps/**/*.py` as Behave's global step registry. Do not assume feature files map only to nearby step files.
+- Expand `context.execute_steps()` recursively before command generation. Preserve parent and child step evidence in the report and mark cycles or unresolved nested steps instead of flattening them into prose.
+- Classify hooks before conversion. Convert setup/state guarantee hooks into setup or teardown only when they materially affect the case and have a safe DSL or runner equivalent; keep screenshot, telemetry, retry patching, session close, and log archival as runner/evidence policy instead of YAML commands.
+- Extract executable operations from step implementations, including Appium-style calls (`click_element`, `send_keys`, `verify_element_exists`, `verify_element_not_exists`, `verify_element_attribute`, `press_key`, `swipe`) and Windows/pywinauto helper calls (`element_click`, `send_keystrokes`, `enter_text`, `native_navigate`, `verify_element_value`, `verify_visual_task`, `time_sleep`). Convert those operations into direct DSL commands rather than prose `tapOn` placeholders.
 - Preserve operation order inside compound implementation steps. If a step implementation types text and then presses Enter, emit `inputText` before `pressKey`; do not infer a separate `tapOn: Go` unless the source actually clicks a UI element.
-- Translate preconditions from Background, fixtures, `before_scenario`, and helper steps when they materially affect execution, such as launch state, NTP state, signed-in/account state, top/bottom omnibox mode, app foreground/background, or required permissions. Put stable setup into commands only when needed for the case to run; document uncertain preconditions in the conversion report.
+- Translate preconditions from Background, fixtures, `before_scenario`, and helper steps when they materially affect execution, such as launch state, NTP state, signed-in/account state, top/bottom omnibox mode, app foreground/background, or required permissions. Put stable setup into commands only when the DSL or runner has a safe equivalent; otherwise record the precondition under `Unresolved Or Low-Confidence Items` instead of inventing prose actions such as `tapOn: clean cache`.
 - Preserve deterministic locators from source automation. When Behave/Appium step definitions call `verify_element_exists`, `verify_element_attribute`, `click_element`, `send_keys`, or similar with `locator_strategy` and `locator_value`, carry that into the DSL as dual-layer `target` + `locator` or `assert.element` instead of dropping to pure natural language or generic URL assertions.
 - Preserve URL/current-page assertions through the source observable state. If the source verifies `url_bar` text or an XPath over the address bar, convert it to locator-backed `assert.element` plus `assert.text` when possible; do not convert it to bare `assert.url` unless the source actually reads browser current URL.
 - Treat icon wording carefully: if the source checks an icon through Appium ID/accessibility ID, keep the locator; use screenshot `assertWithAI` only when the source is truly visual/screenshot based or no accessibility locator exists.
+- Preserve conditional helper semantics. If source code probes for an optional dialog or cleanup target and proceeds only when present, do not convert the probe into a blocking `assertVisible`. Prefer the source's optional click/dismiss action when the DSL can express it safely; otherwise document it as an unresolved optional helper in the report.
 - Do not guess coordinates. If the source implementation contains exact gesture coordinates, preserve them as source evidence, preferably with W3C `performActions` pointer actions when path and target matter.
 - Do not use screenshot-based coordinate inference under a non-vision model.
 - Convert screenshot verification into blocking `assertWithAI`, not a fallback tap location.
@@ -190,6 +196,18 @@ Codex-produced conversion report.
 
 ## Step Mapping
 | Source step | FSQ command | Notes |
+| --- | --- | --- |
+
+## BDD Execution Model
+
+## Hook Normalization
+| Hook | Classification | Converted? | Notes |
+| --- | --- | --- | --- |
+
+## Environment Requirements
+
+## Step Expansion Evidence
+| Source step | Expanded steps | Implementation evidence |
 | --- | --- | --- |
 
 ## Step Implementation Evidence
