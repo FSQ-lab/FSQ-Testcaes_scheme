@@ -21,7 +21,7 @@
 | 转化工具设计 | `docs/codex-fsq-case-converter-design.md` | case 转化工具和流程说明 |
 | 转化 skill | `skills/codex-fsq-case-converter/` | 将平台 case 转成 FSQ Codex YAML 的 skill |
 | 运行 skill | `skills/codex-fsq-case-runner/` | 选择、校验、生成 manifest、运行 case 的 skill |
-| 已转化 case | `fsq-testcases/` | Android、iOS、macOS、Windows 各 20 条 case |
+| 已转化 case | `fsq-testcases/` | Android、iOS、macOS、Windows 的 Codex YAML case |
 | 交付说明 | `docs/codex-repository-handoff.md` | 当前仓库状态、验证命令和后续建议 |
 
 ### Case 目录
@@ -38,11 +38,11 @@ fsq-testcases/
 
 | 平台 | Codex YAML case | 转化报告 |
 | --- | ---: | ---: |
-| Android | 20 | 20 |
-| iOS | 20 | 20 |
-| macOS | 20 | 20 |
-| Windows | 20 | 20 |
-| Total | 80 | 80 |
+| Android | 26 | 26 |
+| iOS | 24 | 24 |
+| macOS | 24 | 24 |
+| Windows | 24 | 24 |
+| Total | 98 | 98 |
 
 ### AI Agent Friendly 原则
 
@@ -65,7 +65,7 @@ python3 skills/codex-fsq-case-converter/scripts/validate_fsq_cases.py \
 期望输出：
 
 ```text
-total=80 failed=0
+total=98 failed=0
 ```
 
 ### 列出 Case
@@ -97,20 +97,21 @@ python3 skills/codex-fsq-case-runner/scripts/run_fsq_cases.py \
 
 ### Android 试跑结论
 
-当前本地 Android 试跑验证了基础链路：Appium 3.x、UiAutomator2、设备连接、schema 校验、manifest 生成和基础 bottom bar 菜单流可以端到端工作。
+当前本地 Android 试跑验证了基础链路：Appium 3.x、UiAutomator2、设备连接、schema 校验、manifest 生成、evidence 采集和一批真实 Edge Android case 可以端到端工作。
 
-已观察到的结果：
+最新试跑结论：
 
-- 4 条 Android bottom bar case 通过临时 Appium runner。
-- 16 条之前失败的 Android case 在系统切换为英文后仍然失败。
-- 英文系统能改善部分 UI 文案匹配，但不能解决主要问题。
+- Android 目前有 26 条 Codex YAML case，其中 `rewards` 和 `default browser` 两条临时标记为 `codex-skip`，因为依赖账号或设备默认浏览器状态。
+- 最近一轮批跑使用 `--exclude-tag codex-skip` 选择 18 条 case；runner 修复后结果为 **14 passed / 4 failed**。
+- 已验证的 runner 修复包括：NTP bottom omnibox 模式下 `search_box_text` 缺失时按目标语义回退到 `url_bar`；`Navigate up` 点击后页面未变化时回退 Android Back。
+- 剩余 4 个失败已分类：`assertWithAI` 暂未实现；一个 Web 结果文本与 case 预期不一致；一个 Tab Center 菜单状态需要继续看 evidence；一个 NTP 搜索 target 文案不够明确，未触发 bottom omnibox fallback。
 
-主要后续方向：
+当前建议：
 
-- runner 需要获取当前 accessibility tree。
-- runner 需要 semantic target resolver，把 `target` 描述解析为稳定定位方式。
-- runner 需要 repair 分类，包括元素找不到、页面未就绪、状态不对、缺少前置条件、不支持视觉断言、转化缺口等。
-- 非 vision 模型下禁止截图猜坐标。
+- 团队验证时优先运行非 `codex-skip` 的 Android case，并保留每步 page source / screenshot evidence。
+- 继续补齐简单版 `assertWithAI` 或 screenshot visual assertion runner 能力。
+- 保持 accessibility-first：定位失败进入 resolver/repair，不在非 vision 模型下截图猜坐标。
+- 后续再回看 rewards/default-browser 这类需要账号或系统状态的 case。
 
 ## English
 
@@ -133,7 +134,7 @@ The repository also includes converted Codex YAML cases so the team can validate
 | Converter design | `docs/codex-fsq-case-converter-design.md` | Case conversion tool and workflow notes |
 | Converter skill | `skills/codex-fsq-case-converter/` | Skill for converting platform cases into FSQ Codex YAML |
 | Runner skill | `skills/codex-fsq-case-runner/` | Skill for selecting, validating, manifesting, and running cases |
-| Converted cases | `fsq-testcases/` | 20 cases each for Android, iOS, macOS, and Windows |
+| Converted cases | `fsq-testcases/` | Codex YAML cases for Android, iOS, macOS, and Windows |
 | Handoff notes | `docs/codex-repository-handoff.md` | Current repository state, validation commands, and next steps |
 
 ### Case Layout
@@ -150,11 +151,11 @@ Current inventory:
 
 | Platform | Codex YAML cases | Conversion reports |
 | --- | ---: | ---: |
-| Android | 20 | 20 |
-| iOS | 20 | 20 |
-| macOS | 20 | 20 |
-| Windows | 20 | 20 |
-| Total | 80 | 80 |
+| Android | 26 | 26 |
+| iOS | 24 | 24 |
+| macOS | 24 | 24 |
+| Windows | 24 | 24 |
+| Total | 98 | 98 |
 
 ### AI Agent Friendly Principles
 
@@ -177,7 +178,7 @@ python3 skills/codex-fsq-case-converter/scripts/validate_fsq_cases.py \
 Expected output:
 
 ```text
-total=80 failed=0
+total=98 failed=0
 ```
 
 ### List Cases
@@ -209,18 +210,18 @@ Default platform backends:
 
 ### Android Test Findings
 
-The local Android smoke run validated the basic execution path: Appium 3.x, UiAutomator2, device connectivity, schema validation, manifest generation, and basic bottom-bar menu flows can work end to end.
+The local Android runs validated the basic execution path: Appium 3.x, UiAutomator2, device connectivity, schema validation, manifest generation, evidence capture, and a batch of real Edge Android cases can work end to end.
 
-Observed results:
+Latest findings:
 
-- 4 Android bottom-bar cases passed with a temporary Appium runner.
-- 16 previously failing Android cases still failed after switching the device UI to English.
-- English UI text helps some matching, but it does not solve the main issue.
+- Android now has 26 Codex YAML cases. The `rewards` and `default browser` cases are temporarily tagged `codex-skip` because they depend on account state or device default-browser state.
+- The latest batch selected 18 cases with `--exclude-tag codex-skip`; after runner fixes, the result was **14 passed / 4 failed**.
+- Verified runner fixes include: falling back from missing NTP `search_box_text` to `url_bar` in bottom omnibox mode when target semantics match, and falling back to Android Back when `Navigate up` does not change the page.
+- The remaining 4 failures are classified as: missing `assertWithAI` support, one web result text mismatch against case expectation, one Tab Center menu state/evidence issue, and one NTP search target wording issue that did not trigger the bottom-omnibox fallback.
 
 Recommended next steps:
 
-- The runner should capture the current accessibility tree.
-- The runner needs a semantic target resolver that maps `target` descriptions to stable locator strategies.
-- The runner needs repair classification for missing elements, page-not-ready states, wrong states, missing preconditions, unsupported visual assertions, and conversion gaps.
-- Non-vision models must not fall back to screenshot coordinate guessing.
-
+- For team validation, run Android cases excluding `codex-skip` and keep per-step page source / screenshot evidence.
+- Add the lightweight `assertWithAI` or screenshot visual assertion path to the runner.
+- Keep the accessibility-first rule: failed location should enter resolver/repair, not screenshot coordinate guessing under non-vision models.
+- Revisit rewards/default-browser after account and system-state preconditions are explicitly controlled.
