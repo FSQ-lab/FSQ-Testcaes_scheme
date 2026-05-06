@@ -8,6 +8,11 @@ tags:
 - codex-converted
 ---
 - launchApp
+- assertVisible:
+    target: New Tab Page account menu
+    locator:
+      accessibilityId: Account menu
+    optional: false
 - tapOn:
     target: I enter tab center by clicking on the tab center icon
     locator:

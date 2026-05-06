@@ -8,6 +8,11 @@ tags:
 - codex-converted
 ---
 - launchApp
+- assertVisible:
+    target: New Tab Page account menu
+    locator:
+      accessibilityId: Account menu
+    optional: false
 - tapOn:
     target: Search box in NTP page
     locator:

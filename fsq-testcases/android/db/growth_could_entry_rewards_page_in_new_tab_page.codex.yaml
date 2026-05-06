@@ -10,6 +10,11 @@ tags:
 ---
 - launchApp
 - assertVisible:
+    target: New Tab Page account menu
+    locator:
+      accessibilityId: Account menu
+    optional: false
+- assertVisible:
     target: Signed-in account entry on NTP page
     locator:
       resourceId: com.microsoft.emmx:id/edge_account_image_view
