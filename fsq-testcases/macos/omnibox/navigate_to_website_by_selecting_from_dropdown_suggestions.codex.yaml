@@ -3,6 +3,8 @@ name: Navigate to website by selecting from dropdown suggestions
 description: Converted from Edge Mac Behave BDD scenario.
 platform: macos
 appId: com.microsoft.edgemac
+runner:
+  backend: appium-mcp
 tags:
 - p0
 - ominibox

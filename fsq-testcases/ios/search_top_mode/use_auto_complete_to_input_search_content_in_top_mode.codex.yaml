@@ -3,6 +3,8 @@ name: Use auto complete to input search content in top mode
 description: Converted from Edge iOS Behave BDD scenario.
 platform: ios
 appId: com.microsoft.msedge
+runner:
+  backend: appium-mcp
 tags:
 - p0
 - codex-converted

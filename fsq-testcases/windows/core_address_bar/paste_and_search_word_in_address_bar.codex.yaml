@@ -1,0 +1,51 @@
+schemaVersion: fsq.ai-test/v1
+name: Paste and Search word in address bar
+description: Converted from Edge Windows Behave BDD scenario.
+platform: windows
+app:
+  name: edge
+  exe: C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe
+  windowTitleRegex: .*Microsoft Edge.*
+runner:
+  backend: pywinauto-mcp
+tags:
+- search
+- regression
+- p0
+- codex-converted
+---
+- launchApp
+- inputText:
+    text: cat
+    target: Address bar clipboard staging field
+    locator:
+      className: OmniboxViewViews
+      controlType: Edit
+- pressKey:
+    key: A
+    modifiers: [Control]
+- pressKey:
+    key: C
+    modifiers: [Control]
+- pressKey: Delete
+- rightClickOn:
+    target: Address bar
+    locator:
+      className: OmniboxViewViews
+      controlType: Edit
+    timeout: 10000
+- tapOn:
+    target: Paste and search for cat
+    locator:
+      name: Paste and search for
+      controlType: MenuItem
+    timeout: 10000
+- assertVisible:
+    target: search results page related to cat
+    locator:
+      automationId: RootWebArea
+      name: cat - Search
+      controlType: Document
+    timeout: 10000
+    optional: false
+- killApp

@@ -1,0 +1,65 @@
+schemaVersion: fsq.ai-test/v1
+name: Paste and Go to website in address bar
+description: Converted from Edge Windows Behave BDD scenario.
+platform: windows
+app:
+  name: edge
+  exe: C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe
+  windowTitleRegex: .*Microsoft Edge.*
+runner:
+  backend: pywinauto-mcp
+tags:
+- navigation
+- regression
+- p0
+- codex-converted
+---
+- launchApp
+- inputText:
+    text: https://www.apple.com
+    target: Address bar clipboard staging field
+    locator:
+      className: OmniboxViewViews
+      controlType: Edit
+- pressKey:
+    key: A
+    modifiers: [Control]
+- pressKey:
+    key: C
+    modifiers: [Control]
+- pressKey: Delete
+- rightClickOn:
+    target: Address bar
+    locator:
+      className: OmniboxViewViews
+      controlType: Edit
+    timeout: 10000
+- tapOn:
+    target: Paste and go to https://www.apple.com
+    locator:
+      name: Paste and go to https://www.apple.com
+      controlType: MenuItem
+    timeout: 10000
+- assertVisible:
+    target: Apple tab
+    locator:
+      name: Apple
+      controlType: TabItem
+    timeout: 10000
+    optional: false
+- assert:
+    element:
+      className: OmniboxViewViews
+      controlType: Edit
+    text:
+      contains: https://www.apple.com
+    optional: false
+- assertVisible:
+    target: Apple page document
+    locator:
+      automationId: RootWebArea
+      name: Apple
+      controlType: Document
+    timeout: 10000
+    optional: false
+- killApp

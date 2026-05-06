@@ -15,19 +15,11 @@ tags:
 - codex-converted
 ---
 - launchApp
-- tapOn:
-    target: Address bar
-    locator:
-      name: Address and search bar
-      controlType: Edit
-    timeout: 10000
-- inputText:
-    text: https://www.apple.com
-    target: Address bar
-    locator:
-      name: Address and search bar
-      controlType: Edit
-- pressKey: Enter
+- executeMethod:
+    script: native_navigate
+    args:
+      url: https://www.apple.com
+      timeout: 5000
 - assert:
     element:
       name: https://www.apple.com
@@ -37,7 +29,9 @@ tags:
     optional: false
 - tapOn:
     target: select all text in address bar
-- pressKey: Enter
+- pressKey:
+    key: A
+    modifiers: [Control]
 - pressKey: Backspace
 - tapOn:
     target: Address bar

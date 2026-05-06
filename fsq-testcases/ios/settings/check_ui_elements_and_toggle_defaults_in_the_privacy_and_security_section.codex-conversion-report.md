@@ -31,6 +31,30 @@ Codex-produced conversion report.
 | `When I click on "Done" button on the top right corner` | `tapOn` | Converted from matched step implementation. |
 | `Then I am landing on new tab page` | `assertVisible` | Converted from matched step implementation. |
 
+## BDD Execution Model
+
+- Converted using the latest Codex FSQ Case Converter rule: feature scenario supplies intent and order; Behave step implementations supply executable operations, locators, assertions, waits, and helper behavior.
+- Effective steps include Gherkin Background plus scenario steps when present.
+- `features/steps/**/*.py` is treated as the global Behave step registry; matching is by exact or parameterized decorator before semantic fallback.
+
+## Hook Normalization
+| Hook | Classification | Converted? | Notes |
+| --- | --- | --- | --- |
+| `before_all` / Appium session setup | runner lifecycle / environment requirements | No | Keep Appium/MCP session creation and telemetry out of case YAML. |
+| `before_scenario` / setup helpers | setup/state guarantee | Partial | Material app launch/NTP assumptions are represented by `launchApp`; optional dialogs remain runner repair/evidence unless safely expressible. |
+| `after_scenario` / result capture | runtime evidence | No | Screenshots, reports, and logs are not converted into case commands. |
+
+## Environment Requirements
+
+- iOS Edge app installed and launchable with Appium 3.x MCP.
+- Account credentials are required only for account/MSA/rewards flows and are not written into YAML.
+- Source runtime screenshots/logs are runner evidence, not case commands.
+
+## Step Expansion Evidence
+| Source step | Expanded steps | Implementation evidence |
+| --- | --- | --- |
+| Scenario steps | none or already reflected in Step Implementation Evidence | No unresolved `context.execute_steps()` expansion was identified during this report upgrade; any material setup/precondition is documented in Hook Normalization or Unresolved items. |
+
 ## Step Implementation Evidence
 
 | Source step | Implementation file:line | Extracted operations |

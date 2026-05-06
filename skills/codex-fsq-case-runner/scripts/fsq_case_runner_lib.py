@@ -59,6 +59,7 @@ def discover_cases(
     platform: str | None = None,
     area: str | None = None,
     tags: list[str] | None = None,
+    exclude_tags: list[str] | None = None,
     limit: int | None = None,
 ) -> list[dict[str, Any]]:
     root = Path(cases_root)
@@ -68,13 +69,17 @@ def discover_cases(
         paths = sorted(root.glob("**/*.codex.yaml"))
     selected: list[dict[str, Any]] = []
     required_tags = set(tags or [])
+    blocked_tags = set(exclude_tags or [])
     for path in paths:
         meta = load_case_metadata(path)
+        case_tags = set(meta.get("tags", []))
         if platform and meta.get("platform") != platform:
             continue
         if area and meta.get("area") != area:
             continue
-        if required_tags and not required_tags.issubset(set(meta.get("tags", []))):
+        if required_tags and not required_tags.issubset(case_tags):
+            continue
+        if blocked_tags and blocked_tags.intersection(case_tags):
             continue
         selected.append(meta)
         if limit is not None and len(selected) >= limit:

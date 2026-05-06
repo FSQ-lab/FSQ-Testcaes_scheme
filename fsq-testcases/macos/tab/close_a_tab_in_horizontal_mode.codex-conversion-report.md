@@ -21,16 +21,40 @@ Codex-produced conversion report.
 
 | Source step | FSQ command | Notes |
 | --- | --- | --- |
-| `Given Edge is launched` | `tapOn` | Converted from matched step implementation. |
+| `Given Edge is launched` | `launchApp` | Converted from launch helper; temp profile setup remains runner-owned. |
 | `When I new a tab and navigate to "https://www.apple.com"` | `tapOn, tapOn, inputText, pressKey` | Converted from matched step implementation. |
 | `And I click the "Close Tab" button on tab header` | `tapOn` | Converted from matched step implementation. |
 | `Then the "Apple" tab should be closed` | `assertNotVisible` | Converted from matched step implementation. |
+
+## BDD Execution Model
+
+- Converted using the latest Codex FSQ Case Converter rule: feature scenario supplies intent and order; Behave step implementations supply executable operations, locators, assertions, waits, and helper behavior.
+- Effective steps include Gherkin Background plus scenario steps when present.
+- `features/steps/**/*.py` is treated as the global Behave step registry; matching is by exact or parameterized decorator before semantic fallback.
+
+## Hook Normalization
+| Hook | Classification | Converted? | Notes |
+| --- | --- | --- | --- |
+| `Edge is launched` helper | setup/state guarantee | Partial | Converted to `launchApp`; temp profile arguments and system-dialog handling remain runner setup requirements. |
+| environment/MCP startup | runner lifecycle | No | Appium/MCP session creation belongs to runner. |
+| screenshot/log/report hooks | runtime evidence | No | Evidence collection is not encoded in case YAML. |
+
+## Environment Requirements
+
+- macOS Edge app installed and launchable with the Appium 3.x MCP runner.
+- Source temp-profile setup and macOS system dialog handling are runner setup requirements.
+- External downloads, account state, or filesystem cleanup are unresolved unless a safe runner command exists.
+
+## Step Expansion Evidence
+| Source step | Expanded steps | Implementation evidence |
+| --- | --- | --- |
+| Scenario steps | none or already reflected in Step Implementation Evidence | No unresolved `context.execute_steps()` expansion was identified during this report upgrade; any material setup/precondition is documented in Hook Normalization or Unresolved items. |
 
 ## Step Implementation Evidence
 
 | Source step | Implementation file:line | Extracted operations |
 | --- | --- | --- |
-| `Given Edge is launched` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_Mac/features/steps/common/common.py:154` | operations=semantic/no direct tool call detected |
+| `Given Edge is launched` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_Mac/features/steps/common/common.py:154` | operations=app_launch via launch_edge_implementation; temp profile setup runner-owned |
 | `When I new a tab and navigate to "https://www.apple.com"` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_Mac/features/steps/tab/tab.py:8` | operations=click_element, click_element, send_keys, press_key, app_state, find_element; locator={"xpath": "//XCUIElementTypeButton[@label='New Tab']"} |
 | `And I click the "Close Tab" button on tab header` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_Mac/features/steps/tab/tab.py:114` | operations=click_element, app_state; locator={"xpath": "//XCUIElementTypeTab[@label='Apple' and @selected='true']//XCUIElementTypeButton[@label='Close tab']"} |
 | `Then the "Apple" tab should be closed` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_Mac/features/steps/tab/tab.py:152` | operations=verify_element_not_exists; locator={"xpath": "//XCUIElementTypeTab[@label='Apple']"} |

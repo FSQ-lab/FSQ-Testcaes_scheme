@@ -6,6 +6,7 @@ appId: com.microsoft.emmx
 tags:
 - p0
 - codex-converted
+- codex-skip
 ---
 - launchApp
 - assertVisible:

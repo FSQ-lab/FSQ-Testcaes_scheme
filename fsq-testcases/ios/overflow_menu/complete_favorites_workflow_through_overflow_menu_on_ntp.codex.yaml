@@ -1,0 +1,47 @@
+schemaVersion: fsq.ai-test/v1
+name: Complete favorites workflow through overflow menu on NTP
+description: Converted from Edge iOS Behave BDD scenario.
+platform: ios
+appId: com.microsoft.msedge
+runner:
+  backend: appium-mcp
+tags:
+- overflow_menu
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: overflow menu button
+    locator:
+      accessibilityId: kLegacyToolbarToolsMenuButtonIdentifier
+    timeout: 10000
+- tapOn:
+    target: Favorites option
+    locator:
+      xpath: (//XCUIElementTypeCell[@name='Favourites' or @name='Favorites'])
+    timeout: 10000
+- assertVisible:
+    target: Favorites panel navigation bar
+    locator:
+      xpath: //XCUIElementTypeNavigationBar[@name='Favorites']
+    timeout: 10000
+    optional: false
+- assert:
+    element:
+      xpath: //XCUIElementTypeNavigationBar[@name='Favorites']/XCUIElementTypeStaticText[@value='Favorites']
+    text:
+      contains: Favorites
+    optional: false
+- tapOn:
+    target: Done button in Favorites panel
+    locator:
+      xpath: //XCUIElementTypeButton[@name='kBookmarksHomeNavigationBarDoneButtonIdentifier']
+    timeout: 10000
+- assertVisible:
+    target: NTP collection view
+    locator:
+      name: NTPCollectionViewIdentifier
+    timeout: 10000
+    optional: false
+- killApp

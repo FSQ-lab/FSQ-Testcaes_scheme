@@ -32,6 +32,30 @@ Codex-produced conversion report.
 | `When I click on "Downloads" button on the settings page to turn it off` | `tapOn` | Converted from matched step implementation. |
 | `Then the Downloads button should be hidden on the toolbar` | `assertNotVisible` | Converted from matched step implementation. |
 
+## BDD Execution Model
+
+- Converted using the latest Codex FSQ Case Converter rule: feature scenario supplies intent and order; Behave step implementations supply executable operations, locators, assertions, waits, and helper behavior.
+- Effective steps include Gherkin Background plus scenario steps when present.
+- `features/steps/**/*.py` is treated as the global Behave step registry; matching is by exact or parameterized decorator before semantic fallback.
+
+## Hook Normalization
+| Hook | Classification | Converted? | Notes |
+| --- | --- | --- | --- |
+| `before_all` MCP startup | runner lifecycle / environment requirements | No | Starts pywinauto MCP and telemetry; keep out of case YAML. |
+| Background `I launch Edge with empty user data directory` | setup/state guarantee | Partial | Represented by `launchApp`; temp user-data-dir creation is runner responsibility unless a dedicated command exists. |
+| screenshot/telemetry hooks | runtime evidence | No | Failure screenshots, logs, and telemetry remain runner/evidence behavior. |
+
+## Environment Requirements
+
+- Windows Edge app available through the pywinauto MCP backend.
+- Temporary user data directory setup from the Behave source is runner setup unless a dedicated DSL/runner method is provided.
+- `native_navigate` source steps must be executed through the Windows runner contract, represented as `executeMethod: native_navigate`.
+
+## Step Expansion Evidence
+| Source step | Expanded steps | Implementation evidence |
+| --- | --- | --- |
+| Scenario steps | none or already reflected in Step Implementation Evidence | No unresolved `context.execute_steps()` expansion was identified during this report upgrade; any material setup/precondition is documented in Hook Normalization or Unresolved items. |
+
 ## Step Implementation Evidence
 
 | Source step | Implementation file:line | Extracted operations |

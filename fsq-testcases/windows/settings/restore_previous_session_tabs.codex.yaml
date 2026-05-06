@@ -51,40 +51,24 @@ tags:
       name: New Tab
       controlType: Button
     timeout: 10000
-- tapOn:
-    target: Address bar
-    locator:
-      name: Address and search bar
-      controlType: Edit
-    timeout: 10000
-- inputText:
-    text: https://www.bbc.com
-    target: Address bar
-    locator:
-      name: Address and search bar
-      controlType: Edit
-- pressKey: Enter
+- executeMethod:
+    script: native_navigate
+    args:
+      url: https://www.bbc.com
+      timeout: 5000
 - tapOn:
     target: open a new tab
     locator:
       name: New Tab
       controlType: Button
     timeout: 10000
-- tapOn:
-    target: Address bar
-    locator:
-      name: Address and search bar
-      controlType: Edit
-    timeout: 10000
-- inputText:
-    text: https://www.apple.com
-    target: Address bar
-    locator:
-      name: Address and search bar
-      controlType: Edit
-- pressKey: Enter
-- tapOn:
-    target: close and restart Edge
+- executeMethod:
+    script: native_navigate
+    args:
+      url: https://www.apple.com
+      timeout: 5000
+- killApp
+- launchApp
 - assertVisible:
     target: previously "https://www.bbc.com" and "https://www.apple.com" tabs should
       be opened

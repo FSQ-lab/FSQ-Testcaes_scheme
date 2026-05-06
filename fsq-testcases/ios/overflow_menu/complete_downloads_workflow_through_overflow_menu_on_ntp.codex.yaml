@@ -1,0 +1,47 @@
+schemaVersion: fsq.ai-test/v1
+name: Complete downloads workflow through overflow menu on NTP
+description: Converted from Edge iOS Behave BDD scenario.
+platform: ios
+appId: com.microsoft.msedge
+runner:
+  backend: appium-mcp
+tags:
+- overflow_menu
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: overflow menu button
+    locator:
+      accessibilityId: kLegacyToolbarToolsMenuButtonIdentifier
+    timeout: 10000
+- tapOn:
+    target: Downloads option
+    locator:
+      xpath: //XCUIElementTypeCell[@name='Downloads']
+    timeout: 10000
+- assertVisible:
+    target: Downloads panel
+    locator:
+      name: Download Manager
+    timeout: 10000
+    optional: false
+- assertVisible:
+    target: Downloads panel title
+    locator:
+      xpath: //XCUIElementTypeStaticText[@value='Downloads']
+    timeout: 10000
+    optional: false
+- tapOn:
+    target: Done button in Downloads panel
+    locator:
+      xpath: //XCUIElementTypeButton[@name="Done" and @visible="true"]
+    timeout: 10000
+- assertVisible:
+    target: NTP collection view
+    locator:
+      name: NTPCollectionViewIdentifier
+    timeout: 10000
+    optional: false
+- killApp

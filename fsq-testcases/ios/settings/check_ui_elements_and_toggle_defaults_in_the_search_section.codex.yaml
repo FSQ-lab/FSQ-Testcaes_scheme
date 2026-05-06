@@ -3,6 +3,8 @@ name: Check UI elements and toggle defaults in the "Search" section
 description: Converted from Edge iOS Behave BDD scenario.
 platform: ios
 appId: com.microsoft.msedge
+runner:
+  backend: appium-mcp
 tags:
 - settings
 - p0

@@ -1,0 +1,62 @@
+schemaVersion: fsq.ai-test/v1
+name: Exit browser with confirmation - Cancel option
+description: Converted from Edge Android Behave BDD scenario.
+platform: android
+appId: com.microsoft.emmx
+tags:
+- p0
+- codex-converted
+---
+- launchApp
+- assertVisible:
+    target: New Tab Page account menu
+    locator:
+      accessibilityId: Account menu
+    optional: false
+- tapOn:
+    target: Browser menu
+    locator:
+      resourceId: com.microsoft.emmx:id/overflow_button_bottom
+- performActions:
+  - type: pointer
+    id: codex-menu-page-swipe
+    parameters:
+      pointerType: touch
+    actions:
+    - type: pointerMove
+      origin: viewport
+      x: 800
+      y: 1900
+    - type: pointerDown
+      button: 0
+    - type: pointerMove
+      origin: viewport
+      x: 200
+      y: 1900
+      duration: 1000
+    - type: pointerUp
+      button: 0
+- tapOn:
+    target: Exit browser
+    locator:
+      xpath: "//android.widget.TextView[@text='Exit browser']"
+- assertVisible:
+    target: Exit Microsoft Edge confirmation dialog
+    locator:
+      xpath: "//android.widget.TextView[@text='Exit Microsoft Edge?']"
+    optional: false
+- tapOn:
+    target: Cancel in confirmation dialog
+    locator:
+      xpath: "//android.widget.Button[@text='Cancel']"
+- assertNotVisible:
+    target: Exit Microsoft Edge confirmation dialog
+    locator:
+      xpath: "//android.widget.TextView[@text='Exit Microsoft Edge?']"
+    optional: false
+- assertVisible:
+    target: New Tab Page
+    locator:
+      resourceId: com.microsoft.emmx:id/edge_ntp_scrollview
+    optional: false
+- killApp

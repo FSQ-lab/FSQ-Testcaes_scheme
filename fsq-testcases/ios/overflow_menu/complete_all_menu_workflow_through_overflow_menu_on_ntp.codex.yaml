@@ -1,0 +1,76 @@
+schemaVersion: fsq.ai-test/v1
+name: Complete all menu workflow through overflow menu on NTP
+description: Converted from Edge iOS Behave BDD scenario.
+platform: ios
+appId: com.microsoft.msedge
+runner:
+  backend: appium-mcp
+tags:
+- overflow_menu
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: overflow menu button
+    locator:
+      accessibilityId: kLegacyToolbarToolsMenuButtonIdentifier
+    timeout: 10000
+- performActions:
+  - type: pointer
+    id: finger1
+    parameters:
+      pointerType: touch
+    actions:
+    - type: pointerMove
+      duration: 0
+      origin: viewport
+      x: 350
+      y: 640
+    - type: pointerDown
+      button: 0
+    - type: pointerMove
+      duration: 1000
+      origin: viewport
+      x: 50
+      y: 640
+    - type: pointerUp
+      button: 0
+- tapOn:
+    target: All menu option
+    locator:
+      predicate: name == "All Menu" AND type == "XCUIElementTypeCell"
+    timeout: 10000
+- assertVisible:
+    target: All Menu panel
+    locator:
+      name: All Menu
+    timeout: 10000
+    optional: false
+- performActions:
+  - type: pointer
+    id: finger1
+    parameters:
+      pointerType: touch
+    actions:
+    - type: pointerMove
+      duration: 0
+      origin: viewport
+      x: 196
+      y: 200
+    - type: pointerDown
+      button: 0
+    - type: pointerMove
+      duration: 500
+      origin: viewport
+      x: 196
+      y: 600
+    - type: pointerUp
+      button: 0
+- assertVisible:
+    target: NTP collection view
+    locator:
+      name: NTPCollectionViewIdentifier
+    timeout: 10000
+    optional: false
+- killApp

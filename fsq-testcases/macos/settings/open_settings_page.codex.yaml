@@ -3,6 +3,8 @@ name: Open settings page
 description: Converted from Edge Mac Behave BDD scenario.
 platform: macos
 appId: com.microsoft.edgemac
+runner:
+  backend: appium-mcp
 tags:
 - regression
 - p0

@@ -16,13 +16,14 @@ def main() -> int:
     parser.add_argument("--platform", help="Filter by platform")
     parser.add_argument("--area", help="Filter by area directory")
     parser.add_argument("--tag", action="append", default=[], help="Require tag; repeatable")
+    parser.add_argument("--exclude-tag", action="append", default=[], help="Exclude tag; repeatable")
     parser.add_argument("--limit", type=int, help="Maximum number of cases")
     parser.add_argument("--schema", default="docs/codex-fsq-ai-test-dsl-v1.schema.json", help="FSQ schema path")
     parser.add_argument("--output-root", default="runs", help="Run output root")
     parser.add_argument("--run-id", help="Run id; defaults to codex timestamp")
     args = parser.parse_args()
 
-    cases = discover_cases(args.cases, args.platform, args.area, args.tag, args.limit)
+    cases = discover_cases(args.cases, args.platform, args.area, args.tag, args.exclude_tag, args.limit)
     if not cases:
         print("No cases matched selection.", file=sys.stderr)
         return 1

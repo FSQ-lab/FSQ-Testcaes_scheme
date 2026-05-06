@@ -3,6 +3,8 @@ name: Exit search process and Navigate back to NTP
 description: Converted from Edge iOS Behave BDD scenario.
 platform: ios
 appId: com.microsoft.msedge
+runner:
+  backend: appium-mcp
 tags:
 - p0
 - codex-converted

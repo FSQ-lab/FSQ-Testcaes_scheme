@@ -16,11 +16,12 @@ def main() -> int:
     parser.add_argument("--platform", help="Filter by platform")
     parser.add_argument("--area", help="Filter by area directory")
     parser.add_argument("--tag", action="append", default=[], help="Require tag; repeatable")
+    parser.add_argument("--exclude-tag", action="append", default=[], help="Exclude tag; repeatable")
     parser.add_argument("--limit", type=int, help="Maximum number of cases")
     parser.add_argument("--json", action="store_true", help="Emit JSON")
     args = parser.parse_args()
 
-    cases = discover_cases(args.cases, args.platform, args.area, args.tag, args.limit)
+    cases = discover_cases(args.cases, args.platform, args.area, args.tag, args.exclude_tag, args.limit)
     if args.json:
         print(json.dumps(cases, indent=2, sort_keys=True))
         return 0

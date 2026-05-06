@@ -33,9 +33,9 @@ tags:
       contains: Settings
     optional: false
 - tapOn:
-    target: Close Settings panel
+    target: Navigate up from Settings page
     locator:
-      resourceId: com.microsoft.emmx:id/close_button
+      accessibilityId: Navigate up
 - assertVisible:
     target: New Tab Page
     locator:

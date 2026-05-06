@@ -3,6 +3,8 @@ name: Type URL by autocompleting to navigate directly to site
 description: Converted from Edge Mac Behave BDD scenario.
 platform: macos
 appId: com.microsoft.edgemac
+runner:
+  backend: appium-mcp
 tags:
 - p0
 - ominibox

@@ -21,6 +21,7 @@ import yaml
 from appium import webdriver
 from appium.options.android import UiAutomator2Options
 from appium.webdriver.common.appiumby import AppiumBy
+from selenium.webdriver.remote.command import Command
 from selenium.common.exceptions import NoSuchElementException, TimeoutException, WebDriverException
 
 
@@ -42,6 +43,8 @@ TARGET_ALIASES: dict[str, list[tuple[str, str]]] = {
     "drop": [("desc_contains", "Drop"), ("text_contains", "Drop")],
     "edit": [("desc_contains", "Edit"), ("text_contains", "Edit"), ("desc_contains", "编辑"), ("text_contains", "编辑")],
     "done": [("desc_contains", "Done"), ("text_contains", "Done"), ("desc_contains", "完成"), ("text_contains", "完成")],
+    "move address bar to bottom": [("text_contains", "Move address bar to the bottom"), ("desc_contains", "Move address bar to the bottom"), ("text_contains", "Move address bar to bottom")],
+    "move address bar to top": [("text_contains", "Move address bar to the top"), ("desc_contains", "Move address bar to the top"), ("text_contains", "Move address bar to top")],
 }
 
 ASSERT_HINTS = (
@@ -113,6 +116,10 @@ def by_spec(spec: tuple[str, str]) -> tuple[str, str]:
     kind, value = spec
     if kind == "id":
         return (AppiumBy.ID, value)
+    if kind == "accessibility_id":
+        return (AppiumBy.ACCESSIBILITY_ID, value)
+    if kind == "xpath":
+        return (AppiumBy.XPATH, value)
     if kind == "class":
         return (AppiumBy.CLASS_NAME, value)
     if kind == "text":
@@ -126,11 +133,32 @@ def by_spec(spec: tuple[str, str]) -> tuple[str, str]:
     raise ValueError(f"Unsupported locator spec: {spec}")
 
 
+def locator_specs(locator: Any) -> list[tuple[str, str]]:
+    if not isinstance(locator, dict):
+        return []
+    specs: list[tuple[str, str]] = []
+    if locator.get("resourceId"):
+        specs.append(("id", str(locator["resourceId"])))
+    if locator.get("id"):
+        specs.append(("id", str(locator["id"])))
+    if locator.get("accessibilityId"):
+        specs.append(("accessibility_id", str(locator["accessibilityId"])))
+    if locator.get("xpath"):
+        specs.append(("xpath", str(locator["xpath"])))
+    if locator.get("text"):
+        specs.append(("text", str(locator["text"])))
+    if locator.get("name"):
+        specs.append(("desc", str(locator["name"])))
+    if locator.get("className"):
+        specs.append(("class", str(locator["className"])))
+    return specs
+
+
 def resolve_aliases(target: str) -> list[tuple[str, str]]:
     normalized = str(target or "").strip()
     low = normalized.lower()
     aliases: list[tuple[str, str]] = []
-    for key, specs in TARGET_ALIASES.items():
+    for key, specs in sorted(TARGET_ALIASES.items(), key=lambda item: len(item[0]), reverse=True):
         if key in low:
             aliases.extend(specs)
     if not aliases and normalized:
@@ -141,6 +169,21 @@ def resolve_aliases(target: str) -> list[tuple[str, str]]:
             ("desc", normalized),
         ])
     return aliases
+
+
+def is_ntp_search_entry_locator(target: str, locator: Any) -> bool:
+    if not isinstance(locator, dict):
+        return False
+    if locator.get("resourceId") != "com.microsoft.emmx:id/search_box_text":
+        return False
+    low = str(target or "").lower()
+    return "ntp" in low and ("search" in low or "address bar" in low)
+
+
+def is_navigate_up_locator(target: str, locator: Any) -> bool:
+    if not isinstance(locator, dict):
+        return False
+    return locator.get("accessibilityId") == "Navigate up" or str(target or "").strip().lower() == "navigate up"
 
 
 def element_metadata(element: Any) -> dict[str, Any]:
@@ -157,12 +200,14 @@ def element_metadata(element: Any) -> dict[str, Any]:
     return data
 
 
-def find_target(driver: webdriver.Remote, target: str, timeout: float = 8) -> tuple[Any, dict[str, Any]]:
+def find_target(driver: webdriver.Remote, target: str, timeout: float = 8, locator: Any = None) -> tuple[Any, dict[str, Any]]:
     deadline = time.time() + timeout
     attempts: list[dict[str, str]] = []
     last_error = ""
+    explicit_specs = locator_specs(locator)
+    specs = explicit_specs or resolve_aliases(target)
     while time.time() < deadline:
-        for spec in resolve_aliases(target):
+        for spec in specs:
             by, value = by_spec(spec)
             attempts.append({"kind": spec[0], "value": spec[1]})
             try:
@@ -179,10 +224,17 @@ def is_assert_like(target: str) -> bool:
     return any(hint in low for hint in ASSERT_HINTS) or low.startswith("the ")
 
 
-def assert_visible(driver: webdriver.Remote, target: str) -> dict[str, Any]:
+def assert_visible(driver: webdriver.Remote, target: str, locator: Any = None) -> dict[str, Any]:
     normalized = str(target or "").strip()
     candidates = re.findall(r'"([^"]+)"', normalized) + [normalized]
     errors: list[str] = []
+    if locator_specs(locator):
+        try:
+            element, resolution = find_target(driver, target, locator=locator)
+            if element.is_displayed():
+                return resolution
+        except Exception as exc:
+            errors.append(repr(exc))
     for candidate in candidates:
         try:
             element, resolution = find_target(driver, candidate)
@@ -195,9 +247,9 @@ def assert_visible(driver: webdriver.Remote, target: str) -> dict[str, Any]:
     raise AssertionError(f"Visible assertion failed: {target}; attempts={errors[:3]}")
 
 
-def assert_not_visible(driver: webdriver.Remote, target: str) -> dict[str, Any]:
+def assert_not_visible(driver: webdriver.Remote, target: str, locator: Any = None) -> dict[str, Any]:
     try:
-        element, resolution = find_target(driver, target, timeout=3)
+        element, resolution = find_target(driver, target, timeout=3, locator=locator)
         if element.is_displayed():
             raise AssertionError(f"Not-visible assertion failed: {target}")
         return resolution
@@ -219,8 +271,79 @@ def swipe(driver: webdriver.Remote, direction: str, duration: int = 500) -> None
         driver.swipe(int(width * 0.25), height // 2, int(width * 0.78), height // 2, duration)
 
 
-def click_target(driver: webdriver.Remote, target: str) -> dict[str, Any]:
+def normalize_actions(actions: Any) -> list[dict[str, Any]]:
+    normalized: list[dict[str, Any]] = []
+    for source in actions if isinstance(actions, list) else []:
+        if not isinstance(source, dict):
+            continue
+        next_source = dict(source)
+        next_actions: list[dict[str, Any]] = []
+        for action in source.get("actions", []):
+            if not isinstance(action, dict):
+                continue
+            next_action = dict(action)
+            if next_action.get("type") == "pointerMove" and "duration" not in next_action:
+                next_action["duration"] = 0
+            next_actions.append(next_action)
+        next_source["actions"] = next_actions
+        normalized.append(next_source)
+    return normalized
+
+
+def perform_w3c_actions(driver: webdriver.Remote, actions: Any) -> dict[str, Any]:
+    normalized = normalize_actions(actions)
+    if not normalized:
+        return {"matched": {"kind": "w3cActions", "value": 0}}
+    driver.execute(Command.W3C_ACTIONS, {"actions": normalized})
+    driver.execute(Command.W3C_CLEAR_ACTIONS)
+    return {"matched": {"kind": "w3cActions", "value": len(normalized)}}
+
+
+def rect_center(rect: dict[str, Any]) -> tuple[int, int]:
+    return (int(rect["x"]) + int(rect["width"]) // 2, int(rect["y"]) + int(rect["height"]) // 2)
+
+
+def long_press_target(driver: webdriver.Remote, target: str, locator: Any = None, duration_ms: int = 1000) -> dict[str, Any]:
+    element, resolution = find_target(driver, target, locator=locator)
+    x, y = rect_center(element.rect)
+    actions = [
+        {
+            "type": "pointer",
+            "id": "codex-long-press",
+            "parameters": {"pointerType": "touch"},
+            "actions": [
+                {"type": "pointerMove", "duration": 0, "origin": "viewport", "x": x, "y": y},
+                {"type": "pointerDown", "button": 0},
+                {"type": "pause", "duration": duration_ms},
+                {"type": "pointerUp", "button": 0},
+            ],
+        }
+    ]
+    perform_w3c_actions(driver, actions)
+    return {**resolution, "point": {"x": x, "y": y}, "durationMs": duration_ms}
+
+
+def click_target(driver: webdriver.Remote, target: str, locator: Any = None) -> dict[str, Any]:
     low = str(target or "").lower()
+    if locator_specs(locator):
+        before_source = driver.page_source if is_navigate_up_locator(target, locator) else None
+        try:
+            timeout = 3 if is_ntp_search_entry_locator(target, locator) else 8
+            element, resolution = find_target(driver, target, timeout=timeout, locator=locator)
+        except ResolutionError:
+            if not is_ntp_search_entry_locator(target, locator):
+                raise
+            element, resolution = find_target(driver, target, timeout=4, locator={"resourceId": "com.microsoft.emmx:id/url_bar"})
+            resolution["repair"] = {"kind": "ntpSearchBoxFallback", "from": "search_box_text", "to": "url_bar"}
+        element.click()
+        if before_source is not None:
+            time.sleep(0.5)
+            after_source = driver.page_source
+            if after_source == before_source:
+                driver.press_keycode(4)
+                time.sleep(0.5)
+                resolution["repair"] = {"kind": "backKeyAfterUnchangedNavigateUp"}
+        return resolution
     if "press enter" in low or low == "go":
         driver.press_keycode(66)
         return {"target": target, "matched": {"kind": "keycode", "value": "ENTER"}}
@@ -246,9 +369,9 @@ def click_target(driver: webdriver.Remote, target: str) -> dict[str, Any]:
     return resolution
 
 
-def input_text(driver: webdriver.Remote, target: str, text: str) -> dict[str, Any]:
+def input_text(driver: webdriver.Remote, target: str, text: str, locator: Any = None) -> dict[str, Any]:
     try:
-        element, resolution = find_target(driver, target, timeout=4)
+        element, resolution = find_target(driver, target, timeout=4, locator=locator)
         element.click()
     except Exception:
         element = driver.switch_to.active_element
@@ -285,9 +408,15 @@ def execute_command(driver: webdriver.Remote, app_id: str, command: Any) -> tupl
     name, value = next(iter(command.items()))
     if name == "tapOn":
         target = value.get("target") if isinstance(value, dict) else value
-        return f"tapOn:{target}", click_target(driver, str(target))
+        locator = value.get("locator") if isinstance(value, dict) else None
+        return f"tapOn:{target}", click_target(driver, str(target), locator)
     if name == "inputText":
-        return f"inputText:{value.get('target')}", input_text(driver, value.get("target", "Search box"), value.get("text", ""))
+        return f"inputText:{value.get('target')}", input_text(driver, value.get("target", "Search box"), value.get("text", ""), value.get("locator"))
+    if name == "longPressOn":
+        target = value.get("target") if isinstance(value, dict) else value
+        locator = value.get("locator") if isinstance(value, dict) else None
+        duration = int(value.get("duration", 1000)) if isinstance(value, dict) else 1000
+        return f"longPressOn:{target}", long_press_target(driver, str(target), locator, duration)
     if name == "pressKey":
         key = str(value)
         if key.lower() in ("enter", "return"):
@@ -303,10 +432,12 @@ def execute_command(driver: webdriver.Remote, app_id: str, command: Any) -> tupl
         return f"swipe:{direction}", {"matched": {"kind": "gesture", "value": direction}}
     if name == "assertVisible":
         target = value.get("target") if isinstance(value, dict) else value
-        return f"assertVisible:{target}", assert_visible(driver, str(target))
+        locator = value.get("locator") if isinstance(value, dict) else None
+        return f"assertVisible:{target}", assert_visible(driver, str(target), locator)
     if name == "assertNotVisible":
         target = value.get("target") if isinstance(value, dict) else value
-        return f"assertNotVisible:{target}", assert_not_visible(driver, str(target))
+        locator = value.get("locator") if isinstance(value, dict) else None
+        return f"assertNotVisible:{target}", assert_not_visible(driver, str(target), locator)
     if name == "assert":
         if isinstance(value, dict) and "url" in value:
             expected = value["url"].get("contains") if isinstance(value["url"], dict) else value["url"]
@@ -321,13 +452,7 @@ def execute_command(driver: webdriver.Remote, app_id: str, command: Any) -> tupl
                     raise AssertionError(f"URL assertion failed: {expected}") from exc
         return "assert", {"matched": {"kind": "assertion", "value": "accepted"}}
     if name == "performActions":
-        max_pause = 0
-        for sequence in value if isinstance(value, list) else []:
-            for action in sequence.get("actions", []):
-                if action.get("type") == "pause":
-                    max_pause = max(max_pause, int(action.get("duration", 0)))
-        time.sleep(max_pause / 1000 if max_pause else 1)
-        return "performActions", {"matched": {"kind": "pause", "value": max_pause or 1000}}
+        return "performActions", perform_w3c_actions(driver, value)
     raise ValueError(f"Unsupported command: {name}")
 
 

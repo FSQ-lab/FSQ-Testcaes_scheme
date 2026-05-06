@@ -36,19 +36,11 @@ tags:
       name: New Tab
       controlType: Button
     timeout: 10000
-- tapOn:
-    target: Address bar
-    locator:
-      name: Address and search bar
-      controlType: Edit
-    timeout: 10000
-- inputText:
-    text: edge://settings
-    target: Address bar
-    locator:
-      name: Address and search bar
-      controlType: Edit
-- pressKey: Enter
+- executeMethod:
+    script: native_navigate
+    args:
+      url: edge://settings
+      timeout: 5000
 - assertVisible:
     target: settings page should be opened
     locator:

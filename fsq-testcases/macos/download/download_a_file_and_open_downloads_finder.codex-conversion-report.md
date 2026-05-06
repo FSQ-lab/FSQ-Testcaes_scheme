@@ -21,7 +21,7 @@ Codex-produced conversion report.
 
 | Source step | FSQ command | Notes |
 | --- | --- | --- |
-| `Given Edge is launched` | `tapOn` | Converted from matched step implementation. |
+| `Given Edge is launched` | `launchApp` | Converted from launch helper; temp profile setup remains runner-owned. |
 | `And I clean Edge downloads file "sample-1.pdf"` | `tapOn` | Converted from matched step implementation. |
 | `When I navigate to "https://getsamplefiles.com/download/pdf/sample-1.pdf"` | `tapOn, inputText, pressKey` | Converted from matched step implementation. |
 | `Then the Downloads panel should appear` | `assertVisible` | Converted from matched step implementation. |
@@ -31,12 +31,36 @@ Codex-produced conversion report.
 | `Then Analyze the screenshot to verify the Finder window should appear` | `assertWithAI` | Converted from matched step implementation. |
 | `And Analyze the screenshot to verify that the file "sample-1.pdf" is present in the Finder window` | `assertWithAI` | Converted from matched step implementation. |
 
+## BDD Execution Model
+
+- Converted using the latest Codex FSQ Case Converter rule: feature scenario supplies intent and order; Behave step implementations supply executable operations, locators, assertions, waits, and helper behavior.
+- Effective steps include Gherkin Background plus scenario steps when present.
+- `features/steps/**/*.py` is treated as the global Behave step registry; matching is by exact or parameterized decorator before semantic fallback.
+
+## Hook Normalization
+| Hook | Classification | Converted? | Notes |
+| --- | --- | --- | --- |
+| `Edge is launched` helper | setup/state guarantee | Partial | Converted to `launchApp`; temp profile arguments and system-dialog handling remain runner setup requirements. |
+| environment/MCP startup | runner lifecycle | No | Appium/MCP session creation belongs to runner. |
+| screenshot/log/report hooks | runtime evidence | No | Evidence collection is not encoded in case YAML. |
+
+## Environment Requirements
+
+- macOS Edge app installed and launchable with the Appium 3.x MCP runner.
+- Source temp-profile setup and macOS system dialog handling are runner setup requirements.
+- External downloads, account state, or filesystem cleanup are unresolved unless a safe runner command exists.
+
+## Step Expansion Evidence
+| Source step | Expanded steps | Implementation evidence |
+| --- | --- | --- |
+| Scenario steps | none or already reflected in Step Implementation Evidence | No unresolved `context.execute_steps()` expansion was identified during this report upgrade; any material setup/precondition is documented in Hook Normalization or Unresolved items. |
+
 ## Step Implementation Evidence
 
 | Source step | Implementation file:line | Extracted operations |
 | --- | --- | --- |
-| `Given Edge is launched` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_Mac/features/steps/common/common.py:154` | operations=semantic/no direct tool call detected |
-| `And I clean Edge downloads file "sample-1.pdf"` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_Mac/features/steps/common/common.py:289` | operations=semantic/no direct tool call detected |
+| `Given Edge is launched` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_Mac/features/steps/common/common.py:154` | operations=app_launch via launch_edge_implementation; temp profile setup runner-owned |
+| `And I clean Edge downloads file "sample-1.pdf"` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_Mac/features/steps/common/common.py:289` | operations=app_launch via launch_edge_implementation; temp profile setup runner-owned |
 | `When I navigate to "https://getsamplefiles.com/download/pdf/sample-1.pdf"` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_Mac/features/steps/download/download.py:9` | operations=click_element, send_keys, press_key; locator={"accessibilityId": "Address and search bar"} |
 | `Then the Downloads panel should appear` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_Mac/features/steps/download/download.py:64` | operations=verify_element_exists; locator={"accessibilityId": "Downloads"} |
 | `When I click "Search downloads" in Downloads panel` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_Mac/features/steps/download/download.py:85` | operations=click_element; locator={"accessibilityId": "Search downloads"} |

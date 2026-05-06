@@ -15,19 +15,11 @@ tags:
 - codex-converted
 ---
 - launchApp
-- tapOn:
-    target: Address bar
-    locator:
-      name: Address and search bar
-      controlType: Edit
-    timeout: 10000
-- inputText:
-    text: https://getsamplefiles.com/download/pdf/sample-1.pdf
-    target: Address bar
-    locator:
-      name: Address and search bar
-      controlType: Edit
-- pressKey: Enter
+- executeMethod:
+    script: native_navigate
+    args:
+      url: https://getsamplefiles.com/download/pdf/sample-1.pdf
+      timeout: 5000
 - assertVisible:
     target: Downloads panel should appear
     locator:
@@ -35,19 +27,11 @@ tags:
       controlType: Window
     timeout: 10000
     optional: false
-- tapOn:
-    target: Address bar
-    locator:
-      name: Address and search bar
-      controlType: Edit
-    timeout: 10000
-- inputText:
-    text: edge://downloads
-    target: Address bar
-    locator:
-      name: Address and search bar
-      controlType: Edit
-- pressKey: Enter
+- executeMethod:
+    script: native_navigate
+    args:
+      url: edge://downloads
+      timeout: 5000
 - assertVisible:
     target: '"sample-1.pdf" should appear in download list'
     locator:

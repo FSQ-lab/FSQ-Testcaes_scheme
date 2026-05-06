@@ -1,0 +1,57 @@
+schemaVersion: fsq.ai-test/v1
+name: Select website URL suggestion to navigate directly to site
+description: Converted from Edge Windows Behave BDD scenario.
+platform: windows
+app:
+  name: edge
+  exe: C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe
+  windowTitleRegex: .*Microsoft Edge.*
+runner:
+  backend: pywinauto-mcp
+tags:
+- navigation
+- regression
+- p0
+- codex-converted
+---
+- launchApp
+- executeMethod:
+    script: native_navigate
+    args:
+      url: https://www.bing.com/?cc=us
+      timeout: 5000
+- inputText:
+    text: apple
+    target: Address bar
+    locator:
+      className: OmniboxViewViews
+      controlType: Edit
+- tapOn:
+    target: apple.com suggestion in the dropdown list
+    locator:
+      name: apple.com
+      controlType: ListItem
+    timeout: 10000
+- assertVisible:
+    target: Apple tab
+    locator:
+      name: Apple
+      controlType: TabItem
+    timeout: 10000
+    optional: false
+- assert:
+    element:
+      className: OmniboxViewViews
+      controlType: Edit
+    text:
+      contains: https://www.apple.com
+    optional: false
+- assertVisible:
+    target: Apple page document
+    locator:
+      automationId: RootWebArea
+      name: Apple
+      controlType: Document
+    timeout: 10000
+    optional: false
+- killApp

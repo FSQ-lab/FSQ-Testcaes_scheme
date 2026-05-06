@@ -21,7 +21,7 @@ Codex-produced conversion report.
 
 | Source step | FSQ command | Notes |
 | --- | --- | --- |
-| `Given Edge is launched` | `tapOn` | Converted from matched step implementation. |
+| `Given Edge is launched` | `launchApp` | Converted from launch helper; temp profile setup remains runner-owned. |
 | `And I input "edge://settings/startHomeNTP" to the address bar` | `tapOn, inputText, pressKey` | Converted from matched step implementation. |
 | `When I select the option "Open custom sites"` | `tapOn` | Converted from matched step implementation. |
 | `And I click the "Add site" button` | `tapOn` | Converted from matched step implementation. |
@@ -30,11 +30,35 @@ Codex-produced conversion report.
 | `And I click the "Cancel" button on the "Add site" dialog` | `tapOn` | Converted from matched step implementation. |
 | `Then the "Add site" dialog should be closed` | `assertNotVisible` | Converted from matched step implementation. |
 
+## BDD Execution Model
+
+- Converted using the latest Codex FSQ Case Converter rule: feature scenario supplies intent and order; Behave step implementations supply executable operations, locators, assertions, waits, and helper behavior.
+- Effective steps include Gherkin Background plus scenario steps when present.
+- `features/steps/**/*.py` is treated as the global Behave step registry; matching is by exact or parameterized decorator before semantic fallback.
+
+## Hook Normalization
+| Hook | Classification | Converted? | Notes |
+| --- | --- | --- | --- |
+| `Edge is launched` helper | setup/state guarantee | Partial | Converted to `launchApp`; temp profile arguments and system-dialog handling remain runner setup requirements. |
+| environment/MCP startup | runner lifecycle | No | Appium/MCP session creation belongs to runner. |
+| screenshot/log/report hooks | runtime evidence | No | Evidence collection is not encoded in case YAML. |
+
+## Environment Requirements
+
+- macOS Edge app installed and launchable with the Appium 3.x MCP runner.
+- Source temp-profile setup and macOS system dialog handling are runner setup requirements.
+- External downloads, account state, or filesystem cleanup are unresolved unless a safe runner command exists.
+
+## Step Expansion Evidence
+| Source step | Expanded steps | Implementation evidence |
+| --- | --- | --- |
+| Scenario steps | none or already reflected in Step Implementation Evidence | No unresolved `context.execute_steps()` expansion was identified during this report upgrade; any material setup/precondition is documented in Hook Normalization or Unresolved items. |
+
 ## Step Implementation Evidence
 
 | Source step | Implementation file:line | Extracted operations |
 | --- | --- | --- |
-| `Given Edge is launched` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_Mac/features/steps/common/common.py:154` | operations=semantic/no direct tool call detected |
+| `Given Edge is launched` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_Mac/features/steps/common/common.py:154` | operations=app_launch via launch_edge_implementation; temp profile setup runner-owned |
 | `And I input "edge://settings/startHomeNTP" to the address bar` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_Mac/features/steps/settings/settings.py:321` | operations=click_element, send_keys, press_key; locator={"accessibilityId": "Address and search bar"} |
 | `When I select the option "Open custom sites"` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_Mac/features/steps/settings/settings.py:697` | operations=find_element, click_element; locator={"name": "Open custom sites"} |
 | `And I click the "Add site" button` | `/Users/qunmi/Documents/MS_ADO/FSQ_AI_Testcases_Mac/features/steps/settings/settings.py:453` | operations=click_element; locator={"accessibilityId": "Add site"} |

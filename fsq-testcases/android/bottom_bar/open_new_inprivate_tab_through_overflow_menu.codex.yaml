@@ -1,0 +1,38 @@
+schemaVersion: fsq.ai-test/v1
+name: Open new InPrivate tab through overflow menu
+description: Converted from Edge Android Behave BDD scenario.
+platform: android
+appId: com.microsoft.emmx
+tags:
+- p0
+- codex-converted
+---
+- launchApp
+- assertVisible:
+    target: New Tab Page account menu
+    locator:
+      accessibilityId: Account menu
+    optional: false
+- tapOn:
+    target: Browser menu
+    locator:
+      resourceId: com.microsoft.emmx:id/overflow_button_bottom
+- tapOn:
+    target: New InPrivate tab
+    locator:
+      xpath: "//android.widget.TextView[@text='New InPrivate Tab']"
+- assertVisible:
+    target: Browse InPrivate page
+    locator:
+      xpath: "//android.widget.TextView[@text='Browse InPrivate']"
+    optional: false
+- tapOn:
+    target: Exit InPrivate mode
+    locator:
+      xpath: "//android.widget.Button[@text='Exit InPrivate mode']"
+- assertVisible:
+    target: New Tab Page
+    locator:
+      resourceId: com.microsoft.emmx:id/edge_ntp_scrollview
+    optional: false
+- killApp

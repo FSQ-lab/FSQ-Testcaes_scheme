@@ -1,0 +1,32 @@
+schemaVersion: fsq.ai-test/v1
+name: Add a folder to Favorites by clicking the Add button of hub
+description: Converted from Edge Mac Behave BDD scenario.
+platform: macos
+appId: com.microsoft.edgemac
+runner:
+  backend: appium-mcp
+tags:
+- favorites
+- regression
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Favorites button on toolbar
+    locator:
+      accessibilityId: Favorites
+    timeout: 10000
+- tapOn:
+    target: Add folder button in Favorites hub
+    locator:
+      accessibilityId: Add folder
+    timeout: 10000
+- pressKey: Enter
+- assertVisible:
+    target: New folder in Favorites hub
+    locator:
+      accessibilityId: New folder
+    timeout: 10000
+    optional: false
+- killApp

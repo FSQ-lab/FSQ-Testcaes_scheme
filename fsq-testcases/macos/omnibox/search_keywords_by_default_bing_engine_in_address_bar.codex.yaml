@@ -3,6 +3,8 @@ name: Search keywords by default Bing engine in address bar
 description: Converted from Edge Mac Behave BDD scenario.
 platform: macos
 appId: com.microsoft.edgemac
+runner:
+  backend: appium-mcp
 tags:
 - p0
 - codex-converted

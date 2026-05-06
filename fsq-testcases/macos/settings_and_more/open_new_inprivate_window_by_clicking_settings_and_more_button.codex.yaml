@@ -1,0 +1,49 @@
+schemaVersion: fsq.ai-test/v1
+name: Open a new Inprivate window by clicking the Settings and more button
+description: Converted from Edge Mac Behave BDD scenario.
+platform: macos
+appId: com.microsoft.edgemac
+runner:
+  backend: appium-mcp
+tags:
+- settings_and_more
+- inprivate_mode
+- regression
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Settings and more button on toolbar
+    locator:
+      accessibilityId: Settings and more
+    timeout: 10000
+- tapOn:
+    target: New InPrivate window button from the dropdown menu
+    locator:
+      accessibilityId: New InPrivate Window ⇧⌘N ⇧⌘N
+    timeout: 10000
+- assertVisible:
+    target: new InPrivate Edge window
+    locator:
+      accessibilityId: New InPrivate tab - Microsoft Edge (InPrivate)
+    timeout: 10000
+    optional: false
+- assertVisible:
+    target: InPrivate browsing icon
+    locator:
+      accessibilityId: InPrivate browsing
+    timeout: 10000
+    optional: false
+- tapOn:
+    target: InPrivate browsing icon
+    locator:
+      accessibilityId: InPrivate browsing
+    timeout: 10000
+- assert:
+    element:
+      xpath: //XCUIElementTypeStaticText[@value="You have one InPrivate window."]
+    text:
+      contains: You have one InPrivate window
+    optional: false
+- killApp

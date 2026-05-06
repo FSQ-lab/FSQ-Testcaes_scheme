@@ -26,7 +26,7 @@ Codex-produced conversion report.
 | `And I tap "Settings" from the menu` | `tapOn` |  |
 | `Then the Settings panel should open` | `tapOn` | the Settings panel should open |
 | `And the panel title should display "Settings"` | `tapOn` | the panel title should display "Settings" |
-| `When I click back button on setting page` | `pressKey` |  |
+| `When I click back button on setting page` | `tapOn` | Preserved source `AppiumBy.ACCESSIBILITY_ID`: `Navigate up`. |
 | `Then I should return to the New Tab Page` | `tapOn` |  |
 | `When I open the browser menu by tapping on the three dots icon at the bottom right corner` | `tapOn` |  |
 | `And I tap "Settings" from the menu` | `tapOn` |  |
@@ -97,6 +97,5 @@ Codex-produced conversion report.
 ## Codex Whole-pass Reconciliation
 
 - Replaced assertion-like `tapOn` placeholders with locator-backed assertions.
-- Preserved source locators for browser menu, Settings menu item, Settings title, and NTP return assertion.
-- Kept setting-page close as Android Back/return according to the source steps.
-
+- Preserved source locators for browser menu, Settings menu item, Settings title, Settings `Navigate up` button, and NTP return assertion.
+- Kept the second close path as Android Back because the source step uses key code 4.

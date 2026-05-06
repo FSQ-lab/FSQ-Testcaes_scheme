@@ -3,6 +3,8 @@ name: Set NTP as home page
 description: Converted from Edge Mac Behave BDD scenario.
 platform: macos
 appId: com.microsoft.edgemac
+runner:
+  backend: appium-mcp
 tags:
 - settings
 - smoke

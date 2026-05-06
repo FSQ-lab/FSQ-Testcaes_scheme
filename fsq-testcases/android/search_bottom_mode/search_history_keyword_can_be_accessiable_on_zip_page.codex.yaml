@@ -1,0 +1,39 @@
+schemaVersion: fsq.ai-test/v1
+name: Search history keyword can be accessiable on zip page
+description: Converted from Edge Android Behave BDD scenario.
+platform: android
+appId: com.microsoft.emmx
+tags:
+- p0
+- codex-converted
+---
+- launchApp
+- assertVisible:
+    target: New Tab Page account menu
+    locator:
+      accessibilityId: Account menu
+    optional: false
+- tapOn:
+    target: Search box on NTP page
+    locator:
+      resourceId: com.microsoft.emmx:id/search_box_text
+- inputText:
+    text: microsoft
+    target: Search box
+    locator:
+      resourceId: com.microsoft.emmx:id/url_bar
+- pressKey: Enter
+- tapOn:
+    target: Open a new tab
+    locator:
+      resourceId: com.microsoft.emmx:id/edge_bottom_bar_plus_button
+- tapOn:
+    target: Search box on NTP page
+    locator:
+      resourceId: com.microsoft.emmx:id/search_box_text
+- assertVisible:
+    target: new search history keyword microsoft
+    locator:
+      xpath: "//android.widget.TextView[@resource-id='com.microsoft.emmx:id/line_1' and @text='microsoft']"
+    optional: false
+- killApp

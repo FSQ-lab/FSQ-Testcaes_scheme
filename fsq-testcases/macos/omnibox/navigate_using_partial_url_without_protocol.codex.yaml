@@ -3,6 +3,8 @@ name: Navigate using partial URL without protocol
 description: Converted from Edge Mac Behave BDD scenario.
 platform: macos
 appId: com.microsoft.edgemac
+runner:
+  backend: appium-mcp
 tags:
 - p0
 - ominibox

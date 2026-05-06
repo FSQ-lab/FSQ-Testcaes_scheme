@@ -3,6 +3,8 @@ name: Verify that each item in the first part is accessible and exitable
 description: Converted from Edge iOS Behave BDD scenario.
 platform: ios
 appId: com.microsoft.msedge
+runner:
+  backend: appium-mcp
 tags:
 - settings
 - p0

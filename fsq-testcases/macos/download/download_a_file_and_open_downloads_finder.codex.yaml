@@ -3,6 +3,8 @@ name: Download a file and open downloads finder
 description: Converted from Edge Mac Behave BDD scenario.
 platform: macos
 appId: com.microsoft.edgemac
+runner:
+  backend: appium-mcp
 tags:
 - p0
 - regression

@@ -15,19 +15,11 @@ tags:
 - codex-converted
 ---
 - launchApp
-- tapOn:
-    target: Address bar
-    locator:
-      name: Address and search bar
-      controlType: Edit
-    timeout: 10000
-- inputText:
-    text: https://getsamplefiles.com/download/pdf/sample-1.pdf
-    target: Address bar
-    locator:
-      name: Address and search bar
-      controlType: Edit
-- pressKey: Enter
+- executeMethod:
+    script: native_navigate
+    args:
+      url: https://getsamplefiles.com/download/pdf/sample-1.pdf
+      timeout: 5000
 - assertWithAI:
     prompt: Verify that the Downloads page appears
     optional: false

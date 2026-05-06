@@ -1,0 +1,38 @@
+schemaVersion: fsq.ai-test/v1
+name: Open favorites hub from toolbar
+description: Converted from Edge Mac Behave BDD scenario.
+platform: macos
+appId: com.microsoft.edgemac
+runner:
+  backend: appium-mcp
+tags:
+- favorites
+- regression
+- p0
+- codex-converted
+---
+- launchApp
+- tapOn:
+    target: Favorites button on toolbar
+    locator:
+      name: Favorites
+    timeout: 10000
+- assertVisible:
+    target: Favorites hub
+    locator:
+      name: Favorites
+    timeout: 10000
+    optional: false
+- assertVisible:
+    target: Favorites Bar folder in Favorites hub
+    locator:
+      name: Favorites Bar
+    timeout: 10000
+    optional: false
+- assertVisible:
+    target: Other Favorites folder in Favorites hub
+    locator:
+      name: Other Favorites
+    timeout: 10000
+    optional: false
+- killApp

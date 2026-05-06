@@ -3,6 +3,8 @@ name: Set the History button show in toolbar
 description: Converted from Edge Mac Behave BDD scenario.
 platform: macos
 appId: com.microsoft.edgemac
+runner:
+  backend: appium-mcp
 tags:
 - p0
 - regression

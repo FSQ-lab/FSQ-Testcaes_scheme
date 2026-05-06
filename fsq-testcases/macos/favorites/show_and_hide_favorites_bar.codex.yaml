@@ -1,0 +1,33 @@
+schemaVersion: fsq.ai-test/v1
+name: Show and hide favorites bar
+description: Converted from Edge Mac Behave BDD scenario.
+platform: macos
+appId: com.microsoft.edgemac
+runner:
+  backend: appium-mcp
+tags:
+- favorites
+- regression
+- p0
+- codex-converted
+---
+- launchApp
+- pressKey:
+    key: B
+    modifiers: [Shift, Command]
+- assertNotVisible:
+    target: Import favorites button below the address bar
+    locator:
+      xpath: //XCUIElementTypeButton[@label="Import favorites"]
+    timeout: 10000
+    optional: false
+- pressKey:
+    key: B
+    modifiers: [Shift, Command]
+- assertVisible:
+    target: Import favorites button below the address bar
+    locator:
+      xpath: //XCUIElementTypeButton[@label="Import favorites"]
+    timeout: 10000
+    optional: false
+- killApp
